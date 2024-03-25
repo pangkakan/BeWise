@@ -1,15 +1,22 @@
 
 '''
-LOGGA IN 
-För att logga in användaren har vi färdig kod i databasprojektet om det behövs
+Logga in ska vi ej ha 
 
-MAIN 
-I första versionen kanske den ska innehålla följande, varav alla kommer vara med i final version: 
+ 
+I första versionen kanske den ska innehålla följande, varav alla kommer vara med i final version på något sätt: 
 - schemavy: dag 
 - uppgifter: kommande uppgifter för två olika kurser, innehållande namn på uppg, startdatum och deadline och 
 - uppgifter: dagens to do 
 - statistik 
-- 
+
+FUNKTIONER 
+huvud 
+se beckoschema 
+se uppgifter 
+se statitsik 
+hantera kuser - lägg till ta bort / ändra info  
+hantera uppgifter - lägg till ta bort ändra info 
+skapa en lista för varje ny användare med deras nya namn och inkludera det som databasen ska använda 
 '''
 
 '''namn GLOBAL VARIABEL? SÅLÄNGE'''
