@@ -84,18 +84,19 @@ def add_assignments():
     print("LÄGG TILL UPPGIFTER")
     #börja med att söka i listan efter kurser under personen och finns det ej hänvisa tillbaka till menyn eller låt dem välja lägga till kurser
 
-    print("
+
 
 
     print("Här kan du hantera dina befintliga kurser och lägga till nya")
     changed_course = input("Vilken kurs vill du redigera?" )
 
-    print
+
 
 
     #VI SÖKER I DATABASEN OCH ÅTERKOMMER MED EXISTERANDE KURS  OCH DESS INFO OM DEN FFINNS OCH ERBJUDER MÖJLIGHET ATT SPARA NY OM DET FINNS 
 
-
+def view_assignments():
+    print("SE UPPGIFTER")
 
     return 
     
