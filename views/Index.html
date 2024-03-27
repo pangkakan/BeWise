@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BWP Homepage</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Lägg till kurs</h1>
+    <form action="/add-course" method="POST">
+        <label for="courseCoude">Ange kurskod:</label>
+        <input type="text" id="courseCode" name="courseCode">
+        <button type="submit">Lägg till</button>
+    </form>
+</body>
+</html>
