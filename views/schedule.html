@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tidsplanering - {{ coursecode }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div id="container">
-        <h1>Schema för kurs</h1>
+        <h1>Tidsplanering för {{ coursecode }}</h1>
         <div class="timeblock">
             <h2>Måndag 8 april</h2>
             <p>10:00-12:00</p>
@@ -25,5 +25,30 @@
             <p>Labb</p>
         </div>
     </div>
+
+    <form action="/add-timeblock" method="post">
+        <h2>Lägg till tidsblock</h2>
+        <label for="timeblock_title">Titel:</label>
+        <input type="text" id="timeblock_title" name="timeblock_title" required>
+  
+        <label for="taskdate">Datum:</label>
+        <input type="date" id="taskdate" name="taskdate" min="" required>
+
+        <label for="start_time">Starttid:</label>
+        <input type="time" id="start_time" name="start_time" required>
+
+        <label for="end_time">Sluttid:</label>
+        <input type="time" id="end_time" name="end_time" required>
+
+        <button type="submit">Lägg till</button>
+    </form>
+
+    <script>
+        // Get the current date in the format yyyy-mm-dd
+        const currentDate = new Date().toISOString().split('T')[0];
+        
+        // Set the minimum selectable date for the input element
+        document.getElementById('taskdate').min = currentDate;
+    </script>
 </body>
 </html>

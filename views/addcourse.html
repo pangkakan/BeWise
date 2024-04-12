@@ -8,9 +8,18 @@
 </head>
 <body>
     <h1>Lägg till kurs</h1>
-    <form action="/add-course" method="POST">
+    <!-- <form action="/add-course" method="POST">
         <label for="courseCoude">Ange kurskod:</label>
         <input type="text" id="courseCode" name="courseCode">
+        <button type="submit">Lägg till</button>
+    </form> -->
+    <form action="/add-course" method="POST">
+        <label for="coursedropdown">Välj kurs:</label>
+        <select name="coursedropdown" id="coursedropdown">
+            <option value="da336a">DA336A - Systemutveckling och projekt</option>
+            <option value="da297a">DA297A - Databasteknik</option>
+            <option value="da108a">DA108A - Informationsarkitektur</option>
+        </select>
         <button type="submit">Lägg till</button>
     </form>
 </body>

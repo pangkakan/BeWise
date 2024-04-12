@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Kurssida - {{ coursecode }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Mina kurser</h1>
-    
-
-    <a href="/new-course">Ny kurs</a>
-
+    <h1>Kurssida för {{ coursecode }}</h1>
+    <a href="/{{ coursecode }}/tasks">Uppgifter</a>
+    <a href="/{{ coursecode }}/schedule">Tidsplanering</a>
 </body>
 </html>
