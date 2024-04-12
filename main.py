@@ -1,24 +1,28 @@
 from bottle import run, template, route, request, redirect, static_file
 import json
 
+# @route("/")
+# def index():
+#     return template("index")
+
+
+# @route("/schedule")
+# def schedule():
+#     return template("schedule")
+
+
+# @route("/importantdates")
+# def schedule():
+#     return template("importantdates")
+
+
+# @route("/tasks")
+# def schedule():
+#     return template("tasks")
+
 @route("/")
 def index():
-    return template("index")
-
-
-@route("/schedule")
-def schedule():
-    return template("schedule")
-
-
-@route("/importantdates")
-def schedule():
-    return template("importantdates")
-
-
-@route("/tasks")
-def schedule():
-    return template("tasks")
+    return template("addcourse")
 
 
 @route("/add-course", method="post")
