@@ -8,9 +8,15 @@
 </head>
 <body>
     <h1>Mina kurser</h1>
-    
+
+    <div class="mycourselist">
+        % for course in courses:
+            <a href="{{ course['kurskod'] }}">{{ course["kurskod"] }} - {{ course["titel"] }}</a>
+        % end
+    </div>
 
     <a href="/new-course">Ny kurs</a>
+
 
 </body>
 </html>

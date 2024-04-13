@@ -1,0 +1,24 @@
+[
+    {
+        "id": 1,
+        "kurskod": "DA336A",
+        "titel": "Workshop",
+        "datum": "",
+        "tidsintervall": ""
+    },
+    {
+        "id": 2,
+        "kurskod": "DA336A",
+        "titel": "Laboration",
+        "datum": "",
+        "tidsintervall": ""
+    },
+    {
+        "id": 3,
+        "kurskod": "DA336A",
+        "titel": "Individuellt arbete",
+        "datum": "",
+        "tidsintervall": ""
+    }
+
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "kurskod": "DA336A",
+        "titel": "Läsa några sidor",
+        "datum": ""
+    },
+    {
+        "id": 2,
+        "kurskod": "DA336A",
+        "titel": "Gå på föreläsning",
+        "datum": ""
+    },
+    {
+        "id": 3,
+        "kurskod": "DA336A",
+        "titel": "Arbeta med projekt",
+        "datum": ""
+    }
+]

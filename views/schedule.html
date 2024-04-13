@@ -3,42 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tidsplanering - {{ coursecode }}</title>
+    <title>Tidsplanering - {{ course["kurskod"] }} {{ course["titel"] }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div id="container">
-        <h1>Tidsplanering för {{ coursecode }}</h1>
-        <div class="timeblock">
-            <h2>Måndag 8 april</h2>
-            <p>10:00-12:00</p>
-            <p>Föreläsning</p>
-        </div>
-        <div class="timeblock">
-            <h2>Onsdag 10 april</h2>
-            <p>13:00-15:00</p>
-            <p>Workshop</p>
-        </div>
-        <div class="timeblock">
-            <h2>Torsdag 11 april</h2>
-            <p>8:00-12:00</p>
-            <p>Labb</p>
-        </div>
-    </div>
+    
+    <h1>Tidsplanering för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <h2>Inlagda tidsblock</h2>
 
-    <form action="/add-timeblock" method="post">
+    <ul class="timeblockslist">
+        % for timeblock in timeblocks:
+            <li>{{ timeblock }}</li>
+        % end
+    </ul>
+
+    <form action="/add-timeblock" method="post" onsubmit="validateTime(event)">
         <h2>Lägg till tidsblock</h2>
+        
         <label for="timeblock_title">Titel:</label>
         <input type="text" id="timeblock_title" name="timeblock_title" required>
   
-        <label for="taskdate">Datum:</label>
-        <input type="date" id="taskdate" name="taskdate" min="" required>
+        <label for="timeblock_date">Datum:</label>
+        <input type="date" id="timeblock_date" name="timeblock_date" min="" required>
 
-        <label for="start_time">Starttid:</label>
-        <input type="time" id="start_time" name="start_time" required>
+        <label for="timeblock_start_time">Starttid:</label>
+        <input type="time" id="timeblock_start_time" name="timeblock_start_time" required>
 
-        <label for="end_time">Sluttid:</label>
-        <input type="time" id="end_time" name="end_time" required>
+        <label for="timeblock_end_time">Sluttid:</label>
+        <input type="time" id="timeblock_end_time" name="timeblock_end_time" required>
 
         <button type="submit">Lägg till</button>
     </form>
@@ -48,7 +40,18 @@
         const currentDate = new Date().toISOString().split('T')[0];
         
         // Set the minimum selectable date for the input element
-        document.getElementById('taskdate').min = currentDate;
+        document.getElementById('timeblock_date').min = currentDate;
+
+
+        function validateTime(event) {
+            const startTime = document.getElementById("timeblock_start_time").value;
+            const endTime = document.getElementById("timeblock_end_time").value;
+
+            if (startTime >= endTime) {
+                alert("Starttid måste vara tidigare än sluttid.");
+                event.preventDefault(); // Prevent form submission
+            }
+        }
     </script>
 </body>
 </html>

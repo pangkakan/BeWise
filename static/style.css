@@ -43,3 +43,14 @@ body {
     padding: 1em;
     list-style: none;
 }
+
+/* ------------------------------------------------- */
+
+.mycourselist > a {
+    display: block;
+}
+
+.mycourselist {
+    background-color: pink;
+}
+
