@@ -13,7 +13,9 @@
 
     <ul class="timeblockslist">
         % for timeblock in timeblocks:
-            <li>{{ timeblock }}</li>
+            <a href="/{{ course['kurskod'] }}/schedule/{{ timeblock['id'] }}">
+                <li>{{ timeblock }}</li>
+            </a>
         % end
     </ul>
 
@@ -32,8 +34,12 @@
         <label for="timeblock_end_time">Sluttid:</label>
         <input type="time" id="timeblock_end_time" name="timeblock_end_time" required>
 
+        <input type="hidden" name="coursecode" value="{{ course['kurskod'] }}">
+
         <button type="submit">Lägg till</button>
     </form>
+
+    <a href="/{{ course['kurskod'] }}">Tillbaka till kurssidan</a>
 
     <script>
         // Get the current date in the format yyyy-mm-dd

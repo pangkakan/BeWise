@@ -2,19 +2,19 @@
     {
         "id": 1,
         "kurskod": "DA336A",
-        "titel": "Läsa några sidor",
-        "datum": ""
+        "titel": "Arbeta med design",
+        "datum": "2024-04-23"
     },
     {
         "id": 2,
-        "kurskod": "DA336A",
-        "titel": "Gå på föreläsning",
-        "datum": ""
+        "kurskod": "DA108A",
+        "titel": "En uppgift",
+        "datum": "2024-04-16"
     },
     {
         "id": 3,
-        "kurskod": "DA336A",
-        "titel": "Arbeta med projekt",
-        "datum": ""
+        "kurskod": "DA297A",
+        "titel": "Testuppgift",
+        "datum": "2024-04-16"
     }
 ]
