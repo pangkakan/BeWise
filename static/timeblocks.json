@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "kurskod": "DA108A",
+        "titel": "F\u00f6rel\u00e4sning",
+        "datum": "2024-04-22",
+        "starttid": "13:15",
+        "sluttid": "15:00"
+    },
+    {
+        "id": 2,
+        "kurskod": "DA297A",
+        "titel": "Test",
+        "datum": "2024-04-23",
+        "starttid": "08:00",
+        "sluttid": "10:00"
+    },
+    {
+        "id": 3,
+        "kurskod": "DA336A",
+        "titel": "L\u00e4sning",
+        "datum": "2024-05-03",
+        "starttid": "13:00",
+        "sluttid": "14:40"
+    }
+]

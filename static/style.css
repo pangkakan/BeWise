@@ -11,7 +11,7 @@ body {
 /* #container {
     width: 80%;
     margin-inline: auto;
-} */
+}
 
 .timeblock {
     background-color: pink;
@@ -42,4 +42,15 @@ body {
     background-color: pink;
     padding: 1em;
     list-style: none;
+} */
+
+/* ------------------------------------------------- */
+
+.mycourselist > a {
+    display: block;
 }
+
+.mycourselist {
+    background-color: pink;
+}
+

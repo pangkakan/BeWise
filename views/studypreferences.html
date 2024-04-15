@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Studiepreferenser</h1>
+
+    <p>Hur många timmar vill du lägga på studier per vecka?</p>
+
+    <form action="/save-preferences" method="post">
+        <label for="rangeInput">Antal timmar (1-168 h):</label>
+        <input type="range" id="rangeInput" name="rangeInput" value="1" min="1" max="168" oninput="this.nextElementSibling.value = this.value">
+        <output>1</output>
+
+        <button type="submit">Slutför</button>
+    </form>
+    
+</body>
+</html>

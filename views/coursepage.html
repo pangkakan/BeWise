@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurssida - {{ course["kurskod"] }} {{ course["titel"] }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Kurssida för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    
+    <a href="/{{ course['kurskod'] }}/tasks">Uppgifter</a>
+    <a href="/{{ course['kurskod'] }}/schedule">Tidsplanering</a>
+
+    <a href="/">Tillbaka till startsidan</a>
+</body>
+</html>

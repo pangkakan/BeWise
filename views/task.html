@@ -7,16 +7,12 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Mina kurser</h1>
+    <h1>{{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <h2>Uppgift</h2>
 
-    <div class="mycourselist">
-        % for course in courses:
-            <a href="{{ course['kurskod'] }}">{{ course["kurskod"] }} - {{ course["titel"] }}</a>
-        % end
-    </div>
+    <p>{{ task["titel"] }} {{ task["datum"] }}</p>
 
-    <a href="/new-course">Ny kurs</a>
-
+    <a href="/{{ course['kurskod'] }}/tasks">Tillbaka till uppgifter</a>
 
 </body>
 </html>
