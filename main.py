@@ -128,12 +128,18 @@ def add_course():
     if coursecode == "da336a":
         course["kurskod"] = "DA336A"
         course["titel"] = "Systemutveckling och projekt"
+        # timeblocks = scraper("da336a")
+        # save_to_json_file(timeblocks, "static/timeblocks.json")
     elif coursecode == "da297a":
         course["kurskod"] = "DA297A"
         course["titel"] = "Databasteknik"
+        # timeblocks = scraper("da297a")
+        # save_to_json_file(timeblocks, "static/timeblocks.json")
     elif coursecode == "da108a":
         course["kurskod"] = "DA108A"
         course["titel"] = "Informationsarkitektur"
+        # timeblocks = scraper("da108a")
+        # save_to_json_file(timeblocks, "static/timeblocks.json")
 
     courses.append(course)
     save_to_json_file(courses, "static/courses.json")
