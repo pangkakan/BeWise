@@ -1,6 +1,8 @@
 from bottle import route, get, post, run, template, error, static_file, request, response, redirect
 import json
 
+from mainTing.scraper import Scraper
+
 
 # Läser från json-fil och returnerar lista av innehåll
 def read_from_json_file(file_path):
@@ -316,3 +318,4 @@ def static_files(filename):
 
 # Start our web server
 run(host="127.0.0.1", port=8080, reloader=True)
+
