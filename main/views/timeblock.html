@@ -9,7 +9,7 @@
 <body>
     <h1>{{ course["kurskod"] }} {{ course["titel"] }}</h1>
     <h2>Tidsblock</h2>
-    <p>{{ timeblock["titel"] }} {{ timeblock["datum"] }} {{ timeblock["starttid"] }}-{{ timeblock["sluttid"] }}</p>
+    <p>{{ timeblock["date"] }} {{ timeblock["start_time"] }}-{{ timeblock["end_time"] }} {{ timeblock["location"] }} {{ timeblock["description"] }}</p>
 
     <a href="/{{ course['kurskod'] }}/schedule">Tillbaka till tidsplanering</a>
 </body>
