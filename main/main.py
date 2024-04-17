@@ -1,11 +1,74 @@
-from bottle import route, run, template, error, static_file, request, redirect
-from controllers import course_controller as course_ctrl
-from controllers.db import create_connection
-from controllers.timeblock_controller import add_timeblock_post
-from models.shared import create_id
-from models.json_manager import read_from_json_file, save_to_json_file
+from bottle import route, get, post, run, template, error, static_file, request, response, redirect
+import json
+import psycopg2
+from datetime import datetime
 
-conn = create_connection()
+from main.mainTing.scraper import Scraper
+
+#General variables
+host = "pgserver.mau.se"
+database = "bewise"
+user = "ao9682"
+password = "934ae98a"
+port = "5432"  # Default PostgreSQL port
+
+#Connect to the database
+conn = psycopg2.connect(
+    host=host,
+    database=database,
+    user=user,
+    password=password,
+    port=port
+)
+
+
+
+def get_events():
+    cur = conn.cursor()
+    # Fetch events and convert date and time columns to string format
+    query = """
+    SELECT id, date::text, start_time::text, end_time::text, location, description FROM events
+    """
+    cur.execute(query)
+    events = cur.fetchall()
+    # Convert query results into a list of dicts to serialize to JSON
+    columns = [desc[0] for desc in cur.description]
+    events_list = [dict(zip(columns, row)) for row in events]
+
+    # Print each event as a separate JSON object on a new line
+    return json.dumps(events_list, indent=4)  # Return JSON string
+
+
+
+# Läser från json-fil och returnerar lista av innehåll
+def read_from_json_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+            return data
+        
+    except FileNotFoundError:
+        print(f"File '{file_path}' not found. Creating a new file.")
+        with open(file_path, 'w') as file:
+            json.dump([], file)
+            return []
+        
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON in file '{file_path}'.")
+        return []
+   
+
+# Skriver lista av innehåll till json-fil
+def save_to_json_file(data, file_path):
+    try:
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+        print(f"Data saved to '{file_path}' successfully.")
+
+    except Exception as e:
+        print(f"Error saving data to '{file_path}': {e}")
+
+
 
 
 def get_course_with_coursecode(coursecode):
@@ -13,7 +76,7 @@ def get_course_with_coursecode(coursecode):
     for course in courses:
         if course["kurskod"] == coursecode:
             return course
-
+        
 
 def get_tasks_with_coursecode(coursecode):
     tasks = read_from_json_file("static/tasks.json")
@@ -21,7 +84,7 @@ def get_tasks_with_coursecode(coursecode):
     for task in tasks:
         if task["kurskod"] == coursecode:
             task_list.append(task)
-
+    
     return task_list
 
 
@@ -38,7 +101,7 @@ def get_timeblocks_with_coursecode(coursecode):
     for timeblock in timeblocks:
         if timeblock["kurskod"] == coursecode:
             timeblocks_list.append(timeblock)
-
+    
     return timeblocks_list
 
 
@@ -49,10 +112,25 @@ def get_timeblock_with_id(coursecode, id):
             return timeblock
 
 
+# Generell funktion som tar emot listor av lexikon där man utgår från att alla lexikon har id-nyckel
+def create_id(list_of_dictionaries):
+    highest_id = 1
+    for dictionary in list_of_dictionaries:
+        if dictionary["id"] >= highest_id:
+            highest_id = dictionary["id"] + 1
+    return highest_id
+
+
+
+
+
+
+
+
 @route("/")
 def index():
     # Lista av kurser
-    courses = read_from_json_file("static/courses.json")
+    courses = read_from_json_file("static/courses.json")    
     return template("mycourses", courses=courses)
 
 
@@ -72,8 +150,40 @@ def new_course():
 
 
 @route("/add-course", method="post")
-def handle_add_course():
-    return course_ctrl.add_course_post(conn)
+def add_course():
+    courses = read_from_json_file("static/courses.json")
+    coursecode = getattr(request.forms, "coursedropdown")
+
+    # kontrollera att kursen inte redan är tillagd
+    for course in courses:
+        if course["kurskod"] == coursecode.upper():
+            print("Kursen finns redan")
+            return template("addcourse")
+    
+    # skriv till courses.json
+    course = {}
+
+    if coursecode == "da336a":
+        course["kurskod"] = "DA336A"
+        course["titel"] = "Systemutveckling och projekt"
+        timeblocks = get_events()
+        save_to_json_file(timeblocks, "static/timeblocks.json")
+    elif coursecode == "da297a":
+        course["kurskod"] = "DA297A"
+        course["titel"] = "Databasteknik"
+        # timeblocks = scraper("da297a")
+        # save_to_json_file(timeblocks, "static/timeblocks.json")
+    elif coursecode == "da108a":
+        course["kurskod"] = "DA108A"
+        course["titel"] = "Informationsarkitektur"
+        # timeblocks = scraper("da108a")
+        # save_to_json_file(timeblocks, "static/timeblocks.json")
+
+    courses.append(course)
+    save_to_json_file(courses, "static/courses.json")
+
+    # flash message("Kursen har lagts till")
+    redirect("/")
 
 
 @route("/<coursecode>/tasks")
@@ -82,11 +192,11 @@ def course_tasks(coursecode):
     try:
         course = get_course_with_coursecode(coursecode)
         tasks = get_tasks_with_coursecode(coursecode)
-        return template("tasks", course=course, tasks=tasks)
-
+        return template("tasks", course=course, tasks=tasks )
+    
     except:
         return template("error")
-
+    
 
 @route("/<coursecode>/tasks/<id>")
 def view_task(coursecode, id):
@@ -95,7 +205,7 @@ def view_task(coursecode, id):
         course = get_course_with_coursecode(coursecode)
         task = get_task_with_id(coursecode, id)
         return template("task", course=course, task=task)
-
+    
     except:
         return template("error")
 
@@ -115,13 +225,14 @@ def add_task():
         "id": task_id,
         "kurskod": coursecode,
         "titel": task_title,
-        "datum": task_date,
+        "datum": task_date
     }
     # lägg till den nya uppgiften i uppgiftslistan
     all_tasks.append(new_task)
 
     # skriv till tasks.json
     save_to_json_file(all_tasks, "static/tasks.json")
+
 
     # flash message("Uppgiften har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
@@ -135,10 +246,10 @@ def course_tasks(coursecode):
         course = get_course_with_coursecode(coursecode)
         timeblocks = get_timeblocks_with_coursecode(coursecode)
         return template("schedule", course=course, timeblocks=timeblocks)
-
+    
     except:
         return template("error")
-
+    
 
 @route("/<coursecode>/schedule/<id>")
 def view_timeblock(coursecode, id):
@@ -147,14 +258,42 @@ def view_timeblock(coursecode, id):
         course = get_course_with_coursecode(coursecode)
         timeblock = get_timeblock_with_id(coursecode, id)
         return template("timeblock", course=course, timeblock=timeblock)
-
+            
     except:
         return template("error")
 
 
 @route("/add-timeblock", method="post")
-def handle_add_timeblock():
-    return add_timeblock_post()
+def add_timeblock():
+    coursecode = getattr(request.forms, "coursecode")
+    timeblock_title = getattr(request.forms, "timeblock_title")
+    timeblock_date = getattr(request.forms, "timeblock_date")
+    timeblock_start_time = getattr(request.forms, "timeblock_start_time")
+    timeblock_end_time = getattr(request.forms, "timeblock_end_time")
+
+    # hämta alla inlagda tidsblock
+    all_timeblocks = read_from_json_file("static/timeblocks.json")
+    # skapa unikt id för uppgift
+    timeblock_id = create_id(all_timeblocks)
+
+    new_timeblock = {
+        "id": timeblock_id,
+        "kurskod": coursecode,
+        "titel": timeblock_title,
+        "datum": timeblock_date,
+        "starttid": timeblock_start_time,
+        "sluttid": timeblock_end_time
+    }
+    # lägg till den nya uppgiften i uppgiftslistan
+    all_timeblocks.append(new_timeblock)
+
+    # skriv till timeblocks.json
+    save_to_json_file(all_timeblocks, "static/timeblocks.json")
+
+
+    # flash message("Tidsblocket har lagts till")
+    # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
+    redirect("/")
 
 
 @route("/preferences")
@@ -176,30 +315,43 @@ def show_profile():
     return template("profile")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @error(404)
 def error404(error):
-    """
+    '''
     Visar felmeddelande för sida som ej existerar
 
     Returnerar error.html
-    """
+    '''
     return template("error")
 
 
 @route("/static/<filename>")
 def static_files(filename):
-    """
+    '''
     Handles the routes to our static files
-
-        Returns:
-                file : the static file requested by URL
-    """
+	
+	Returns:
+		file : the static file requested by URL	
+	'''
     return static_file(filename, root="static")
-
-
-def getnew():
-    print("fem")
 
 
 # Start our web server
 run(host="127.0.0.1", port=8080, reloader=True)
+
