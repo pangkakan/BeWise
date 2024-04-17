@@ -1,5 +1,6 @@
 from bottle import request, template, redirect
-from models import courses, events
+from main.models import courses, events
+
 
 def add_course_post(conn):
     course_list = courses.read_from_json_file("static/courses.json")

@@ -1,6 +1,6 @@
 from bottle import request, redirect
-from models.json_manager import read_from_json_file, save_to_json_file
-from models.shared import create_id
+from main.models.json_manager import read_from_json_file, save_to_json_file
+from main.models.shared import create_id
 
 
 def add_timeblock_post():
@@ -21,13 +21,14 @@ def add_timeblock_post():
         "titel": timeblock_title,
         "datum": timeblock_date,
         "starttid": timeblock_start_time,
-        "sluttid": timeblock_end_time,
+        "sluttid": timeblock_end_time
     }
     # lägg till den nya uppgiften i uppgiftslistan
     all_timeblocks.append(new_timeblock)
 
     # skriv till timeblocks.json
     save_to_json_file(all_timeblocks, "static/timeblocks.json")
+
 
     # flash message("Tidsblocket har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan

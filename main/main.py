@@ -1,13 +1,9 @@
-from bottle import route, get, post, run, template, error, static_file, request, response, redirect
-import json
-import psycopg2
+from bottle import route, run, template, error, static_file, request, redirect
+from controllers import course_controller as course_ctrl
 from controllers.db import create_connection
-from main.controllers import course_controller as course_ctrl
-from datetime import datetime
-
-from main.mainTing.scraper import Scraper
-from models.courses import read_from_json_file, save_to_json_file
-
+from controllers.timeblock_controller import add_timeblock_post
+from models.shared import create_id
+from models.json_manager import read_from_json_file, save_to_json_file
 conn = create_connection()
 
 
@@ -54,13 +50,7 @@ def get_timeblock_with_id(coursecode, id):
             return timeblock
 
 
-# Generell funktion som tar emot listor av lexikon där man utgår från att alla lexikon har id-nyckel
-def create_id(list_of_dictionaries):
-    highest_id = 1
-    for dictionary in list_of_dictionaries:
-        if dictionary["id"] >= highest_id:
-            highest_id = dictionary["id"] + 1
-    return highest_id
+
 
 
 
@@ -92,7 +82,7 @@ def new_course():
 
 
 @route("/add-course", method="post")
-def add_course():
+def handle_add_course():
     return course_ctrl.add_course_post(conn)
 
 
@@ -174,37 +164,8 @@ def view_timeblock(coursecode, id):
 
 
 @route("/add-timeblock", method="post")
-def add_timeblock():
-    coursecode = getattr(request.forms, "coursecode")
-    timeblock_title = getattr(request.forms, "timeblock_title")
-    timeblock_date = getattr(request.forms, "timeblock_date")
-    timeblock_start_time = getattr(request.forms, "timeblock_start_time")
-    timeblock_end_time = getattr(request.forms, "timeblock_end_time")
-
-    # hämta alla inlagda tidsblock
-    all_timeblocks = read_from_json_file("static/timeblocks.json")
-    # skapa unikt id för uppgift
-    timeblock_id = create_id(all_timeblocks)
-
-    new_timeblock = {
-        "id": timeblock_id,
-        "kurskod": coursecode,
-        "titel": timeblock_title,
-        "datum": timeblock_date,
-        "starttid": timeblock_start_time,
-        "sluttid": timeblock_end_time
-    }
-    # lägg till den nya uppgiften i uppgiftslistan
-    all_timeblocks.append(new_timeblock)
-
-    # skriv till timeblocks.json
-    save_to_json_file(all_timeblocks, "static/timeblocks.json")
-
-
-    # flash message("Tidsblocket har lagts till")
-    # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
-    redirect("/")
-
+def handle_add_timeblock():
+    return add_timeblock_post()
 
 @route("/preferences")
 def study_preferences():
@@ -223,18 +184,6 @@ def add_preferences():
 @route("/profile")
 def show_profile():
     return template("profile")
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
