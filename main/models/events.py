@@ -1,3 +1,7 @@
+import json
+import psycopg2
+
+
 def get_events(conn):
     cur = conn.cursor()
     # Fetch events and convert date and time columns to string format

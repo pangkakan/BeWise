@@ -1,72 +1,14 @@
 from bottle import route, get, post, run, template, error, static_file, request, response, redirect
 import json
 import psycopg2
+from controllers.db import create_connection
+from main.controllers import course_controller as course_ctrl
 from datetime import datetime
 
 from main.mainTing.scraper import Scraper
+from models.courses import read_from_json_file, save_to_json_file
 
-#General variables
-host = "pgserver.mau.se"
-database = "bewise"
-user = "ao9682"
-password = "934ae98a"
-port = "5432"  # Default PostgreSQL port
-
-#Connect to the database
-conn = psycopg2.connect(
-    host=host,
-    database=database,
-    user=user,
-    password=password,
-    port=port
-)
-
-
-
-def get_events():
-    cur = conn.cursor()
-    # Fetch events and convert date and time columns to string format
-    query = """
-    SELECT id, date::text, start_time::text, end_time::text, location, description FROM events
-    """
-    cur.execute(query)
-    events = cur.fetchall()
-    # Convert query results into a list of dicts to serialize to JSON
-    columns = [desc[0] for desc in cur.description]
-    events_list = [dict(zip(columns, row)) for row in events]
-
-    # Print each event as a separate JSON object on a new line
-    return json.dumps(events_list, indent=4)  # Return JSON string
-
-
-
-# Läser från json-fil och returnerar lista av innehåll
-def read_from_json_file(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            return data
-        
-    except FileNotFoundError:
-        print(f"File '{file_path}' not found. Creating a new file.")
-        with open(file_path, 'w') as file:
-            json.dump([], file)
-            return []
-        
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON in file '{file_path}'.")
-        return []
-   
-
-# Skriver lista av innehåll till json-fil
-def save_to_json_file(data, file_path):
-    try:
-        with open(file_path, 'w') as file:
-            json.dump(data, file, indent=4)
-        print(f"Data saved to '{file_path}' successfully.")
-
-    except Exception as e:
-        print(f"Error saving data to '{file_path}': {e}")
+conn = create_connection()
 
 
 
@@ -151,39 +93,7 @@ def new_course():
 
 @route("/add-course", method="post")
 def add_course():
-    courses = read_from_json_file("static/courses.json")
-    coursecode = getattr(request.forms, "coursedropdown")
-
-    # kontrollera att kursen inte redan är tillagd
-    for course in courses:
-        if course["kurskod"] == coursecode.upper():
-            print("Kursen finns redan")
-            return template("addcourse")
-    
-    # skriv till courses.json
-    course = {}
-
-    if coursecode == "da336a":
-        course["kurskod"] = "DA336A"
-        course["titel"] = "Systemutveckling och projekt"
-        timeblocks = get_events()
-        save_to_json_file(timeblocks, "static/timeblocks.json")
-    elif coursecode == "da297a":
-        course["kurskod"] = "DA297A"
-        course["titel"] = "Databasteknik"
-        # timeblocks = scraper("da297a")
-        # save_to_json_file(timeblocks, "static/timeblocks.json")
-    elif coursecode == "da108a":
-        course["kurskod"] = "DA108A"
-        course["titel"] = "Informationsarkitektur"
-        # timeblocks = scraper("da108a")
-        # save_to_json_file(timeblocks, "static/timeblocks.json")
-
-    courses.append(course)
-    save_to_json_file(courses, "static/courses.json")
-
-    # flash message("Kursen har lagts till")
-    redirect("/")
+    return course_ctrl.add_course_post(conn)
 
 
 @route("/<coursecode>/tasks")
