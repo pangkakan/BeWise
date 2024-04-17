@@ -1,5 +1,6 @@
-from bs4 import BeautifulSoup
 from urllib.request import urlopen
+
+from bs4 import BeautifulSoup
 
 url = "https://schema.mau.se/setup/jsp/Schema.jsp?startDatum=idag&intervallTyp=m&intervallAntal=6&sprak=SV&sokMedAND=true&forklaringar=true&resurser=p.TGSYA23h"
 page = urlopen(url)
