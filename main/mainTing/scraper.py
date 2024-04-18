@@ -1,8 +1,9 @@
-import mechanicalsoup
-import requests
-from bs4 import BeautifulSoup
 import re
 from datetime import datetime
+
+import requests
+from bs4 import BeautifulSoup
+
 
 class Scraper:
     """
@@ -42,7 +43,6 @@ class Scraper:
         """
         self.search_term = search_term
         self.course_or_no = course_or_no
-
 
     def scrape(self):
         """
@@ -110,9 +110,9 @@ class Scraper:
             The href of the found link, or None if no suitable link is found or an error occurs.
         """
         try:
-            soup = BeautifulSoup(content_page, 'html.parser')
-            for link in soup.find_all('a'):
-                href = link.get('href')
+            soup = BeautifulSoup(content_page, "html.parser")
+            for link in soup.find_all("a"):
+                href = link.get("href")
                 text = link.text.strip()
                 if text.__len__() > 20:
                     print(f"Found link: {href}")
@@ -139,89 +139,105 @@ class Scraper:
             A dictionary containing the scraped schedule data, or None if no schedule table is found or an error occurs.
         """
         month_map = {
-            'Jan': 'January',
-            'Feb': 'February',
-            'Mar': 'March',
-            'Apr': 'April',
-            'Maj': 'May',
-            'Jun': 'June',
-            'Jul': 'July',
-            'Aug': 'August',
-            'Sep': 'September',
-            'Okt': 'October',
-            'Nov': 'November',
-            'Dec': 'December'
+            "Jan": "January",
+            "Feb": "February",
+            "Mar": "March",
+            "Apr": "April",
+            "Maj": "May",
+            "Jun": "June",
+            "Jul": "July",
+            "Aug": "August",
+            "Sep": "September",
+            "Okt": "October",
+            "Nov": "November",
+            "Dec": "December",
         }
         try:
             response = requests.get(url)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            schedule_table = soup.find('table', class_='schemaTabell')
+            soup = BeautifulSoup(response.text, "html.parser")
+            schedule_table = soup.find("table", class_="schemaTabell")
             if schedule_table is None:
                 print("No schedule table found")
                 return None
 
             events = {}
-            for row in schedule_table.find_all('tr'):
-                week_marker = row.find('td', class_='vecka')
+            for row in schedule_table.find_all("tr"):
+                week_marker = row.find("td", class_="vecka")
                 if week_marker:
                     current_week = week_marker.get_text(strip=True)
                     events[current_week] = []
                     continue
 
-                cells = row.find_all('td', class_='commonCell')
+                cells = row.find_all("td", class_="commonCell")
                 if len(cells) >= 4:
                     day = cells[0].get_text(strip=True)
                     scraped_date = cells[1].get_text(strip=True)
-                    if scraped_date != '':
-                    # Replace the month name in the scraped date with the English month name
+                    if scraped_date != "":
+                        # Replace the month name in the scraped date with the English month name
                         for non_english_month, english_month in month_map.items():
-                            scraped_date = scraped_date.replace(non_english_month, english_month)
+                            scraped_date = scraped_date.replace(
+                                non_english_month, english_month
+                            )
                         # Add the current year to the scraped date
                         current_year = datetime.now().year
                         scraped_date = f"{scraped_date} {current_year}"
                         # Parse the date string to a date object
-                        date = datetime.strptime(scraped_date, '%d %B %Y').date()
+                        date = datetime.strptime(scraped_date, "%d %B %Y").date()
                     time = cells[2].get_text(strip=True)
-                    starting_time, ending_time = time.split('-')
+                    starting_time, ending_time = time.split("-")
                     start_time = datetime.strptime(starting_time, "%H:%M").time()
                     end_time = datetime.strptime(ending_time, "%H:%M").time()
                     if course_or_no:
-                        description = cells[8].get_text(strip=True).replace('\n', ' ').replace('\r', '')
+                        description = (
+                            cells[8]
+                            .get_text(strip=True)
+                            .replace("\n", " ")
+                            .replace("\r", "")
+                        )
                         location = cells[6].get_text(strip=True)
                     else:
-                        description = cells[7].get_text(strip=True).replace('\n', ' ').replace('\r', '')
+                        description = (
+                            cells[7]
+                            .get_text(strip=True)
+                            .replace("\n", " ")
+                            .replace("\r", "")
+                        )
                         location = cells[5].get_text(strip=True)
 
-                    description = re.sub(r'\s*,\s*', ', ', description)
-                    events[current_week].append({
-                        'day': day,
-                        'date': date,
-                        'start_time': start_time,
-                        'end_time': end_time,
-                        'location': location,
-                        'description': description
-                    })
+                    description = re.sub(r"\s*,\s*", ", ", description)
+                    events[current_week].append(
+                        {
+                            "day": day,
+                            "date": date,
+                            "start_time": start_time,
+                            "end_time": end_time,
+                            "location": location,
+                            "description": description,
+                        }
+                    )
             # Fill in missing day and date values if event is not the first in a day
             for week_events in events.values():
                 for event in week_events:
-                    if event['day'] != '':
-                        dag = event['day']
-                    if event['day'] == '':
-                        event['day'] = dag
-                    if event['date'] != '':
-                        date = event['date']
-                    if event['date'] == '':
-                        event['date'] = date
+                    if event["day"] != "":
+                        dag = event["day"]
+                    if event["day"] == "":
+                        event["day"] = dag
+                    if event["date"] != "":
+                        date = event["date"]
+                    if event["date"] == "":
+                        event["date"] = date
             # Print the schedule
             for week, week_events in events.items():
                 for event in week_events:
                     print(
-                        f"Week: {week}, Day: {event['day']}, Date: {event['date']}, From: {event['start_time']}, To: {event['end_time']}, Locale: {event['location']} Description: {event['description']}")
+                        f"Week: {week}, Day: {event['day']}, Date: {event['date']}, From: {event['start_time']}, To: {event['end_time']}, Locale: {event['location']} Description: {event['description']}"
+                    )
 
             return events
         except Exception as e:
             print(f"An error occurred in get_schedule: {e}")
             return None
+
 
 Scraper("da336a", True).scrape()
 
