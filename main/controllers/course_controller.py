@@ -1,9 +1,10 @@
 from bottle import request, template, redirect
 from models import courses, events
+from models.json_manager import add_to_json, save_to_json_file, read_from_json_file
 
 
 def add_course_post(conn):
-    course_list = courses.read_from_json_file("static/courses.json")
+    course_list = read_from_json_file("static/courses.json")
     coursecode = request.forms.get("coursedropdown")
 
     if courses.course_exists(course_list, coursecode):
@@ -26,7 +27,7 @@ def add_course_post(conn):
         )  # Assumes events model exists and has a method get_events()
         for event in course_events:
             event["kurskod"] = course["kurskod"]
-        courses.save_to_json_file(course_events, "static/timeblocks.json")
+        save_to_json_file(course_events, "static/timeblocks.json")
 
-    courses.add_course(course_list, course)
+    add_to_json(course_list, course, "static/courses.json")
     redirect("/")
