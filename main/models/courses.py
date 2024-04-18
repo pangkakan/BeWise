@@ -1,4 +1,4 @@
-from json_manager import save_to_json_file
+from models.json_manager import save_to_json_file
 
 
 def course_exists(courses, coursecode):
