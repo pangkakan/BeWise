@@ -1,6 +1,6 @@
 from bottle import request, redirect
-from main.models.json_manager import read_from_json_file, save_to_json_file
-from main.models.shared import create_id
+from models.json_manager import read_from_json_file, save_to_json_file
+from models.shared import create_id
 
 
 def add_timeblock_post():

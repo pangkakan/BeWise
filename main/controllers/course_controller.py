@@ -1,5 +1,5 @@
 from bottle import request, template, redirect
-from ..models import courses, events
+from models import courses, events
 
 
 def add_course_post(conn):
