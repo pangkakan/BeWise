@@ -11,6 +11,7 @@ conn = create_connection()
 @route("/")
 def index():
     # Lista av kurser
+    #fem
     courses = read_from_json_file("static/courses.json")
     return template("mycourses", courses=courses)
 
