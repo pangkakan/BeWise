@@ -1,9 +1,10 @@
 from bottle import request, template, redirect
 from models import courses, events
+from models.json_manager import read_from_json_file
 
 
 def add_course_post(conn):
-    course_list = courses.read_from_json_file("static/courses.json")
+    course_list = read_from_json_file("static/courses.json")
     coursecode = request.forms.get("coursedropdown")
 
     if courses.course_exists(course_list, coursecode):
