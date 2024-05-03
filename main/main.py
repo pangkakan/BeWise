@@ -1,8 +1,16 @@
 from bottle import route, run, template, error, static_file, request, redirect
 from controllers import course_controller as course_ctrl
 from controllers.db import create_connection
-from controllers.task_controller import add_task_post, get_tasks_with_coursecode, get_task_with_id
-from controllers.timeblock_controller import add_timeblock_post, get_timeblocks_with_coursecode, get_timeblock_with_id
+from controllers.task_controller import (
+    add_task_post,
+    get_tasks_with_coursecode,
+    get_task_with_id,
+)
+from controllers.timeblock_controller import (
+    add_timeblock_post,
+    get_timeblocks_with_coursecode,
+    get_timeblock_with_id,
+)
 from models.json_manager import read_from_json_file
 
 conn = create_connection()
@@ -11,7 +19,7 @@ conn = create_connection()
 @route("/")
 def index():
     # Lista av kurser
-    #fem
+    # fem
     courses = read_from_json_file("static/courses.json")
     return template("mycourses", courses=courses)
 
