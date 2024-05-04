@@ -14,6 +14,7 @@ def get_events(conn):
     columns = [desc[0] for desc in cur.description]
     return [dict(zip(columns, row)) for row in events]
 
+
 def scrape_to_db(conn, course_code, course_or_no):
     cur = conn.cursor()
     events = Scraper(course_code, course_or_no).scrape()

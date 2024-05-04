@@ -238,6 +238,7 @@ class Scraper:
             print(f"An error occurred in get_schedule: {e}")
             return None
 
+
 print("\n")
 print("\n")
 print("\n")

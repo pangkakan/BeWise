@@ -26,14 +26,12 @@ def add_timeblock_post():
         "sluttid": timeblock_end_time,
     }
 
-
     add_to_json(all_timeblocks, new_timeblock, "static/timeblocks.json")
-
-
 
     # flash message("Tidsblocket har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
     redirect("/")
+
 
 def view_timeblock(coursecode, id):
     # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
@@ -45,11 +43,13 @@ def view_timeblock(coursecode, id):
     except:
         return template("error")
 
+
 def get_timeblock_with_id(coursecode, id):
     timeblocks = get_timeblocks_with_coursecode(coursecode)
     for timeblock in timeblocks:
         if timeblock["id"] == int(id):
             return timeblock
+
 
 def get_timeblocks_with_coursecode(coursecode):
     timeblocks = read_from_json_file("static/timeblocks.json")

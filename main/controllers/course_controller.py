@@ -32,6 +32,7 @@ def add_course_post(conn):
     add_to_json(course_list, course, "static/courses.json")
     redirect("/")
 
+
 def get_course_with_coursecode(coursecode):
     courses = read_from_json_file("static/courses.json")
     for course in courses:
