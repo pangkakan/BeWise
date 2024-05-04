@@ -5,4 +5,3 @@ def create_id(list_of_dictionaries):
         if dictionary["id"] >= highest_id:
             highest_id = dictionary["id"] + 1
     return highest_id
-
