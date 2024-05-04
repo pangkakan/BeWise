@@ -385,5 +385,13 @@
         "location": "",
         "description": "Project Module: DEADLINE Third hand in of project work (team artefacts, individual assignment and individual reflection)",
         "kurskod": "DA336A"
+    },
+    {
+        "id": 45,
+        "kurskod": "DA297A",
+        "titel": "ef",
+        "datum": "2024-04-19",
+        "starttid": "17:47",
+        "sluttid": "18:47"
     }
 ]

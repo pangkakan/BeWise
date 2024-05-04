@@ -23,3 +23,8 @@ def save_to_json_file(data, file_path):
         print(f"Data saved to '{file_path}' successfully.")
     except Exception as e:
         print(f"Error saving data to '{file_path}': {e}")
+
+
+def add_to_json(entitylist, new_entity, filename):
+    entitylist.append(new_entity)
+    save_to_json_file(entitylist, filename)

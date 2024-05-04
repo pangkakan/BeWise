@@ -1,6 +1,8 @@
-from bottle import request, redirect
+from bottle import request, redirect, template
+from controllers.course_controller import get_course_with_coursecode
 from models.json_manager import read_from_json_file, save_to_json_file
 from models.shared import create_id
+from models.json_manager import add_to_json
 
 
 def add_timeblock_post():
@@ -23,12 +25,37 @@ def add_timeblock_post():
         "starttid": timeblock_start_time,
         "sluttid": timeblock_end_time,
     }
-    # lägg till den nya uppgiften i uppgiftslistan
-    all_timeblocks.append(new_timeblock)
 
-    # skriv till timeblocks.json
-    save_to_json_file(all_timeblocks, "static/timeblocks.json")
+
+    add_to_json(all_timeblocks, new_timeblock, "static/timeblocks.json")
+
+
 
     # flash message("Tidsblocket har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
     redirect("/")
+
+def view_timeblock(coursecode, id):
+    # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
+    try:
+        course = get_course_with_coursecode(coursecode)
+        timeblock = get_timeblock_with_id(coursecode, id)
+        return template("timeblock", course=course, timeblock=timeblock)
+
+    except:
+        return template("error")
+
+def get_timeblock_with_id(coursecode, id):
+    timeblocks = get_timeblocks_with_coursecode(coursecode)
+    for timeblock in timeblocks:
+        if timeblock["id"] == int(id):
+            return timeblock
+
+def get_timeblocks_with_coursecode(coursecode):
+    timeblocks = read_from_json_file("static/timeblocks.json")
+    timeblocks_list = []
+    for timeblock in timeblocks:
+        if timeblock["kurskod"] == coursecode:
+            timeblocks_list.append(timeblock)
+
+    return timeblocks_list
