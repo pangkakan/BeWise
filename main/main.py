@@ -22,23 +22,27 @@ conn = create_connection()
 
 @route("/")
 def index():
-    # Lista av kurser
-    # fem
+    return template("index")
+    
+
+@route("/courses")
+def courses():
     courses = read_from_json_file("./main/static/courses.json")
     return template("mycourses", courses=courses)
 
 
 @route("/calendar")
 def calendar():
-    # get all events
-    events = "hej"
-    return template("calendar", events=events) 
+    # get all events from database
+    # save to caldayview.json, calweekview.json, calmonthview.json
+    return template("calendar")
+    # return template("calendar", weekevents=weekevents)
 
 
 @route("/tasks")
 def tasks():
-    # get all tasks
-    pass
+    # get all tasks from database
+    return template("tasks")
 
 
 @route("/<coursecode>")
@@ -67,7 +71,7 @@ def course_tasks(coursecode):
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         tasks = get_tasks_with_coursecode(coursecode)
-        return template("tasks", course=course, tasks=tasks)
+        return template("coursetasks", course=course, tasks=tasks)
 
     except:
         return template("error")
@@ -90,19 +94,19 @@ def handle_add_task():
     return add_task_post()
 
 
-@route("/<coursecode>/schedule")
+@route("/<coursecode>/calendar")
 def course_tasks(coursecode):
     # läs in alla tidsblock för kurskod och skicka till schedule.html
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         timeblocks = get_timeblocks_with_coursecode(coursecode)
-        return template("schedule", course=course, timeblocks=timeblocks)
+        return template("coursecalendar", course=course, timeblocks=timeblocks)
 
     except:
         return template("error")
 
 
-@route("/<coursecode>/schedule/<id>")
+@route("/<coursecode>/calendar/<id>")
 def view_timeblock(coursecode, id):
     # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
     try:
@@ -158,9 +162,6 @@ def static_files(filename):
     """
     return static_file(filename, root="main/static")
 
-
-def getnew():
-    print("fem")
 
 
 # Start our web server

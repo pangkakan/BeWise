@@ -7,7 +7,15 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Lägg till kurs</h1>
+    <header>
+        <h1>Lägg till kurs</h1>
+        <nav>
+            <a href="/">Översikt</a>
+            <a href="/calendar">Kalender</a>
+            <a href="/tasks">Uppgifter</a>
+            <a href="/courses">Kurser</a>
+        </nav>
+    </header>
 
     <form action="/add-course" method="POST">
         <label for="coursedropdown">Välj kurs:</label>
@@ -19,6 +27,6 @@
         <button type="submit">Lägg till</button>
     </form>
 
-    <a href="/">Tillbaka</a>
+    <a href="/courses">Tillbaka</a>
 </body>
 </html>

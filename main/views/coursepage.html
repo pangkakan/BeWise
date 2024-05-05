@@ -7,10 +7,19 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Kurssida för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <header>
+        <h1>Kurssida - {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+        <nav>
+            <a href="/">Översikt</a>
+            <a href="/calendar">Kalender</a>
+            <a href="/tasks">Uppgifter</a>
+            <a href="/courses">Kurser</a>
+        </nav>
+    </header>
+
     
     <a href="/{{ course['kurskod'] }}/tasks">Uppgifter</a>
-    <a href="/{{ course['kurskod'] }}/schedule">Tidsplanering</a>
+    <a href="/{{ course['kurskod'] }}/calendar">Kalender</a>
 
     <a href="/">Tillbaka till startsidan</a>
 </body>

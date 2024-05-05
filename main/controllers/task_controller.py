@@ -3,7 +3,8 @@ from models.json_manager import read_from_json_file, save_to_json_file
 from models.shared import create_id
 
 
-def add_task_post(conn):
+def add_task_post():
+#def add_task_post(conn):
     coursecode = getattr(request.forms, "coursecode")
     task_title = getattr(request.forms, "task_title")
     task_date = getattr(request.forms, "task_date")
