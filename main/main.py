@@ -12,6 +12,7 @@ from controllers.timeblock_controller import (
     get_timeblock_with_id,
 )
 from models.json_manager import read_from_json_file
+from models.events import get_events
 
 # Set the path to the 'views' directory
 TEMPLATE_PATH.append('main/views')
@@ -23,8 +24,21 @@ conn = create_connection()
 def index():
     # Lista av kurser
     # fem
-    courses = read_from_json_file("static/courses.json")
+    courses = read_from_json_file("./main/static/courses.json")
     return template("mycourses", courses=courses)
+
+
+@route("/calendar")
+def calendar():
+    # get all events
+    events = "hej"
+    return template("calendar", events=events) 
+
+
+@route("/tasks")
+def tasks():
+    # get all tasks
+    pass
 
 
 @route("/<coursecode>")

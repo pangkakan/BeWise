@@ -5,7 +5,7 @@ def get_events(conn):
     cur = conn.cursor()
     # Fetch events and convert date and time columns to string format
     query = """
-    SELECT id, date::text, start_time::text, end_time::text, location, description FROM events
+    SELECT id, date::text, start_time::text, end_time::text, location, description FROM course_events
     """
     cur.execute(query)
     events = cur.fetchall()

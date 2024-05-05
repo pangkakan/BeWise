@@ -9,7 +9,7 @@
 <body>
     
     <h1>Tidsplanering för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
-    <h2>Inlagda tidsblock</h2>
+    <h2>Inlagda händelser</h2>
 
     <ul class="timeblockslist">
         % for timeblock in timeblocks:
@@ -20,7 +20,7 @@
     </ul>
 
     <form action="/add-timeblock" method="post" onsubmit="validateTime(event)">
-        <h2>Lägg till tidsblock</h2>
+        <h2>Lägg till händelse</h2>
         
         <label for="timeblock_title">Titel:</label>
         <input type="text" id="timeblock_title" name="timeblock_title" required>
