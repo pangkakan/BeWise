@@ -56,6 +56,8 @@ cmake-build-*/
 # IntelliJ
 out/
 
+**/__pycache__/
+*.pyc
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
