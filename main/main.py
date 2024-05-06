@@ -1,4 +1,6 @@
-from bottle import route, run, template, error, static_file, request, redirect
+import json
+
+from bottle import route, run, template, error, static_file, request, redirect, response
 from controllers import course_controller as course_ctrl
 from controllers.db import create_connection
 from controllers.task_controller import (
@@ -120,6 +122,30 @@ def add_preferences():
 def show_profile():
     return template("profile")
 
+@route("/api/events")
+def api_events():
+    # Load events from your JSON file
+    events = read_from_json_file("static/timeblocks.json")
+
+    # Convert the events to FullCalendar's format
+    formatted_events = []
+    for event in events:
+        start_datetime = f"{event['date']}T{event['start_time']}"
+        end_datetime = f"{event['date']}T{event['end_time']}"
+        formatted_event = {
+            "title": event["description"],
+            "start": start_datetime,
+            "end": end_datetime,
+            "extendedProps": {
+                "location": event["location"],
+                "kurskod": event["kurskod"]
+            }
+        }
+        formatted_events.append(formatted_event)
+
+    # Return the formatted events
+    response.content_type = 'application/json'
+    return json.dumps(formatted_events)
 
 @error(404)
 def error404(error):
