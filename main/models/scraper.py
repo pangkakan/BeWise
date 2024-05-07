@@ -54,11 +54,11 @@ class Scraper:
             A dictionary containing the scraped schedule data, or None if an error occurs.
         """
         try:
-            contentPage = self.getCourse(self.search_term)
-            if contentPage is None:
+            content_page = self.getCourse(self.search_term)
+            if content_page is None:
                 return None
 
-            good_link = self.findLink(contentPage)
+            good_link = self.findLink(content_page)
             if good_link is None:
                 return None
 
