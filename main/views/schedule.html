@@ -1,45 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
-    <title>Event Calendar</title>
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidsplanering - {{ course["kurskod"] }} {{ course["titel"] }}</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div id='calendar'></div>
+    
+    <h1>Tidsplanering för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <h2>Inlagda tidsblock</h2>
 
-<!-- Event Modal -->
-<div id="eventModal" style="display: none;">
-    <div id="eventDetails"></div>
-    <button onclick="closeModal()">Close</button>
-</div>
+    <ul class="timeblockslist">
+        % for timeblock in timeblocks:
+            <a href="/{{ course['kurskod'] }}/schedule/{{ timeblock['id'] }}">
+                <li>{{ timeblock }}</li>
+            </a>
+        % end
+    </ul>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+    <form action="/add-timeblock" method="post" onsubmit="validateTime(event)">
+        <h2>Lägg till tidsblock</h2>
+        
+        <label for="timeblock_title">Titel:</label>
+        <input type="text" id="timeblock_title" name="timeblock_title" required>
+  
+        <label for="timeblock_date">Datum:</label>
+        <input type="date" id="timeblock_date" name="timeblock_date" min="" required>
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: '/api/events',
-            eventClick: function(info) {
-                var eventDetails = `
-                    <p>Course Code: ${info.event.extendedProps.kurskod}</p>
-                    <p>Date: ${info.event.startStr.split('T')[0]}</p>
-                    <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
-                    <p>Location: ${info.event.extendedProps.location}</p>
-                    <p>Description: ${info.event.title}</p>
-                `;
-                document.getElementById("eventDetails").innerHTML = eventDetails;
-                document.getElementById("eventModal").style.display = "block";
+        <label for="timeblock_start_time">Starttid:</label>
+        <input type="time" id="timeblock_start_time" name="timeblock_start_time" required>
+
+        <label for="timeblock_end_time">Sluttid:</label>
+        <input type="time" id="timeblock_end_time" name="timeblock_end_time" required>
+
+        <input type="hidden" name="coursecode" value="{{ course['kurskod'] }}">
+
+        <button type="submit">Lägg till</button>
+    </form>
+
+    <a href="/{{ course['kurskod'] }}">Tillbaka till kurssidan</a>
+
+    <script>
+        // Get the current date in the format yyyy-mm-dd
+        const currentDate = new Date().toISOString().split('T')[0];
+        
+        // Set the minimum selectable date for the input element
+        document.getElementById('timeblock_date').min = currentDate;
+
+
+        function validateTime(event) {
+            const startTime = document.getElementById("timeblock_start_time").value;
+            const endTime = document.getElementById("timeblock_end_time").value;
+
+            if (startTime >= endTime) {
+                alert("Starttid måste vara tidigare än sluttid.");
+                event.preventDefault(); // Prevent form submission
             }
-        });
-
-        calendar.render();
-    });
-
-    function closeModal() {
-        document.getElementById("eventModal").style.display = "none";
-    }
-</script>
+        }
+    </script>
 </body>
 </html>

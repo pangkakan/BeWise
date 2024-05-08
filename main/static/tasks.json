@@ -16,5 +16,29 @@
         "kurskod": "DA297A",
         "titel": "Testuppgift",
         "datum": "2024-04-16"
+    },
+    {
+        "id": 4,
+        "kurskod": "DA108A",
+        "titel": "G\u00f6r en poster",
+        "datum": "2024-05-10"
+    },
+    {
+        "id": 5,
+        "kurskod": "DA108A",
+        "titel": "G\u00f6r en poster",
+        "datum": "2024-05-10"
+    },
+    {
+        "id": 6,
+        "kurskod": "DA297A",
+        "titel": "Teos schema",
+        "datum": "2024-05-08"
+    },
+    {
+        "id": 7,
+        "kurskod": "DA336A",
+        "titel": "Databas-tentamen",
+        "datum": "2024-05-17"
     }
 ]

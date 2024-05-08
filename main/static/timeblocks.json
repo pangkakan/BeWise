@@ -1,105 +1,51 @@
 [
     {
-        "id": 2,
-        "date": "2024-04-16",
-        "start_time": "08:15:00",
+        "id": 197,
+        "date": "2024-05-06",
+        "start_time": "09:15:00",
         "end_time": "12:00:00",
-        "location": "NI:A0422,NI:C0305,NI:C0401,NI:C0402,OR:B231a,OR:C235,OR:C236,OR:E235,OR:E336",
-        "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCESven NI:C0402Mareike's groups: NI:C0401Zahra: OR:E235Anna: NI:C0305Hamza: Online (Monday 04-15 / one day earlier)Anton: NI:A0422Sara: OnlineEmil: moved to Wednesday",
+        "location": "NI:A0506",
+        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE: Teams 1-8, 11",
         "kurskod": "DA336A"
     },
     {
-        "id": 3,
-        "date": "2024-04-17",
-        "start_time": "08:15:00",
-        "end_time": "10:00:00",
-        "location": "NI:A0606",
-        "description": "Project Module: Follow up for usability testing, no booking requiered",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 4,
-        "date": "2024-04-17",
-        "start_time": "10:15:00",
-        "end_time": "17:00:00",
-        "location": "NI:A0422,NI:A0515,NI:A0614,NI:C0305,NI:C0401,NI:C0402",
-        "description": "Project Module: First Cross Team Test Day, EXPECTED ATTENDANCE 2h for each team",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 5,
-        "date": "2024-04-19",
-        "start_time": "08:15:00",
-        "end_time": "12:00:00",
-        "location": "NI:A0411",
-        "description": "Project Module: Follow up for usability testing and analysis, no booking requiered",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 6,
-        "date": "2024-04-23",
-        "start_time": "08:15:00",
-        "end_time": "10:00:00",
-        "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
-        "description": "Project Module: RS2 Retrospective meeting EXPECTED ATTENDANCESara: NIB0314Anna: NI:B0317Hamza: NI:C0205",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 7,
-        "date": "2024-04-23",
-        "start_time": "10:15:00",
-        "end_time": "12:00:00",
-        "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
-        "description": "Project Module: RS2 Retrospective meeting EXPECTED ATTENDANCEZahra: NI:C0301Sven: NI:C0205Mareike's groups: NI:B0317Emil: NI:B0314Anton: OR:B338",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 8,
-        "date": "2024-04-30",
-        "start_time": "08:15:00",
-        "end_time": "12:00:00",
-        "location": "NI:A0515,NI:C0305,NI:C0401,OR:B231a,OR:B422,OR:C235,OR:C236,OR:E235,OR:E336",
-        "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCESven NI:C0401Sara: NIC305Emil: NI:A0515Anna: OR:C236Hamza: OR:C235Zahra: OR:E336Anton: OR:B422",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 9,
+        "id": 198,
         "date": "2024-05-07",
         "start_time": "08:15:00",
         "end_time": "12:00:00",
-        "location": "NI:A0322,NI:A0422,NI:A0515,NI:A0614,NI:B0305,NI:C0305,NI:C0401,OR:E235,OR:E336",
+        "location": "NI:A0322,NI:A0422,NI:A0614,NI:B0305,NI:C0305,NI:C0401,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCEZahra: NI:C0305Sven NI:C0401Mareike's groups: NI:B0305Sara: NIA0322Emil: NI:A0614Anna: NI:A0422Hamza: onlineAnton: OR:E336",
         "kurskod": "DA336A"
     },
     {
-        "id": 10,
+        "id": 199,
         "date": "2024-05-08",
-        "start_time": "08:15:00",
+        "start_time": "10:15:00",
         "end_time": "17:00:00",
         "location": "NI:A0422,NI:A0515,NI:A0614,NI:C0305,NI:C0401,NI:C0402",
         "description": "Project Module: Second Cross Team Test Day, 2h for each team EXPECTED ATTENDANCE",
         "kurskod": "DA336A"
     },
     {
-        "id": 11,
+        "id": 200,
         "date": "2024-05-13",
         "start_time": "13:15:00",
         "end_time": "16:00:00",
         "location": "NI:A0607",
-        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
+        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE : Teams 9-10, 12-19",
         "kurskod": "DA336A"
     },
     {
-        "id": 12,
+        "id": 201,
         "date": "2024-05-14",
         "start_time": "08:15:00",
         "end_time": "10:00:00",
-        "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
+        "location": "NI:B0314,NI:B0317,NI:C0205",
         "description": "Project Module: RS3 Restrospective meeting EXPECTED ATTENDANCESara: B0314Anna: NI:B0317Hamza: NI:C0205",
         "kurskod": "DA336A"
     },
     {
-        "id": 13,
+        "id": 202,
         "date": "2024-05-14",
         "start_time": "10:15:00",
         "end_time": "12:00:00",
@@ -108,7 +54,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 14,
+        "id": 203,
         "date": "2024-05-15",
         "start_time": "08:15:00",
         "end_time": "13:00:00",
@@ -117,25 +63,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 15,
-        "date": "2024-05-15",
-        "start_time": "09:15:00",
-        "end_time": "12:00:00",
-        "location": "NI:A0607",
-        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 16,
-        "date": "2024-05-15",
-        "start_time": "13:15:00",
-        "end_time": "16:00:00",
-        "location": "NI:A0607",
-        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 17,
+        "id": 204,
         "date": "2024-05-16",
         "start_time": "08:15:00",
         "end_time": "17:00:00",
@@ -144,16 +72,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 18,
-        "date": "2024-05-16",
-        "start_time": "13:15:00",
-        "end_time": "16:00:00",
-        "location": "NI:A0407",
-        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 19,
+        "id": 205,
         "date": "2024-05-17",
         "start_time": "08:15:00",
         "end_time": "13:00:00",
@@ -162,16 +81,16 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 20,
+        "id": 206,
         "date": "2024-05-17",
         "start_time": "09:15:00",
         "end_time": "12:00:00",
         "location": "NI:A0407",
-        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
+        "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE Teams 20-29",
         "kurskod": "DA336A"
     },
     {
-        "id": 21,
+        "id": 207,
         "date": "2024-05-20",
         "start_time": "13:15:00",
         "end_time": "15:00:00",
@@ -180,16 +99,16 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 22,
+        "id": 208,
         "date": "2024-05-21",
         "start_time": "08:15:00",
         "end_time": "11:00:00",
-        "location": "NI:A0515,NI:A0614,NI:C0305,NI:C0401,OR:B231a,OR:C235,OR:C236,OR:E235,OR:E336",
+        "location": "NI:A0515,NI:A0614,NI:C0305,NI:C0401,OR:C235,OR:C236,OR:E235,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCEZahra: NI:C0305Sven NI:A0614, Mareike: NI:C0401Emil: NI:A0515Anna: OR:C236Hamza: OR:C235Anton: OR:E336Sara: OR:E235",
         "kurskod": "DA336A"
     },
     {
-        "id": 23,
+        "id": 209,
         "date": "2024-05-21",
         "start_time": "11:15:00",
         "end_time": "12:00:00",
@@ -198,7 +117,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 24,
+        "id": 210,
         "date": "2024-05-22",
         "start_time": "08:15:00",
         "end_time": "13:15:00",
@@ -207,7 +126,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 25,
+        "id": 211,
         "date": "2024-05-23",
         "start_time": "13:15:00",
         "end_time": "17:00:00",
@@ -216,7 +135,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 26,
+        "id": 212,
         "date": "2024-05-24",
         "start_time": "08:15:00",
         "end_time": "12:00:00",
@@ -225,7 +144,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 27,
+        "id": 213,
         "date": "2024-05-29",
         "start_time": "10:15:00",
         "end_time": "15:00:00",
@@ -234,88 +153,79 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 28,
-        "date": "2024-05-29",
-        "start_time": "15:15:00",
-        "end_time": "17:00:00",
-        "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEONLY to use if we absolutely have to",
-        "kurskod": "DA336A"
-    },
-    {
-        "id": 29,
+        "id": 214,
         "date": "2024-05-30",
         "start_time": "08:15:00",
         "end_time": "10:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEHamza",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEHamza's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 30,
+        "id": 215,
         "date": "2024-05-30",
         "start_time": "10:15:00",
         "end_time": "12:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCESvens FirstAnna's first choiceHamzaSaraEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCESven's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 31,
+        "id": 216,
         "date": "2024-05-30",
         "start_time": "13:15:00",
         "end_time": "15:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEZahra's prefered choiceAnna's second choiceSaraEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEZahra's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 32,
+        "id": 217,
         "date": "2024-05-30",
         "start_time": "15:15:00",
         "end_time": "17:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnna's third choiceSaraEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnna's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 33,
+        "id": 218,
         "date": "2024-05-31",
         "start_time": "08:15:00",
         "end_time": "10:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnton's backup choiceHamzaSara",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCESara's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 34,
+        "id": 219,
         "date": "2024-05-31",
         "start_time": "10:15:00",
         "end_time": "12:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnton's prefered choiceHamzaEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnton's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 35,
+        "id": 220,
         "date": "2024-05-31",
         "start_time": "13:15:00",
         "end_time": "15:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEMareike's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 36,
+        "id": 221,
         "date": "2024-05-31",
         "start_time": "15:15:00",
         "end_time": "17:00:00",
         "location": "NI:A0602",
-        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEEmil preferred choice",
+        "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEEmil's teams",
         "kurskod": "DA336A"
     },
     {
-        "id": 37,
+        "id": 222,
         "date": "2024-06-02",
         "start_time": "23:58:00",
         "end_time": "23:59:00",
@@ -324,7 +234,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 38,
+        "id": 223,
         "date": "2024-06-10",
         "start_time": "13:15:00",
         "end_time": "17:00:00",
@@ -333,7 +243,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 39,
+        "id": 224,
         "date": "2024-06-11",
         "start_time": "08:15:00",
         "end_time": "12:00:00",
@@ -342,7 +252,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 40,
+        "id": 225,
         "date": "2024-08-11",
         "start_time": "23:58:00",
         "end_time": "23:59:00",
@@ -351,7 +261,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 41,
+        "id": 226,
         "date": "2024-08-14",
         "start_time": "08:15:00",
         "end_time": "13:15:00",
@@ -360,7 +270,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 42,
+        "id": 227,
         "date": "2024-08-16",
         "start_time": "08:15:00",
         "end_time": "12:00:00",
@@ -369,7 +279,7 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 43,
+        "id": 228,
         "date": "2024-08-19",
         "start_time": "08:15:00",
         "end_time": "12:00:00",
@@ -378,12 +288,20 @@
         "kurskod": "DA336A"
     },
     {
-        "id": 44,
+        "id": 229,
         "date": "2024-10-13",
         "start_time": "23:58:00",
         "end_time": "23:59:00",
         "location": "",
         "description": "Project Module: DEADLINE Third hand in of project work (team artefacts, individual assignment and individual reflection)",
         "kurskod": "DA336A"
+    },
+    {
+        "id": 230,
+        "kurskod": "DA108A",
+        "titel": "poster-uppgift",
+        "datum": "2024-05-09",
+        "starttid": "13:45",
+        "sluttid": "14:00"
     }
 ]

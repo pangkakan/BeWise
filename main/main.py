@@ -72,7 +72,7 @@ def view_task(coursecode, id):
 
 @route("/add-task", method="post")
 def handle_add_task():
-    return add_task_post()
+    return add_task_post(conn)
 
 
 @route("/<coursecode>/schedule")
