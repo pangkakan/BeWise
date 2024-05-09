@@ -4,14 +4,63 @@
     <title>Event Calendar</title>
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <style>
+        body {
+            display: flex; /* sets up a flexbox layout */
+            padding-top: 50px; /* offset from the top */
+        }
+
+        #sidebar {
+            width: 30%; /* takes up 30% of the horizontal space */
+            padding-right: 20px; /* space between the to-do list and the calendar */
+        }
+
+        #calendar {
+            flex-grow: 1; /* takes remaining space */
+        }
+
+        #eventModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(250, 250, 250, 0.75); /* semi-transparent black background */
+            display: none; /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+
+        }
+
+        #eventDetails {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 50%; /* or any suitable width */
+            text-align: left;
+        }
+
+        button {
+            margin-top: 20px;
+
+            cursor: pointer;
+
+
+        }
+    </style>
 </head>
 <body>
+<div id="sidebar">
+    <!-- To-do list will go here -->
+</div>
 <div id='calendar'></div>
 
 <!-- Event Modal -->
-<div id="eventModal" style="display: none;">
+<div id="eventModal">
     <div id="eventDetails"></div>
-    <button onclick="closeModal()">Close</button>
+    <button id="closeButton">Close</button>
 </div>
 
 <script>
@@ -23,18 +72,19 @@
             events: '/api/events',
             eventClick: function(info) {
                 var eventDetails = `
-                    <p>Course Code: ${info.event.extendedProps.kurskod}</p>
-                    <p>Date: ${info.event.startStr.split('T')[0]}</p>
-                    <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
-                    <p>Location: ${info.event.extendedProps.location}</p>
-                    <p>Description: ${info.event.title}</p>
-                `;
+                        <p>Course Code: ${info.event.extendedProps.kurskod}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
+                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
+                        <p>Location: ${info.event.extendedProps.location}</p>
+                        <p>Description: ${info.event.title}</p>
+                    `;
                 document.getElementById("eventDetails").innerHTML = eventDetails;
-                document.getElementById("eventModal").style.display = "block";
+                document.getElementById("eventModal").style.display = "flex";
             }
         });
 
         calendar.render();
+        document.getElementById("closeButton").addEventListener('click', closeModal);
     });
 
     function closeModal() {
