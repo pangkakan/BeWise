@@ -3,13 +3,14 @@ from models.json_manager import read_from_json_file, save_to_json_file
 from models.shared import create_id
 
 
-def add_task_post(conn):
+def add_task_post():
+#def add_task_post(conn):
     coursecode = getattr(request.forms, "coursecode")
     task_title = getattr(request.forms, "task_title")
     task_date = getattr(request.forms, "task_date")
 
     # hämta alla inlagda uppgifter
-    all_tasks = read_from_json_file("static/tasks.json")
+    all_tasks = read_from_json_file("./main/static/tasks.json")
     # skapa unikt id för uppgift
     task_id = create_id(all_tasks)
 
@@ -23,7 +24,7 @@ def add_task_post(conn):
     all_tasks.append(new_task)
 
     # skriv till tasks.json
-    save_to_json_file(all_tasks, "static/tasks.json")
+    save_to_json_file(all_tasks, "./main/static/tasks.json")
 
     # flash message("Uppgiften har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
@@ -31,7 +32,7 @@ def add_task_post(conn):
 
 
 def get_tasks_with_coursecode(coursecode):
-    tasks = read_from_json_file("static/tasks.json")
+    tasks = read_from_json_file("./main/static/tasks.json")
     task_list = []
     for task in tasks:
         if task["kurskod"] == coursecode:

@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tidsplanering - {{ course["kurskod"] }} {{ course["titel"] }}</title>
+    <title>Kalender - {{ course["kurskod"] }} {{ course["titel"] }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <header>
+        <h1>Kalender - {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+        <nav>
+            <a href="/">Översikt</a>
+            <a href="/calendar">Kalender</a>
+            <a href="/tasks">Uppgifter</a>
+            <a href="/courses">Kurser</a>
+        </nav>
+    </header>
     
-    <h1>Tidsplanering för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
-    <h2>Inlagda tidsblock</h2>
+    <h2>Inlagda händelser</h2>
 
     <ul class="timeblockslist">
         % for timeblock in timeblocks:
-            <a href="/{{ course['kurskod'] }}/schedule/{{ timeblock['id'] }}">
+            <a href="/{{ course['kurskod'] }}/calendar/{{ timeblock['id'] }}">
                 <li>{{ timeblock }}</li>
             </a>
         % end
     </ul>
 
     <form action="/add-timeblock" method="post" onsubmit="validateTime(event)">
-        <h2>Lägg till tidsblock</h2>
+        <h2>Lägg till händelse</h2>
         
         <label for="timeblock_title">Titel:</label>
         <input type="text" id="timeblock_title" name="timeblock_title" required>

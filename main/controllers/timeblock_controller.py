@@ -13,7 +13,7 @@ def add_timeblock_post():
     timeblock_end_time = getattr(request.forms, "timeblock_end_time")
 
     # hämta alla inlagda tidsblock
-    all_timeblocks = read_from_json_file("static/timeblocks.json")
+    all_timeblocks = read_from_json_file("./main/static/timeblocks.json")
     # skapa unikt id för uppgift
     timeblock_id = create_id(all_timeblocks)
 
@@ -26,7 +26,7 @@ def add_timeblock_post():
         "sluttid": timeblock_end_time,
     }
 
-    add_to_json(all_timeblocks, new_timeblock, "static/timeblocks.json")
+    add_to_json(all_timeblocks, new_timeblock, "./main/static/timeblocks.json")
 
     # flash message("Tidsblocket har lagts till")
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
@@ -52,7 +52,7 @@ def get_timeblock_with_id(coursecode, id):
 
 
 def get_timeblocks_with_coursecode(coursecode):
-    timeblocks = read_from_json_file("static/timeblocks.json")
+    timeblocks = read_from_json_file("./main/static/timeblocks.json")
     timeblocks_list = []
     for timeblock in timeblocks:
         if timeblock["kurskod"] == coursecode:

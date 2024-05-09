@@ -1,4 +1,4 @@
-from bottle import route, run, template, error, static_file, request, redirect
+from bottle import route, run, template, error, static_file, request, redirect, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from controllers.db import create_connection
 from controllers.task_controller import (
@@ -12,16 +12,37 @@ from controllers.timeblock_controller import (
     get_timeblock_with_id,
 )
 from models.json_manager import read_from_json_file
+from models.events import get_events
+
+# Set the path to the 'views' directory
+TEMPLATE_PATH.append('main/views')
 
 conn = create_connection()
 
 
 @route("/")
 def index():
-    # Lista av kurser
-    # fem
-    courses = read_from_json_file("static/courses.json")
+    return template("index")
+    
+
+@route("/courses")
+def courses():
+    courses = read_from_json_file("./main/static/courses.json")
     return template("mycourses", courses=courses)
+
+
+@route("/calendar")
+def calendar():
+    # get all events from database
+    # save to caldayview.json, calweekview.json, calmonthview.json
+    return template("calendar")
+    # return template("calendar", weekevents=weekevents)
+
+
+@route("/tasks")
+def tasks():
+    # get all tasks from database
+    return template("tasks")
 
 
 @route("/<coursecode>")
@@ -50,7 +71,7 @@ def course_tasks(coursecode):
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         tasks = get_tasks_with_coursecode(coursecode)
-        return template("tasks", course=course, tasks=tasks)
+        return template("coursetasks", course=course, tasks=tasks)
 
     except:
         return template("error")
@@ -73,19 +94,19 @@ def handle_add_task():
     return add_task_post()
 
 
-@route("/<coursecode>/schedule")
+@route("/<coursecode>/calendar")
 def course_tasks(coursecode):
     # läs in alla tidsblock för kurskod och skicka till schedule.html
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         timeblocks = get_timeblocks_with_coursecode(coursecode)
-        return template("schedule", course=course, timeblocks=timeblocks)
+        return template("coursecalendar", course=course, timeblocks=timeblocks)
 
     except:
         return template("error")
 
 
-@route("/<coursecode>/schedule/<id>")
+@route("/<coursecode>/calendar/<id>")
 def view_timeblock(coursecode, id):
     # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
     try:
@@ -139,11 +160,8 @@ def static_files(filename):
         Returns:
                 file : the static file requested by URL
     """
-    return static_file(filename, root="static")
+    return static_file(filename, root="main/static")
 
-
-def getnew():
-    print("fem")
 
 
 # Start our web server

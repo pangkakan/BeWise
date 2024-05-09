@@ -1,20 +1,20 @@
 [
     {
         "id": 1,
-        "kurskod": "DA336A",
-        "titel": "Arbeta med design",
-        "datum": "2024-04-23"
+        "kurskod": "DA108A",
+        "titel": "asdsd",
+        "datum": "2024-05-14"
+    },
+    {
+        "id": 1,
+        "kurskod": "DA108A",
+        "titel": "asdsd",
+        "datum": "2024-05-14"
     },
     {
         "id": 2,
-        "kurskod": "DA108A",
-        "titel": "En uppgift",
-        "datum": "2024-04-16"
-    },
-    {
-        "id": 3,
-        "kurskod": "DA297A",
-        "titel": "Testuppgift",
-        "datum": "2024-04-16"
+        "kurskod": "DA336A",
+        "titel": "hfhgfhgf",
+        "datum": "2024-05-14"
     }
 ]

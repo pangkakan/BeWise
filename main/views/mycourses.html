@@ -7,7 +7,15 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Mina kurser</h1>
+    <header>
+        <h1>Mina kurser</h1>
+        <nav>
+            <a href="/">Översikt</a>
+            <a href="/calendar">Kalender</a>
+            <a href="/tasks">Uppgifter</a>
+            <a href="/courses">Kurser</a>
+        </nav>
+    </header>
 
     <div class="mycourselist">
         % for course in courses:
@@ -17,6 +25,7 @@
 
     <a href="/new-course">Ny kurs</a>
 
+    <a href="/">Tillbaka</a>
 
 </body>
 </html>
