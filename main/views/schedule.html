@@ -11,8 +11,8 @@
         }
 
         #sidebar {
-            width: 30%; /* takes up 30% of the horizontal space */
-            padding-right: 20px; /* space between the to-do list and the calendar */
+           /* width: 30%; /* takes up 30% of the horizontal space */
+           /* padding-right: 20px; /* space between the to-do list and the calendar */
         }
 
         #calendar {
@@ -46,9 +46,13 @@
             margin-top: 20px;
 
             cursor: pointer;
-
-
         }
+        button:hover {
+            background-color: #f1f1f1;
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -57,11 +61,14 @@
 </div>
 <div id='calendar'></div>
 
+
 <!-- Event Modal -->
 <div id="eventModal">
     <div id="eventDetails"></div>
+
     <button id="closeButton">Close</button>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -69,7 +76,7 @@
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            events: '/api/events',
+            events: '/api/calendar',
             eventClick: function(info) {
                 var eventDetails = `
                         <p>Course Code: ${info.event.extendedProps.kurskod}</p>
@@ -87,9 +94,11 @@
         document.getElementById("closeButton").addEventListener('click', closeModal);
     });
 
+
     function closeModal() {
         document.getElementById("eventModal").style.display = "none";
     }
 </script>
+
 </body>
 </html>

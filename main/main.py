@@ -122,8 +122,9 @@ def add_preferences():
 def show_profile():
     return template("profile")
 
-@route("/api/events")
-def api_events():
+
+@route("/api/calendar")
+def calendar_api():
     # Load events from your JSON file
     events = read_from_json_file("static/timeblocks.json")
 
