@@ -1,4 +1,5 @@
 import json
+import datetime
 
 
 # Läser från json-fil och returnerar lista av innehåll
@@ -28,3 +29,10 @@ def save_to_json_file(data, file_path):
 def add_to_json(entitylist, new_entity, filename):
     entitylist.append(new_entity)
     save_to_json_file(entitylist, filename)
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.isoformat()
+        return super(DateTimeEncoder, self).default(obj)

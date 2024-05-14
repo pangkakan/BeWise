@@ -19,8 +19,8 @@ def add_timeblock_post():
 
     new_timeblock = {
         "id": timeblock_id,
-        "kurskod": coursecode,
-        "titel": timeblock_title,
+        "coursecode": coursecode,
+        "title": timeblock_title,
         "datum": timeblock_date,
         "starttid": timeblock_start_time,
         "sluttid": timeblock_end_time,
@@ -55,7 +55,7 @@ def get_timeblocks_with_coursecode(coursecode):
     timeblocks = read_from_json_file("static/timeblocks.json")
     timeblocks_list = []
     for timeblock in timeblocks:
-        if timeblock["kurskod"] == coursecode:
+        if timeblock["coursecode"] == coursecode:
             timeblocks_list.append(timeblock)
 
     return timeblocks_list

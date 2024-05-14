@@ -15,8 +15,8 @@ def add_task_post(conn):
 
     new_task = {
         "id": task_id,
-        "kurskod": coursecode,
-        "titel": task_title,
+        "coursecode": coursecode,
+        "title": task_title,
         "datum": task_date,
     }
     # lägg till den nya uppgiften i uppgiftslistan
@@ -33,7 +33,7 @@ def get_tasks_with_coursecode(coursecode):
     tasks = read_from_json_file("static/tasks.json")
     task_list = []
     for task in tasks:
-        if task["kurskod"] == coursecode:
+        if task["coursecode"] == coursecode:
             task_list.append(task)
 
     return task_list

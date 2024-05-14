@@ -6,7 +6,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0422,NI:C0305,NI:C0401,NI:C0402,OR:B231a,OR:C235,OR:C236,OR:E235,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCESven NI:C0402Mareike's groups: NI:C0401Zahra: OR:E235Anna: NI:C0305Hamza: Online (Monday 04-15 / one day earlier)Anton: NI:A0422Sara: OnlineEmil: moved to Wednesday",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 3,
@@ -15,7 +15,7 @@
         "end_time": "10:00:00",
         "location": "NI:A0606",
         "description": "Project Module: Follow up for usability testing, no booking requiered",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 4,
@@ -24,7 +24,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0422,NI:A0515,NI:A0614,NI:C0305,NI:C0401,NI:C0402",
         "description": "Project Module: First Cross Team Test Day, EXPECTED ATTENDANCE 2h for each team",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 5,
@@ -33,7 +33,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0411",
         "description": "Project Module: Follow up for usability testing and analysis, no booking requiered",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 6,
@@ -42,7 +42,7 @@
         "end_time": "10:00:00",
         "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
         "description": "Project Module: RS2 Retrospective meeting EXPECTED ATTENDANCESara: NIB0314Anna: NI:B0317Hamza: NI:C0205",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 7,
@@ -51,7 +51,7 @@
         "end_time": "12:00:00",
         "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
         "description": "Project Module: RS2 Retrospective meeting EXPECTED ATTENDANCEZahra: NI:C0301Sven: NI:C0205Mareike's groups: NI:B0317Emil: NI:B0314Anton: OR:B338",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 8,
@@ -60,7 +60,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0515,NI:C0305,NI:C0401,OR:B231a,OR:B422,OR:C235,OR:C236,OR:E235,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCESven NI:C0401Sara: NIC305Emil: NI:A0515Anna: OR:C236Hamza: OR:C235Zahra: OR:E336Anton: OR:B422",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 9,
@@ -69,7 +69,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0322,NI:A0422,NI:A0515,NI:A0614,NI:B0305,NI:C0305,NI:C0401,OR:E235,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCEZahra: NI:C0305Sven NI:C0401Mareike's groups: NI:B0305Sara: NIA0322Emil: NI:A0614Anna: NI:A0422Hamza: onlineAnton: OR:E336",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 10,
@@ -78,7 +78,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0422,NI:A0515,NI:A0614,NI:C0305,NI:C0401,NI:C0402",
         "description": "Project Module: Second Cross Team Test Day, 2h for each team EXPECTED ATTENDANCE",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 11,
@@ -87,7 +87,7 @@
         "end_time": "16:00:00",
         "location": "NI:A0607",
         "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 12,
@@ -96,7 +96,7 @@
         "end_time": "10:00:00",
         "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
         "description": "Project Module: RS3 Restrospective meeting EXPECTED ATTENDANCESara: B0314Anna: NI:B0317Hamza: NI:C0205",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 13,
@@ -105,7 +105,7 @@
         "end_time": "12:00:00",
         "location": "NI:B0314,NI:B0317,NI:C0205,NI:C0301,OR:B338",
         "description": "Project Module: RS3 Restrospective meeting EXPECTED ATTENDANCEZahra: NI:C0305Sven: NI:B0317Mareike: NI:C0205Emil: NI:B0314Anton: OR:B338",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 14,
@@ -114,7 +114,7 @@
         "end_time": "13:00:00",
         "location": "NI:A0301",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 15,
@@ -123,7 +123,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0607",
         "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 16,
@@ -132,7 +132,7 @@
         "end_time": "16:00:00",
         "location": "NI:A0607",
         "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 17,
@@ -141,7 +141,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0301",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 18,
@@ -150,7 +150,7 @@
         "end_time": "16:00:00",
         "location": "NI:A0407",
         "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 19,
@@ -159,7 +159,7 @@
         "end_time": "13:00:00",
         "location": "NI:A0301",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 20,
@@ -168,7 +168,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0407",
         "description": "Project Module: Workshop Poster for Demo Day, EXPECTED ATTENDANCE 8 teams",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 21,
@@ -177,7 +177,7 @@
         "end_time": "15:00:00",
         "location": "NI:B0E07",
         "description": "Theory Module: Q&A Session before exam re-sit",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 22,
@@ -186,7 +186,7 @@
         "end_time": "11:00:00",
         "location": "NI:A0515,NI:A0614,NI:C0305,NI:C0401,OR:B231a,OR:C235,OR:C236,OR:E235,OR:E336",
         "description": "Project Module: Supervision meeting, 30 min for each team EXPECTED ATTENDANCEZahra: NI:C0305Sven NI:A0614, Mareike: NI:C0401Emil: NI:A0515Anna: OR:C236Hamza: OR:C235Anton: OR:E336Sara: OR:E235",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 23,
@@ -195,7 +195,7 @@
         "end_time": "12:00:00",
         "location": "NI:C0E11",
         "description": "Project Module: How to make a good demo EXPECTED ATTENDANCE",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 24,
@@ -204,7 +204,7 @@
         "end_time": "13:15:00",
         "location": "KR:Tentasal 1-6",
         "description": "Salstentamen - Digitamen Omtentamen 12101",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 25,
@@ -213,7 +213,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0322,NI:A0515,NI:A0614,NI:C0305,NI:C0401,NI:C0402",
         "description": "Project Module: Third Cross Team Test Day, 1h for each team",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 26,
@@ -222,7 +222,7 @@
         "end_time": "12:00:00",
         "location": "NI:B0E07",
         "description": "Theory Module: Exam walk through",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 27,
@@ -231,7 +231,7 @@
         "end_time": "15:00:00",
         "location": "NI:A0500A,NI:A0500B,NI:A0500V,NI:A0506,NI:A0507",
         "description": "Project Module: Demo Day EXPECTED ATTENDANCE",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 28,
@@ -240,7 +240,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEONLY to use if we absolutely have to",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 29,
@@ -249,7 +249,7 @@
         "end_time": "10:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEHamza",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 30,
@@ -258,7 +258,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCESvens FirstAnna's first choiceHamzaSaraEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 31,
@@ -267,7 +267,7 @@
         "end_time": "15:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEZahra's prefered choiceAnna's second choiceSaraEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 32,
@@ -276,7 +276,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnna's third choiceSaraEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 33,
@@ -285,7 +285,7 @@
         "end_time": "10:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnton's backup choiceHamzaSara",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 34,
@@ -294,7 +294,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEAnton's prefered choiceHamzaEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 35,
@@ -303,7 +303,7 @@
         "end_time": "15:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 36,
@@ -312,7 +312,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0602",
         "description": "Project Module: RS4 Restrospective meeting EXPECTED ATTENDANCEEmil preferred choice",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 37,
@@ -321,7 +321,7 @@
         "end_time": "23:59:00",
         "location": "",
         "description": "Project Module: DEADLINE First hand in of project work (team artefacts, individual assignment and individual reflection)",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 38,
@@ -330,7 +330,7 @@
         "end_time": "17:00:00",
         "location": "NI:A0301",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 39,
@@ -339,7 +339,7 @@
         "end_time": "12:00:00",
         "location": "NI:A0301",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 40,
@@ -348,7 +348,7 @@
         "end_time": "23:59:00",
         "location": "",
         "description": "Project Module: DEADLINE Second hand in of project work (team artefacts, individual assignment and individual reflection)",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 41,
@@ -357,7 +357,7 @@
         "end_time": "13:15:00",
         "location": "KR:Tentasal 1-6",
         "description": "Salstentamen - Digitamen Omtentamen 22101",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 42,
@@ -366,7 +366,7 @@
         "end_time": "12:00:00",
         "location": "NI:B0E07",
         "description": "Theory Module: Exam walk through",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 43,
@@ -375,7 +375,7 @@
         "end_time": "12:00:00",
         "location": "NI:C0306",
         "description": "Oral exam for grade VG",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     },
     {
         "id": 44,
@@ -384,6 +384,6 @@
         "end_time": "23:59:00",
         "location": "",
         "description": "Project Module: DEADLINE Third hand in of project work (team artefacts, individual assignment and individual reflection)",
-        "kurskod": "DA336A"
+        "coursecode": "DA336A"
     }
 ]

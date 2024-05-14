@@ -69,7 +69,37 @@
     <button id="closeButton">Close</button>
 </div>
 
+<select id="eventType">
+    <option value="all">All</option>
+    <option value="courses">Courses</option>
+    <option value="goals">Goals</option>
+    <option value="assignments">Assignments</option>
+    <option value="course_events">course_events</option>
+</select>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: function(fetchInfo, successCallback, failureCallback) {
+                const eventType = document.getElementById('eventType').value;
+                fetch(`/api/calendar?type=${eventType}`)
+                    .then(response => response.json())
+                    .then(data => successCallback(data))
+                    .catch(error => failureCallback(error));
+            }
+        });
+        calendar.render();
+
+        // Re-fetch events when the event type is changed
+        document.getElementById('eventType').addEventListener('change', function() {
+            calendar.refetchEvents();
+        });
+    });
+</script>
+<!--
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -79,7 +109,7 @@
             events: '/api/calendar',
             eventClick: function(info) {
                 var eventDetails = `
-                        <p>Course Code: ${info.event.extendedProps.kurskod}</p>
+                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
                         <p>Date: ${info.event.startStr.split('T')[0]}</p>
                         <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
                         <p>Location: ${info.event.extendedProps.location}</p>
@@ -99,6 +129,8 @@
         document.getElementById("eventModal").style.display = "none";
     }
 </script>
+-->
+
 
 </body>
 </html>

@@ -13,7 +13,13 @@ from controllers.timeblock_controller import (
     get_timeblocks_with_coursecode,
     get_timeblock_with_id,
 )
-from models.json_manager import read_from_json_file
+from controllers.calendar_filter import (
+    filter_courses,
+    filter_goals,
+    filter_assignments,
+    filter_course_events
+)
+from models.json_manager import read_from_json_file, DateTimeEncoder
 
 conn = create_connection()
 
@@ -28,7 +34,7 @@ def index():
 
 @route("/<coursecode>")
 def course_page(coursecode):
-    # kontrollera att kurs med den kurskoden finns i courses.json
+    # kontrollera att kurs med den coursecodeen finns i courses.json
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         return template("coursepage", course=course)
@@ -48,7 +54,7 @@ def handle_add_course():
 
 @route("/<coursecode>/tasks")
 def course_tasks(coursecode):
-    # läs in alla uppgifter för kurskod och skicka till tasks.html
+    # läs in alla uppgifter för coursecode och skicka till tasks.html
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         tasks = get_tasks_with_coursecode(coursecode)
@@ -77,7 +83,7 @@ def handle_add_task():
 
 @route("/<coursecode>/schedule")
 def course_tasks(coursecode):
-    # läs in alla tidsblock för kurskod och skicka till schedule.html
+    # läs in alla tidsblock för coursecode och skicka till schedule.html
     try:
         course = course_ctrl.get_course_with_coursecode(coursecode)
         timeblocks = get_timeblocks_with_coursecode(coursecode)
@@ -125,28 +131,28 @@ def show_profile():
 
 @route("/api/calendar")
 def calendar_api():
-    # Load events from your JSON file
-    events = read_from_json_file("static/timeblocks.json")
+    event_type = request.query.type
+    all_events = []
 
-    # Convert the events to FullCalendar's format
-    formatted_events = []
-    for event in events:
-        start_datetime = f"{event['date']}T{event['start_time']}"
-        end_datetime = f"{event['date']}T{event['end_time']}"
-        formatted_event = {
-            "title": event["description"],
-            "start": start_datetime,
-            "end": end_datetime,
-            "extendedProps": {
-                "location": event["location"],
-                "kurskod": event["kurskod"]
-            }
-        }
-        formatted_events.append(formatted_event)
+    if event_type == "courses":
+        all_events += filter_courses(conn)
+    if event_type == "goals":
+        all_events += filter_goals(conn)
+    if event_type == "assignments":
+        all_events += filter_assignments(conn)
+    if event_type == "course_events":
+        all_events += filter_course_events()
+    if event_type == "all":
+        all_events += filter_courses(conn)
+        all_events += filter_goals(conn)
+        all_events += filter_assignments(conn)
+        all_events += filter_course_events()
+
+
 
     # Return the formatted events
     response.content_type = 'application/json'
-    return json.dumps(formatted_events)
+    return json.dumps(all_events, cls=DateTimeEncoder)
 
 @error(404)
 def error404(error):

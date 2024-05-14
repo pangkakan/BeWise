@@ -1,14 +1,14 @@
 [
     {
-        "kurskod": "DA108A",
-        "titel": "Informationsarkitektur"
+        "coursecode": "DA108A",
+        "title": "Informationsarkitektur"
     },
     {
-        "kurskod": "DA297A",
-        "titel": "Databasteknik"
+        "coursecode": "DA297A",
+        "title": "Databasteknik"
     },
     {
-        "kurskod": "DA336A",
-        "titel": "Systemutveckling och projekt"
+        "coursecode": "DA336A",
+        "title": "Systemutveckling och projekt"
     }
 ]

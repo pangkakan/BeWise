@@ -1,20 +1,20 @@
 [
     {
         "id": 1,
-        "kurskod": "DA336A",
-        "titel": "Arbeta med design",
+        "coursecode": "DA336A",
+        "title": "Arbeta med design",
         "datum": "2024-04-23"
     },
     {
         "id": 2,
-        "kurskod": "DA108A",
-        "titel": "En uppgift",
+        "coursecode": "DA108A",
+        "title": "En uppgift",
         "datum": "2024-04-16"
     },
     {
         "id": 3,
-        "kurskod": "DA297A",
-        "titel": "Testuppgift",
+        "coursecode": "DA297A",
+        "title": "Testuppgift",
         "datum": "2024-04-16"
     }
 ]

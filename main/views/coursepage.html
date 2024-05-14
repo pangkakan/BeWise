@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurssida - {{ course["kurskod"] }} {{ course["titel"] }}</title>
+    <title>Kurssida - {{ course["coursecode"] }} {{ course["title"] }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Kurssida för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <h1>Kurssida för {{ course["coursecode"] }} {{ course["title"] }}</h1>
     
-    <a href="/{{ course['kurskod'] }}/tasks">Uppgifter</a>
-    <a href="/{{ course['kurskod'] }}/schedule">Tidsplanering</a>
+    <a href="/{{ course['coursecode'] }}/tasks">Uppgifter</a>
+    <a href="/{{ course['coursecode'] }}/schedule">Tidsplanering</a>
 
     <a href="/">Tillbaka till startsidan</a>
 </body>

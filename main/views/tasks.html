@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uppgifter - {{ course["kurskod"] }} {{ course["titel"] }}</title>
+    <title>Uppgifter - {{ course["coursecode"] }} {{ course["title"] }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Uppgifter för {{ course["kurskod"] }} {{ course["titel"] }}</h1>
+    <h1>Uppgifter för {{ course["coursecode"] }} {{ course["title"] }}</h1>
     <h2>Att göra</h2>
     <ul class="taskslist">
         % for task in tasks:
-            <a href="/{{ course['kurskod'] }}/tasks/{{ task['id'] }}">
+            <a href="/{{ course['coursecode'] }}/tasks/{{ task['id'] }}">
                 <li>{{ task }}</li>
             </a>
         % end
@@ -26,12 +26,12 @@
         <label for="task_date">Datum:</label>
         <input type="date" id="task_date" name="task_date" min="" required>
 
-        <input type="hidden" name="coursecode" value="{{ course['kurskod'] }}">
+        <input type="hidden" name="coursecode" value="{{ course['coursecode'] }}">
 
         <button type="submit">Lägg till</button>
     </form>
 
-    <a href="/{{ course['kurskod'] }}">Tillbaka till kurssidan</a>
+    <a href="/{{ course['coursecode'] }}">Tillbaka till kurssidan</a>
 
     <script>
         // Get the current date in the format yyyy-mm-dd

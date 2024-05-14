@@ -11,7 +11,7 @@
 
     <div class="mycourselist">
         % for course in courses:
-            <a href="{{ course['kurskod'] }}">{{ course["kurskod"] }} - {{ course["titel"] }}</a>
+            <a href="{{ course['coursecode'] }}">{{ course["coursecode"] }} - {{ course["title"] }}</a>
         % end
     </div>
 
