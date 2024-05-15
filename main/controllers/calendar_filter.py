@@ -15,7 +15,8 @@ def filter_courses(conn):
             "start": course[0],
             "end": course[1],
             "extendedProps": {
-                "coursecode": course[2]
+                "coursecode": course[2],
+                "event_type": "course"
             }
         }
         formatted_courses.append(formatted_event)
@@ -31,15 +32,14 @@ def filter_goals(conn):
     filtered_goals = cur.fetchall()
     formatted_goals = []
     for goal in filtered_goals:
-        start_datetime = f"{goal['date']}T{goal['start_time']}"
-        end_datetime = f"{goal['date']}T{goal['deadline']}"
         formatted_event = {
-            "title": goal["title"],
-            "start": start_datetime,
-            "end": end_datetime,
+            "title": goal[0],
+            "start": goal[1],
+            "end": goal[2],
             "extendedProps": {
-                "type": goal["type"],
-                "coursecode": goal["coursecode"]
+                "type": goal[3],
+                "coursecode": goal[4],
+                "event_type": "goal"
             }
         }
         formatted_goals.append(formatted_event)
@@ -55,17 +55,16 @@ def filter_assignments(conn):
     filtered_assignments = cur.fetchall()
     formatted_assignments = []
     for assignment in filtered_assignments:
-        start_datetime = f"{assignment['date']}T{assignment['start_time']}"
-        end_datetime = f"{assignment['date']}T{assignment['deadline']}"
         formatted_event = {
-            "title": assignment["title"],
-            "start": start_datetime,
-            "end": end_datetime,
+            "title": assignment[0],
+            "start": assignment[1],
+            "end": assignment[2],
             "extendedProps": {
-                "type": assignment["type"],
-                "priority": assignment["priority"],
-                "goal_title": assignment["goal_title"],
-                "coursecode": assignment["coursecode"]
+                "type": assignment[3],
+                "priority": assignment[4],
+                "goal_title": assignment[5],
+                "coursecode": assignment[6],
+                "event_type": "assignment"
             }
         }
         formatted_assignments.append(formatted_event)
@@ -87,7 +86,8 @@ def filter_course_events():
             "end": end_datetime,
             "extendedProps": {
                 "location": event["location"],
-                "coursecode": event["coursecode"]
+                "coursecode": event["coursecode"],
+                "event_type": "course_event"
             }
         }
         formatted_events.append(formatted_event)

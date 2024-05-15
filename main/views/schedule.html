@@ -53,6 +53,8 @@
 
 
 
+
+
     </style>
 </head>
 <body>
@@ -82,6 +84,17 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+
+            timeZone: 'none',
+            weekNumbers: true,
+            displayEventEnd: true,
+            firstDay: 1,
+            weekText: "",
+            eventTimeFormat: { // like '14:30:00'
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
             initialView: 'dayGridMonth',
             events: function(fetchInfo, successCallback, failureCallback) {
                 const eventType = document.getElementById('eventType').value;
@@ -91,13 +104,37 @@
                     .catch(error => failureCallback(error));
             },
             eventClick: function(info) {
-                var eventDetails = `
+
+                var eventDetails = '';
+                switch(info.event.extendedProps.event_type) {
+                    case 'course':
+
+                        eventDetails = `
+                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.title}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]} - ${info.event.endStr.split('T')[0]}</p>
+
+                    `;
+                        break;
+                    case 'goal':
+                        // Add or remove data as per your requirement
+
+                        break;
+                    case 'assignment':
+                        // Add or remove data as per your requirement
+                        break;
+                    case 'course_event':
+                        eventDetails = `
                         <p>Course Code: ${info.event.extendedProps.coursecode}</p>
                         <p>Date: ${info.event.startStr.split('T')[0]}</p>
                         <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
                         <p>Location: ${info.event.extendedProps.location}</p>
                         <p>Description: ${info.event.title}</p>
                     `;
+                        break;
+                    default:
+                        // Default case if no type matches
+                        break;
+                }
                 document.getElementById("eventDetails").innerHTML = eventDetails;
                 document.getElementById("eventModal").style.display = "flex";
             }
@@ -115,38 +152,6 @@
         document.getElementById("eventModal").style.display = "none";
     }
 </script>
-<!--
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: '/api/calendar',
-            eventClick: function(info) {
-                var eventDetails = `
-                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
-                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
-                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
-                        <p>Location: ${info.event.extendedProps.location}</p>
-                        <p>Description: ${info.event.title}</p>
-                    `;
-                document.getElementById("eventDetails").innerHTML = eventDetails;
-                document.getElementById("eventModal").style.display = "flex";
-            }
-        });
-
-        calendar.render();
-        document.getElementById("closeButton").addEventListener('click', closeModal);
-    });
-
-
-    function closeModal() {
-        document.getElementById("eventModal").style.display = "none";
-    }
-</script>
--->
-
 
 </body>
 </html>
