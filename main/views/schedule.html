@@ -44,7 +44,7 @@
 
         button {
             margin-top: 20px;
-
+            z-index: 1200;
             cursor: pointer;
         }
         button:hover {
@@ -89,15 +89,31 @@
                     .then(response => response.json())
                     .then(data => successCallback(data))
                     .catch(error => failureCallback(error));
+            },
+            eventClick: function(info) {
+                var eventDetails = `
+                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
+                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
+                        <p>Location: ${info.event.extendedProps.location}</p>
+                        <p>Description: ${info.event.title}</p>
+                    `;
+                document.getElementById("eventDetails").innerHTML = eventDetails;
+                document.getElementById("eventModal").style.display = "flex";
             }
+
         });
         calendar.render();
 
+        document.getElementById("closeButton").addEventListener('click', closeModal);
         // Re-fetch events when the event type is changed
         document.getElementById('eventType').addEventListener('change', function() {
             calendar.refetchEvents();
         });
     });
+    function closeModal() {
+        document.getElementById("eventModal").style.display = "none";
+    }
 </script>
 <!--
 <script>
