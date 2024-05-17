@@ -7,7 +7,7 @@
     <style>
         body {
             display: flex; /* sets up a flexbox layout */
-            padding-top: 50px; /* offset from the top */
+            padding-top: 5px; /* offset from the top */
         }
 
         #sidebar {
@@ -55,6 +55,7 @@
 
 
 
+
     </style>
 </head>
 <body>
@@ -70,7 +71,11 @@
 
     <button id="closeButton">Close</button>
 </div>
-
+<div id="filters" style="display: none; position: absolute; width: 25%; top: 50px; left: 900px; text-align: center; background-color: #fff; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <label><input type="checkbox" id="filter-goals" checked> Goals</label>
+    <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
+    <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
+</div>
 <select id="eventType">
     <option value="all">All</option>
     <option value="courses">Courses</option>
@@ -84,7 +89,21 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            customButtons: {
 
+                filterToggle: {
+                    text: 'Filters',
+                    click: function() {
+                        var filters = document.getElementById('filters');
+                        filters.style.display = (filters.style.display === 'none') ? 'block' : 'none';
+                    }
+                }
+            },
+            headerToolbar: {
+                left: 'title dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'filterToggle',
+                right: 'prev,next today'
+            },
             timeZone: 'none',
             weekNumbers: true,
             displayEventEnd: true,
@@ -96,13 +115,25 @@
                 hour12: false
             },
             initialView: 'dayGridMonth',
+            eventDidMount: function() {
+                var calendarHeader = document.querySelector('.fc-header-toolbar');
+                var filters = document.getElementById('filters');
+                if (calendarHeader && filters) {
+                    calendarHeader.appendChild(filters);
+                    filters.style.display = 'block'; // or adjust based on your display logic
+                }
+            },
+
             events: function(fetchInfo, successCallback, failureCallback) {
                 const eventType = document.getElementById('eventType').value;
                 fetch(`/api/calendar?type=${eventType}`)
                     .then(response => response.json())
                     .then(data => successCallback(data))
-                    .catch(error => failureCallback(error));
+                    .catch(error => failureCallback(error))
+
+
             },
+
             eventClick: function(info) {
 
                 var eventDetails = '';
@@ -138,6 +169,7 @@
                 document.getElementById("eventDetails").innerHTML = eventDetails;
                 document.getElementById("eventModal").style.display = "flex";
             }
+
 
         });
         calendar.render();
