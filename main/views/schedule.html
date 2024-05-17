@@ -50,7 +50,7 @@
         button:hover {
             background-color: #f1f1f1;
         }
-
+        #title
 
 
 
@@ -71,39 +71,25 @@
 
     <button id="closeButton">Close</button>
 </div>
-<div id="filters" style="display: none; position: absolute; width: 25%; top: 50px; left: 900px; text-align: center; background-color: #fff; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<div id="filters" style="display: none; position: absolute; width: 25%; top: 4%; left: 55%; text-align: center; background-color: #fff; padding: 10px;">
     <label><input type="checkbox" id="filter-goals" checked> Goals</label>
     <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
     <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
 </div>
-<select id="eventType">
-    <option value="all">All</option>
-    <option value="courses">Courses</option>
-    <option value="goals">Goals</option>
-    <option value="assignments">Assignments</option>
-    <option value="course_events">course_events</option>
-</select>
+
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            customButtons: {
 
-                filterToggle: {
-                    text: 'Filters',
-                    click: function() {
-                        var filters = document.getElementById('filters');
-                        filters.style.display = (filters.style.display === 'none') ? 'block' : 'none';
-                    }
-                }
-            },
             headerToolbar: {
-                left: 'title dayGridMonth,timeGridWeek,timeGridDay',
-                center: 'filterToggle',
+                left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
                 right: 'prev,next today'
             },
+
             timeZone: 'none',
             weekNumbers: true,
             displayEventEnd: true,
@@ -125,13 +111,16 @@
             },
 
             events: function(fetchInfo, successCallback, failureCallback) {
-                const eventType = document.getElementById('eventType').value;
-                fetch(`/api/calendar?type=${eventType}`)
+                let filters = [];
+
+                if (document.getElementById('filter-goals').checked) filters.push('goals');
+                if (document.getElementById('filter-assignments').checked) filters.push('assignments');
+                if (document.getElementById('filter-course_events').checked) filters.push('course_events');
+
+                fetch(`/api/calendar?types=${filters.join(',')}`)
                     .then(response => response.json())
                     .then(data => successCallback(data))
-                    .catch(error => failureCallback(error))
-
-
+                    .catch(error => failureCallback(error));
             },
 
             eventClick: function(info) {
@@ -176,8 +165,11 @@
 
         document.getElementById("closeButton").addEventListener('click', closeModal);
         // Re-fetch events when the event type is changed
-        document.getElementById('eventType').addEventListener('change', function() {
-            calendar.refetchEvents();
+
+        document.querySelectorAll('#filters input').forEach(input => {
+            input.addEventListener('change', function() {
+                calendar.refetchEvents();
+            });
         });
     });
     function closeModal() {

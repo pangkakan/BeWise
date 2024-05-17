@@ -131,22 +131,19 @@ def show_profile():
 
 @route("/api/calendar")
 def calendar_api():
-    event_type = request.query.type
+    types = request.query.get('types', '')
+    type_list = types.split(',') if types else []
+
     all_events = []
 
-    if event_type == "courses":
-        all_events += filter_courses(conn)
-    if event_type == "goals":
+    all_events += filter_courses(conn)
+    if "goals" in type_list:
         all_events += filter_goals(conn)
-    if event_type == "assignments":
+    if "assignments" in type_list:
         all_events += filter_assignments(conn)
-    if event_type == "course_events":
+    if "course_events" in type_list:
         all_events += filter_course_events()
-    if event_type == "all":
-        all_events += filter_courses(conn)
-        all_events += filter_goals(conn)
-        all_events += filter_assignments(conn)
-        all_events += filter_course_events()
+
 
 
 
