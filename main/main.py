@@ -1,6 +1,6 @@
 import json
 
-from bottle import route, run, template, error, static_file, request, redirect, response
+from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from controllers.db import create_connection
 from controllers.task_controller import (
@@ -21,15 +21,37 @@ from controllers.calendar_filter import (
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
+# Set the path to the 'views' directory
+TEMPLATE_PATH.append('main/views')
+
 conn = create_connection()
 
 
+# @route("/")
+# def index():
+#     # Lista av kurser
+#     # fem
+#     courses = read_from_json_file("static/courses.json")
+#     return template("mycourses", courses=courses)
+
 @route("/")
 def index():
-    # Lista av kurser
-    # fem
-    courses = read_from_json_file("static/courses.json")
-    return template("mycourses", courses=courses)
+    return template("index")
+
+
+# @route("/")
+# def index():
+#     course_list = get_courses()
+#     goal_list = get_goals()
+#     assignment_list = get_assignments()
+#     subtask_list = get_subtasks()
+#     return template("index", course_list, goal_list, assignment_list, subtask_list)
+
+
+# @route("/add-goal")
+# def add_goal():
+#     #  lägg till i databas
+#     redirect("/")
 
 
 @route("/<coursecode>")
@@ -169,7 +191,7 @@ def static_files(filename):
         Returns:
                 file : the static file requested by URL
     """
-    return static_file(filename, root="static")
+    return static_file(filename, root="main/static")
 
 
 def getnew():
