@@ -1,13 +1,615 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BWP Homepage</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <h1>Startsida</h1>
-    
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+
+
+
+  </head>
+  <body>
+
+    <div class="container">
+      <header class="row">
+        <div class="col-12 bg-warning-subtle">
+          <nav class="navbar">
+            <a href="#" class="navbar-brand">BeWisePlanner</a>
+            <div class="d-flex flew-row">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Lägg till
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-course-modal">Kurs</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-goal-modal">Mål</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-assignment-modal">Uppgift</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-subtask-modal">Deluppgift</button>
+                </div>
+              </div>
+
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Visa
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-courses-modal">Kurser</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-goals-modal">Mål</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-assignments-modal">Uppgifter</button>
+                  <button class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-subtasks-modal">Deluppgifter</button>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Meny
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Kontoinställningar</a></li>
+                <li><a class="dropdown-item" href="#">Logga ut</a></li>
+              </ul>
+            </div>
+          </nav> 
+        </div>
+      </header>
+
+
+
+
+      <div class="row">
+        <div class="col-4 bg-success-subtle">
+          <h2>Att göra idag</h2>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+              <label class="form-check-label" for="firstCheckbox">First checkbox</label>
+            </li>
+            <li class="list-group-item">
+              <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox">
+              <label class="form-check-label" for="secondCheckbox">Second checkbox</label>
+            </li>
+            <li class="list-group-item">
+              <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+              <label class="form-check-label" for="thirdCheckbox">Third checkbox</label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-8 bg-warning">
+          <div id="sidebar">
+            <!-- To-do list will go here -->
+          </div>
+          <div id='calendar'></div>
+
+
+          <!-- Event Modal -->
+          <div id="eventModal">
+            <div id="eventDetails"></div>
+
+            <button id="closeButton">Close</button>
+          </div>
+          <div id="filters" style="display: none; position: absolute; width: 25%; top: 4%; left: 55%; text-align: center; background-color: #fff; padding: 10px;">
+            <label><input type="checkbox" id="filter-goals" checked> Goals</label>
+            <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
+            <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row row-cols-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Mål</h4>
+            <h5 class="card-subtitle">Kursnamn</h5>
+            <p class="card-text">3 dagar kvar</p>
+            <p class="card-text">2/5 uppgifter avklarade</p>
+            <button class="btn btn-primary btn-sm toggle-task-button">Uppgifter</button>
+            <div class="task-list">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 1</h5>
+                  <p class="card-text">2 dagar kvar</p>
+                  <p class="card-text">1/3 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 2</h5>
+                  <p class="card-text">5 dagar kvar</p>
+                  <p class="card-text">2/4 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Mål</h4>
+            <h5 class="card-subtitle">Kursnamn</h5>
+            <p class="card-text">3 dagar kvar</p>
+            <p class="card-text">2/5 uppgifter avklarade</p>
+            <button class="btn btn-primary btn-sm toggle-task-button">Uppgifter</button>
+            <div class="task-list">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 1</h5>
+                  <p class="card-text">2 dagar kvar</p>
+                  <p class="card-text">1/3 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 2</h5>
+                  <p class="card-text">5 dagar kvar</p>
+                  <p class="card-text">2/4 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Mål</h4>
+            <h5 class="card-subtitle">Kursnamn</h5>
+            <p class="card-text">3 dagar kvar</p>
+            <p class="card-text">2/5 uppgifter avklarade</p>
+            <button class="btn btn-primary btn-sm toggle-task-button">Uppgifter</button>
+            <div class="task-list">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 1</h5>
+                  <p class="card-text">2 dagar kvar</p>
+                  <p class="card-text">1/3 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Uppgift 2</h5>
+                  <p class="card-text">5 dagar kvar</p>
+                  <p class="card-text">2/4 deluppgifter avklarade</p>
+                  <button class="btn btn-primary btn-sm toggle-subtask-button">Deluppgifter</button>
+                  <ul class="list-group subtask-list">
+                    <li class="list-group-item">Deluppgift 1</li>
+                    <li class="list-group-item">Deluppgift 2</li>
+                    <li class="list-group-item">Deluppgift 3</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Modal: lägg till kurs -->
+  <div class="modal fade" id="add-course-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till kurs</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <div class="mb-3">
+              <label for="course-title" class="form-label">Kursnamn</label>
+              <input type="text" id="course-title" class="form-control" placeholder="Vad heter kursen?">
+            </div>
+            <div class="mb-3">
+              <label for="course-code" class="form-label">Kurskod</label>
+              <input type="text" id="course-code" class="form-control" placeholder="Ange kurskod.">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Slutför</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: lägg till mål -->
+  <div class="modal fade" id="add-goal-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till mål</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <div class="mb-3">
+              <label for="course-select" class="form-label">Välj kurs</label>
+              <select id="course-select" class="form-select">
+                <option>Kurs 1</option>
+                <option>Kurs 2</option>
+                <option>Kurs 3</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="goal-title" class="form-label">Titel</label>
+              <input type="text" id="goal-title" class="form-control" placeholder="Vad ska göras?">
+            </div>
+            <div class="mb-3">
+              <label for="goal-startdate" class="form-label">Välj startdatum</label>
+              <input type="date" id="goal-startdate" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="goal-enddate" class="form-label">Välj slutdatum</label>
+              <input type="date" id="goal-enddate" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Slutför</button>
+
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: lägg till uppgift -->
+  <div class="modal fade" id="add-assignment-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till uppgift</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <div class="mb-3">
+              <label for="course-select" class="form-label">Välj kurs</label>
+              <select id="course-select" class="form-select">
+                <option>Kurs 1</option>
+                <option>Kurs 2</option>
+                <option>Kurs 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="goal-select" class="form-label">Välj mål</label>
+              <select id="goal-select" class="form-select">
+                <option>Mål 1</option>
+                <option>Mål 2</option>
+                <option>Mål 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="task-title" class="form-label">Titel</label>
+              <input type="text" id="task-title" class="form-control" placeholder="Vad ska göras?">
+            </div>
+            <div class="mb-3">
+              <label for="task-startdate" class="form-label">Välj startdatum (kan väljas inom målets intervall)</label>
+              <input type="date" id="task-startdate" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="task-enddate" class="form-label">Välj slutdatum (kan väljas inom målets intervall)</label>
+              <input type="date" id="task-enddate" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Slutför</button>
+
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: lägg till deluppgift -->
+  <div class="modal fade" id="add-subtask-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till deluppgift</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <div class="mb-3">
+              <label for="course-select" class="form-label">Välj kurs</label>
+              <select id="course-select" class="form-select">
+                <option>Kurs 1</option>
+                <option>Kurs 2</option>
+                <option>Kurs 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="goal-select" class="form-label">Välj mål</label>
+              <select id="goal-select" class="form-select">
+                <option>Mål 1</option>
+                <option>Mål 2</option>
+                <option>Mål 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="task-select" class="form-label">Välj uppgift</label>
+              <select id="task-select" class="form-select">
+                <option>Uppgift 1</option>
+                <option>Uppgift 2</option>
+                <option>Uppgift 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="subtask-title" class="form-label">Titel</label>
+              <input type="text" id="subtask-title" class="form-control" placeholder="Vad ska göras?">
+            </div>
+            <div class="mb-3">
+              <label for="subtask-date" class="form-label">Välj datum (kan väljas inom uppgiftens intervall)</label>
+              <input type="date" id="subtask-date" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Slutför</button>
+
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!-- Modal: visa kurser -->
+  <div class="modal fade" id="view-courses-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mina kurser</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: visa mål -->
+  <div class="modal fade" id="view-goals-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mina mål</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: visa uppgifter -->
+  <div class="modal fade" id="view-assignments-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mina uppgifter</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: visa deluppgifter -->
+  <div class="modal fade" id="view-subtasks-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mina deluppgifter</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+
+            headerToolbar: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
+                right: 'prev,next today'
+            },
+
+            timeZone: 'none',
+            weekNumbers: true,
+            displayEventEnd: true,
+            firstDay: 1,
+            weekText: "",
+            eventTimeFormat: { // like '14:30:00'
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+            initialView: 'dayGridMonth',
+            eventDidMount: function() {
+                var calendarHeader = document.querySelector('.fc-header-toolbar');
+                var filters = document.getElementById('filters');
+                if (calendarHeader && filters) {
+                    calendarHeader.appendChild(filters);
+                    filters.style.display = 'block'; // or adjust based on your display logic
+                }
+            },
+
+            events: function(fetchInfo, successCallback, failureCallback) {
+                let filters = [];
+
+                if (document.getElementById('filter-goals').checked) filters.push('goals');
+                if (document.getElementById('filter-assignments').checked) filters.push('assignments');
+                if (document.getElementById('filter-course_events').checked) filters.push('course_events');
+
+                fetch(`/api/calendar?types=${filters.join(',')}`)
+                    .then(response => response.json())
+                    .then(data => successCallback(data))
+                    .catch(error => failureCallback(error));
+            },
+
+            eventClick: function(info) {
+
+                var eventDetails = '';
+                switch(info.event.extendedProps.event_type) {
+                    case 'course':
+
+                        eventDetails = `
+                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.title}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]} - ${info.event.endStr.split('T')[0]}</p>
+
+                    `;
+                        break;
+                    case 'goal':
+                        // Add or remove data as per your requirement
+
+                        break;
+                    case 'assignment':
+                        // Add or remove data as per your requirement
+                        break;
+                    case 'course_event':
+                        eventDetails = `
+                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
+                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
+                        <p>Location: ${info.event.extendedProps.location}</p>
+                        <p>Description: ${info.event.title}</p>
+                    `;
+                        break;
+                    default:
+                        // Default case if no type matches
+                        break;
+                }
+                document.getElementById("eventDetails").innerHTML = eventDetails;
+                document.getElementById("eventModal").style.display = "flex";
+            }
+
+
+        });
+        calendar.render();
+
+        document.getElementById("closeButton").addEventListener('click', closeModal);
+        // Re-fetch events when the event type is changed
+
+        document.querySelectorAll('#filters input').forEach(input => {
+            input.addEventListener('change', function() {
+                calendar.refetchEvents();
+            });
+        });
+    });
+    function closeModal() {
+        document.getElementById("eventModal").style.display = "none";
+    }
+
+
+
+
+
+
+$(document).ready(function(){
+        $(".toggle-task-button").click(function(){
+          $(this).closest('.card').find('.task-list').toggle();
+        });
+      });
+
+      $(document).ready(function(){
+        $(".toggle-subtask-button").click(function(){
+          $(this).closest('.card').find('.subtask-list').toggle();
+        });
+      });
+  </script>
+
+
+  </body>
 </html>
