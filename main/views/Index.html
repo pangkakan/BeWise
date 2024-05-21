@@ -179,8 +179,8 @@
                 <ul class="list-group" id="todoList">
                     % for task in today_tasks:
                     <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
-                        <label class="form-check-label" for="firstCheckbox">First checkbox</label>
+                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ task['id'] }}">
+                        <label class="form-check-label" for="{{ task['id'] }}">{{ task["title"] }}</label>
                     </li>
                     % end
                 </ul>

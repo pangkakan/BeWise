@@ -18,7 +18,8 @@ from controllers.calendar_filter import (
     filter_courses,
     filter_goals,
     filter_assignments,
-    filter_course_events, filter_assignments_for_daily
+    filter_course_events, filter_assignments_for_daily,
+    filter_subtasks
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
@@ -34,9 +35,11 @@ def index():
 
 
 def get_today_tasks():
-    all_tasks = []
-    all_tasks += filter_assignments_for_daily(conn)
-    return all_tasks
+    # all_tasks = []
+    # all_tasks += filter_assignments_for_daily(conn)
+    all_subtasks = []
+    all_subtasks += filter_subtasks(conn)
+    return all_subtasks
 
 
 # @route("/<coursecode>")

@@ -119,3 +119,23 @@ def filter_assignments_for_daily(conn):
         formatted_assignments.append(formatted_event)
     print(formatted_assignments)
     return formatted_assignments
+
+
+def filter_subtasks(conn):
+    cur = conn.cursor()
+    query = """
+    SELECT * FROM subtasks
+    WHERE CURRENT_DATE = date
+    """
+    cur.execute(query)
+    filtered_subtasks = cur.fetchall()
+    formatted_subtasks = []
+    for subtask in filtered_subtasks:
+        formatted_event = {
+            "id": subtask[0],
+            "assignment_id": subtask[1],
+            "title": subtask[2],
+            "date": subtask[3],
+        }
+        formatted_subtasks.append(formatted_event)
+    return formatted_subtasks
