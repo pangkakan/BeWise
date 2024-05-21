@@ -11,14 +11,31 @@
         }
 
         #sidebar {
-           /* width: 30%; /* takes up 30% of the horizontal space */
-           /* padding-right: 20px; /* space between the to-do list and the calendar */
+         /* width: 30%; /* takes up 30% of the horizontal space */
+           /*padding-right: 20px; /* space between the to-do list and the calendar */
         }
 
         #calendar {
             flex-grow: 1; /* takes remaining space */
-        }
 
+             position: relative; /* Ensure the calendar container has a relative positioning */
+            }
+
+        #filters {
+            display: none; /* Start hidden */
+            position: absolute;
+            width: 100%; /* Make it the same width as the calendar */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #fff;
+            padding: 10px;
+            z-index: 2; /* Ensures it's on top, adjust z-index appropriately */
+
+        }
+        #filters label {
+            font-size: calc(0.8vw + 6px); /* Adjust base font size plus a scaling factor based on the viewport width */
+            padding: 5px;
+            display: inline-block; /* Ensures labels align nicely inline */
+        }
         #eventModal {
             position: fixed;
             top: 0;
@@ -48,7 +65,7 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #f1f1f1;
+            background-color: deeppink;
         }
         #title
 
@@ -61,6 +78,11 @@
 <body>
 <div id="sidebar">
     <!-- To-do list will go here -->
+
+
+
+
+    </div>
 </div>
 <div id='calendar'></div>
 
@@ -80,6 +102,17 @@
 
 
 <script>
+    function adjustLabelFontSize() {
+        var calendarWidth = document.getElementById('calendar').offsetWidth; // Get the current width of the calendar
+        var baseSize = 6; // Base font size in pixels
+        var scalingFactor = 0.005; // Scaling factor based on the calendar width
+
+        var newSize = baseSize + (calendarWidth * scalingFactor) + 'px';
+        var labels = document.querySelectorAll('#filters label');
+        labels.forEach(function(label) {
+            label.style.fontSize = newSize; // Set new font size for each label
+        });
+    }
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -123,6 +156,8 @@
                     .catch(error => failureCallback(error));
             },
 
+
+
             eventClick: function(info) {
 
                 var eventDetails = '';
@@ -162,6 +197,22 @@
 
         });
         calendar.render();
+
+
+        adjustLabelFontSize(); // Adjust font size on initial load
+
+        window.addEventListener('resize', function() {
+            adjustLabelFontSize(); // Adjust font size on window resize
+        });
+
+        function adjustFiltersPosition() {
+            var calendarHeader = document.querySelector('.fc-header-toolbar');
+            if (calendarHeader) {
+                var filters = document.getElementById('filters');
+                filters.style.top = calendarHeader.offsetHeight + 'px'; // Dynamically set the top position
+                filters.style.display = 'background';
+            }
+        }
 
         document.getElementById("closeButton").addEventListener('click', closeModal);
         // Re-fetch events when the event type is changed
