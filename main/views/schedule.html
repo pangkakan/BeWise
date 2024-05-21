@@ -11,8 +11,8 @@
         }
 
         #sidebar {
-         /* width: 30%; /* takes up 30% of the horizontal space */
-           /*padding-right: 20px; /* space between the to-do list and the calendar */
+            width: 30%; /* takes up 30% of the horizontal space */
+            padding-right: 20px; /* space between the to-do list and the calendar */
         }
 
         #calendar {
@@ -23,11 +23,11 @@
 
         #filters {
             display: none; /* Start hidden */
-            position: absolute;
+            position: absolute; top: 4%; left: 45%;
             width: 100%; /* Make it the same width as the calendar */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            background-color: #fff;
-            padding: 10px;
+            box-shadow: none;
+            background-color: transparent;
+            padding: 5px;
             z-index: 2; /* Ensures it's on top, adjust z-index appropriately */
 
         }
@@ -67,7 +67,19 @@
         button:hover {
             background-color: deeppink;
         }
-        #title
+        #sidebar h3 {
+            color: #333;
+            padding: 10px 0;
+        }
+
+        #todoList .list-group-item {
+            cursor: pointer; // If you want the items to be clickable
+        transition: background-color 0.3s;
+        }
+
+        #todoList .list-group-item:hover {
+            background-color: #f8f8f8;
+        }
 
 
 
@@ -78,7 +90,10 @@
 <body>
 <div id="sidebar">
     <!-- To-do list will go here -->
-
+    <h3>Today's Tasks</h3>
+    <ul id="todoList" class="list-group">
+        <!-- Tasks will be appended here dynamically -->
+    </ul>
 
 
 
@@ -93,7 +108,7 @@
 
     <button id="closeButton">Close</button>
 </div>
-<div id="filters" style="display: none; position: absolute; width: 25%; top: 4%; left: 55%; text-align: center; background-color: #fff; padding: 10px;">
+<div id="filters" >
     <label><input type="checkbox" id="filter-goals" checked> Goals</label>
     <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
     <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
@@ -114,6 +129,23 @@
         });
     }
     document.addEventListener('DOMContentLoaded', function() {
+
+        fetchTodayTasks().then(tasks => {
+            const todoList = document.getElementById('todoList');
+            tasks.forEach(task => {
+                const taskElement = document.createElement('li');
+                taskElement.className = 'list-group-item';
+                taskElement.textContent = task.title; // Adjust as per your data structure
+                todoList.appendChild(taskElement);
+            });
+        });
+
+        async function fetchTodayTasks() {
+            // Fetch data from server (use your actual API endpoint)
+            const response = await fetch('/api/today-tasks');
+            const data = await response.json();
+            return data; // This should return tasks for the current day
+        }
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 

@@ -94,3 +94,28 @@ def filter_course_events():
     return formatted_events
 
 
+def filter_assignments_for_daily(conn):
+    cur = conn.cursor()
+    query = """
+    SELECT * FROM filter_assignments
+
+    """
+    cur.execute(query)
+    filtered_assignments = cur.fetchall()
+    formatted_assignments = []
+    for assignment in filtered_assignments:
+        formatted_event = {
+            "title": assignment[0],
+            "start": assignment[1],
+            "end": assignment[2],
+            "extendedProps": {
+                "type": assignment[3],
+                "priority": assignment[4],
+                "goal_title": assignment[5],
+                "coursecode": assignment[6],
+                "event_type": "assignment"
+            }
+        }
+        formatted_assignments.append(formatted_event)
+    print(formatted_assignments)
+    return formatted_assignments

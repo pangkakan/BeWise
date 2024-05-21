@@ -2,6 +2,7 @@ import json
 
 from bottle import route, run, template, error, static_file, request, redirect, response
 from controllers import course_controller as course_ctrl
+from datetime import datetime
 from controllers.db import create_connection
 from controllers.task_controller import (
     add_task_post,
@@ -17,7 +18,7 @@ from controllers.calendar_filter import (
     filter_courses,
     filter_goals,
     filter_assignments,
-    filter_course_events
+    filter_course_events, filter_assignments_for_daily
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
@@ -150,6 +151,17 @@ def calendar_api():
     # Return the formatted events
     response.content_type = 'application/json'
     return json.dumps(all_events, cls=DateTimeEncoder)
+
+
+@route("/api/today-tasks")
+def today_tasks():
+
+
+    all_tasks = []
+    all_tasks += filter_assignments_for_daily(conn)
+
+    response.content_type = 'application/json'
+    return json.dumps(all_tasks, cls=DateTimeEncoder)
 
 @error(404)
 def error404(error):
