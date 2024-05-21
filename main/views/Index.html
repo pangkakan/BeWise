@@ -136,6 +136,8 @@
                                     data-bs-toggle="modal" data-bs-target="#add-assignment-modal">Uppgift</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#add-subtask-modal">Deluppgift</button>
+                                    <button class="dropdown-item" type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#add-event-modal">Händelse</button>
                             </div>
                         </div>
 
@@ -153,6 +155,8 @@
                                     data-bs-toggle="modal" data-bs-target="#view-assignments-modal">Uppgifter</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#view-subtasks-modal">Deluppgifter</button>
+                                    <button class="dropdown-item" type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#view-events-modal">Händelser</button>
                             </div>
                         </div>
                     </div>
@@ -205,6 +209,9 @@
 
 
         <div class="row row-cols-3">
+            % for goal in goals:
+            <div>{{ goal["title"] }}</div>
+            % end
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Mål</h4>
@@ -521,6 +528,34 @@
     </div>
 
 
+    <!-- Modal: lägg till händelse -->
+    <div class="modal fade" id="add-event-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till händelse</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+
+                        <div class="mb-3">
+                            <label for="course-title" class="form-label">Kursnamn</label>
+                            <input type="text" id="course-title" class="form-control" placeholder="Vad heter kursen?">
+                        </div>
+                        <div class="mb-3">
+                            <label for="course-code" class="form-label">Kurskod</label>
+                            <input type="text" id="course-code" class="form-control" placeholder="Ange kurskod.">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Slutför</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -580,6 +615,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Mina deluppgifter</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: visa händelser -->
+    <div class="modal fade" id="view-events-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Mina händelser</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

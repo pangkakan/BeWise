@@ -31,7 +31,13 @@ conn = create_connection()
 @route("/")
 def index():
     today_tasks = get_today_tasks()
-    return template("index", today_tasks=today_tasks)
+    goals = filter_goals(conn)
+    print(goals)
+    return template("index", today_tasks=today_tasks, goals=goals)
+
+
+def nested_user_data():
+    pass
 
 
 def get_today_tasks():

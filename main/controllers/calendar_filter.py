@@ -139,3 +139,4 @@ def filter_subtasks(conn):
         }
         formatted_subtasks.append(formatted_event)
     return formatted_subtasks
+
