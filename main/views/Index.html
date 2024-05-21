@@ -818,6 +818,155 @@
         });
     </script>
 
+    <script>
+        function adjustLabelFontSize() {
+            var calendarWidth = document.getElementById('calendar').offsetWidth; // Get the current width of the calendar
+            var baseSize = 6; // Base font size in pixels
+            var scalingFactor = 0.005; // Scaling factor based on the calendar width
+
+            var newSize = baseSize + (calendarWidth * scalingFactor) + 'px';
+            var labels = document.querySelectorAll('#filters label');
+            labels.forEach(function(label) {
+                label.style.fontSize = newSize; // Set new font size for each label
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+
+            fetchTodayTasks().then(tasks => {
+                const todoList = document.getElementById('todoList');
+                tasks.forEach(task => {
+                    const taskElement = document.createElement('li');
+                    taskElement.className = 'list-group-item';
+                    taskElement.textContent = task.title; // Adjust as per your data structure
+                    todoList.appendChild(taskElement);
+                });
+            });
+
+            async function fetchTodayTasks() {
+                // Fetch data from server (use your actual API endpoint)
+                const response = await fetch('/api/today-tasks');
+                const data = await response.json();
+                return data; // This should return tasks for the current day
+            }
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+
+                headerToolbar: {
+                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    center: 'title',
+                    right: 'prev,next today'
+                },
+
+                timeZone: 'none',
+                weekNumbers: true,
+                displayEventEnd: true,
+                firstDay: 1,
+                weekText: "",
+                eventTimeFormat: { // like '14:30:00'
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                },
+                initialView: 'dayGridMonth',
+                eventDidMount: function() {
+                    var calendarHeader = document.querySelector('.fc-header-toolbar');
+                    var filters = document.getElementById('filters');
+                    if (calendarHeader && filters) {
+                        calendarHeader.appendChild(filters);
+                        filters.style.display = 'block'; // or adjust based on your display logic
+                    }
+                },
+
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    let filters = [];
+
+                    if (document.getElementById('filter-goals').checked) filters.push('goals');
+                    if (document.getElementById('filter-assignments').checked) filters.push('assignments');
+                    if (document.getElementById('filter-course_events').checked) filters.push('course_events');
+
+                    fetch(`/api/calendar?types=${filters.join(',')}`)
+                        .then(response => response.json())
+                        .then(data => successCallback(data))
+                        .catch(error => failureCallback(error));
+                },
+
+
+
+                eventClick: function(info) {
+                    let linkedEvents = calendar.getEvents().filter(e => e.extendedProps.linkId === info.event.extendedProps.linkId);
+                    // Now `linkedEvents` contains both the start and end events linked by `linkId`
+
+                    // Example: you could prompt the user to edit details, and apply changes to all linked events
+                    /*linkedEvents.forEach(e => {
+                        e.setProp('title', 'Updated ' + e.title); // Example modification
+                    });*/
+                    var eventDetails = '';
+                    switch(info.event.extendedProps.event_type) {
+                        case 'course':
+
+                            eventDetails = `
+                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.extendedProps.description}</p>
+                        <p>Date: ${info.event.extendedProps.actualStart.split('T')[0]} - ${info.event.extendedProps.actualEnd.split('T')[0]}</p>
+
+                    `;
+                            break;
+                        case 'goal':
+                            // Add or remove data as per your requirement
+
+                            break;
+                        case 'assignment':
+                            // Add or remove data as per your requirement
+                            break;
+                        case 'course_event':
+                            eventDetails = `
+                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
+                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
+                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
+                        <p>Location: ${info.event.extendedProps.location}</p>
+                        <p>Description: ${info.event.title}</p>
+                    `;
+                            break;
+                        default:
+                            // Default case if no type matches
+                            break;
+                    }
+                    document.getElementById("eventDetails").innerHTML = eventDetails;
+                    document.getElementById("eventModal").style.display = "flex";
+                }
+
+
+            });
+            calendar.render();
+
+
+            adjustLabelFontSize(); // Adjust font size on initial load
+
+            window.addEventListener('resize', function() {
+                adjustLabelFontSize(); // Adjust font size on window resize
+            });
+
+            function adjustFiltersPosition() {
+                var calendarHeader = document.querySelector('.fc-header-toolbar');
+                if (calendarHeader) {
+                    var filters = document.getElementById('filters');
+                    filters.style.top = calendarHeader.offsetHeight + 'px'; // Dynamically set the top position
+                    filters.style.display = 'background';
+                }
+            }
+
+            document.getElementById("closeButton").addEventListener('click', closeModal);
+            // Re-fetch events when the event type is changed
+
+            document.querySelectorAll('#filters input').forEach(input => {
+                input.addEventListener('change', function() {
+                    calendar.refetchEvents();
+                });
+            });
+        });
+        function closeModal() {
+            document.getElementById("eventModal").style.display = "none";
+        }
+    </script>
 
 </body>
 
