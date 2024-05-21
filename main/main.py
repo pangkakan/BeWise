@@ -1,6 +1,6 @@
 import json
 
-from bottle import route, run, template, error, static_file, request, redirect, response
+from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from datetime import datetime
 from controllers.db import create_connection
@@ -22,30 +22,36 @@ from controllers.calendar_filter import (
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
+TEMPLATE_PATH.append('main/views')
+
 conn = create_connection()
 
 
 @route("/")
 def index():
-    # Lista av kurser
-    # fem
-    courses = read_from_json_file("static/courses.json")
-    return template("mycourses", courses=courses)
+    today_tasks = get_today_tasks()
+    return template("index", today_tasks=today_tasks)
 
 
-@route("/<coursecode>")
-def course_page(coursecode):
-    # kontrollera att kurs med den coursecodeen finns i courses.json
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        return template("coursepage", course=course)
-    except:
-        return template("error")
+def get_today_tasks():
+    all_tasks = []
+    all_tasks += filter_assignments_for_daily(conn)
+    return all_tasks
 
 
-@route("/new-course")
-def new_course():
-    return template("addcourse")
+# @route("/<coursecode>")
+# def course_page(coursecode):
+#     # kontrollera att kurs med den coursecodeen finns i courses.json
+#     try:
+#         course = course_ctrl.get_course_with_coursecode(coursecode)
+#         return template("coursepage", course=course)
+#     except:
+#         return template("error")
+
+
+# @route("/new-course")
+# def new_course():
+#     return template("addcourse")
 
 
 @route("/add-course", method="post")
@@ -53,28 +59,28 @@ def handle_add_course():
     return course_ctrl.add_course_post(conn)
 
 
-@route("/<coursecode>/tasks")
-def course_tasks(coursecode):
-    # läs in alla uppgifter för coursecode och skicka till tasks.html
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        tasks = get_tasks_with_coursecode(coursecode)
-        return template("tasks", course=course, tasks=tasks)
+# @route("/<coursecode>/tasks")
+# def course_tasks(coursecode):
+#     # läs in alla uppgifter för coursecode och skicka till tasks.html
+#     try:
+#         course = course_ctrl.get_course_with_coursecode(coursecode)
+#         tasks = get_tasks_with_coursecode(coursecode)
+#         return template("tasks", course=course, tasks=tasks)
 
-    except:
-        return template("error")
+#     except:
+#         return template("error")
 
 
-@route("/<coursecode>/tasks/<id>")
-def view_task(coursecode, id):
-    # hämta uppgift med rätt id från uppgiftslistan och skicka till task.html
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        task = get_task_with_id(coursecode, id)
-        return template("task", course=course, task=task)
+# @route("/<coursecode>/tasks/<id>")
+# def view_task(coursecode, id):
+#     # hämta uppgift med rätt id från uppgiftslistan och skicka till task.html
+#     try:
+#         course = course_ctrl.get_course_with_coursecode(coursecode)
+#         task = get_task_with_id(coursecode, id)
+#         return template("task", course=course, task=task)
 
-    except:
-        return template("error")
+#     except:
+#         return template("error")
 
 
 @route("/add-task", method="post")
@@ -82,28 +88,28 @@ def handle_add_task():
     return add_task_post()
 
 
-@route("/<coursecode>/schedule")
-def course_tasks(coursecode):
-    # läs in alla tidsblock för coursecode och skicka till schedule.html
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        timeblocks = get_timeblocks_with_coursecode(coursecode)
-        return template("schedule", course=course, timeblocks=timeblocks)
+# @route("/<coursecode>/schedule")
+# def course_tasks(coursecode):
+#     # läs in alla tidsblock för coursecode och skicka till schedule.html
+#     try:
+#         course = course_ctrl.get_course_with_coursecode(coursecode)
+#         timeblocks = get_timeblocks_with_coursecode(coursecode)
+#         return template("schedule", course=course, timeblocks=timeblocks)
 
-    except:
-        return template("error")
+#     except:
+#         return template("error")
 
 
-@route("/<coursecode>/schedule/<id>")
-def view_timeblock(coursecode, id):
-    # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        timeblock = get_timeblock_with_id(coursecode, id)
-        return template("timeblock", course=course, timeblock=timeblock)
+# @route("/<coursecode>/schedule/<id>")
+# def view_timeblock(coursecode, id):
+#     # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
+#     try:
+#         course = course_ctrl.get_course_with_coursecode(coursecode)
+#         timeblock = get_timeblock_with_id(coursecode, id)
+#         return template("timeblock", course=course, timeblock=timeblock)
 
-    except:
-        return template("error")
+#     except:
+#         return template("error")
 
 
 @route("/add-timeblock", method="post")
@@ -111,23 +117,23 @@ def handle_add_timeblock():
     return add_timeblock_post()
 
 
-@route("/preferences")
-def study_preferences():
-    return template("studypreferences")
+# @route("/preferences")
+# def study_preferences():
+#     return template("studypreferences")
 
 
-@route("/save-preferences", method="post")
-def add_preferences():
-    hours_per_week = getattr(request.forms, "rangeInput")
-    # skriv till fil
+# @route("/save-preferences", method="post")
+# def add_preferences():
+#     hours_per_week = getattr(request.forms, "rangeInput")
+#     # skriv till fil
 
-    # flash message("Dina preferenser har sparats")
-    redirect("/profile")
+#     # flash message("Dina preferenser har sparats")
+#     redirect("/profile")
 
 
-@route("/profile")
-def show_profile():
-    return template("profile")
+# @route("/profile")
+# def show_profile():
+#     return template("profile")
 
 
 @route("/api/calendar")
@@ -163,6 +169,8 @@ def today_tasks():
     response.content_type = 'application/json'
     return json.dumps(all_tasks, cls=DateTimeEncoder)
 
+
+
 @error(404)
 def error404(error):
     """
@@ -182,10 +190,6 @@ def static_files(filename):
                 file : the static file requested by URL
     """
     return static_file(filename, root="static")
-
-
-def getnew():
-    print("fem")
 
 
 # Start our web server

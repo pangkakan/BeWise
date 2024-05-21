@@ -1,49 +1,68 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Event Calendar</title>
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
     <style>
         body {
-            display: flex; /* sets up a flexbox layout */
-            padding-top: 5px; /* offset from the top */
+            display: flex;
+            /* sets up a flexbox layout */
+            padding-top: 5px;
+            /* offset from the top */
         }
 
         #sidebar {
-            width: 30%; /* takes up 30% of the horizontal space */
-            padding-right: 20px; /* space between the to-do list and the calendar */
+            width: 30%;
+            /* takes up 30% of the horizontal space */
+            padding-right: 20px;
+            /* space between the to-do list and the calendar */
         }
 
         #calendar {
-            flex-grow: 1; /* takes remaining space */
+            flex-grow: 1;
+            /* takes remaining space */
 
-             position: relative; /* Ensure the calendar container has a relative positioning */
-            }
+            position: relative;
+            /* Ensure the calendar container has a relative positioning */
+        }
 
         #filters {
-            display: none; /* Start hidden */
-            position: absolute; top: 4%; left: 45%;
-            width: 100%; /* Make it the same width as the calendar */
+            display: none;
+            /* Start hidden */
+            position: absolute;
+            top: 4%;
+            left: 45%;
+            width: 100%;
+            /* Make it the same width as the calendar */
             box-shadow: none;
             background-color: transparent;
             padding: 5px;
-            z-index: 2; /* Ensures it's on top, adjust z-index appropriately */
+            z-index: 2;
+            /* Ensures it's on top, adjust z-index appropriately */
 
         }
+
         #filters label {
-            font-size: calc(0.8vw + 6px); /* Adjust base font size plus a scaling factor based on the viewport width */
+            font-size: calc(0.8vw + 6px);
+            /* Adjust base font size plus a scaling factor based on the viewport width */
             padding: 5px;
-            display: inline-block; /* Ensures labels align nicely inline */
+            display: inline-block;
+            /* Ensures labels align nicely inline */
         }
+
         #eventModal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(250, 250, 250, 0.75); /* semi-transparent black background */
-            display: none; /* hidden by default */
+            background-color: rgba(250, 250, 250, 0.75);
+            /* semi-transparent black background */
+            display: none;
+            /* hidden by default */
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -54,8 +73,9 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 50%; /* or any suitable width */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            /* or any suitable width */
             text-align: left;
         }
 
@@ -64,201 +84,215 @@
             z-index: 1200;
             cursor: pointer;
         }
+
         button:hover {
             background-color: deeppink;
         }
+
         #sidebar h3 {
             color: #333;
             padding: 10px 0;
         }
 
         #todoList .list-group-item {
-            cursor: pointer; // If you want the items to be clickable
-        transition: background-color 0.3s;
+            cursor: pointer;
+
         }
 
         #todoList .list-group-item:hover {
             background-color: #f8f8f8;
         }
-
-
-
-
-
     </style>
 </head>
+
 <body>
-<div id="sidebar">
-    <!-- To-do list will go here -->
-    <h3>Today's Tasks</h3>
-    <ul id="todoList" class="list-group">
-        <!-- Tasks will be appended here dynamically -->
-    </ul>
+    <div id="sidebar">
+        <!-- To-do list will go here -->
+        <h3>Today's Tasks</h3>
+        <ul id="todoList" class="list-group">
+            <!-- Tasks will be appended here dynamically -->
+        </ul>
 
 
 
     </div>
-</div>
-<div id='calendar'></div>
+    </div>
+    <div id='calendar'></div>
 
 
-<!-- Event Modal -->
-<div id="eventModal">
-    <div id="eventDetails"></div>
+    <!-- Event Modal -->
+    <div id="eventModal">
+        <div id="eventDetails"></div>
 
-    <button id="closeButton">Close</button>
-</div>
-<div id="filters" >
-    <label><input type="checkbox" id="filter-goals" checked> Goals</label>
-    <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
-    <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
-</div>
+        <button id="closeButton">Close</button>
+    </div>
+    <div id="filters">
+        <label><input type="checkbox" id="filter-goals" checked> Goals</label>
+        <label><input type="checkbox" id="filter-assignments" checked> Assignments</label>
+        <label><input type="checkbox" id="filter-course_events" checked> Course Events</label>
+    </div>
 
 
 
-<script>
-    function adjustLabelFontSize() {
-        var calendarWidth = document.getElementById('calendar').offsetWidth; // Get the current width of the calendar
-        var baseSize = 6; // Base font size in pixels
-        var scalingFactor = 0.005; // Scaling factor based on the calendar width
+    <script>
+        function adjustLabelFontSize() {
+            var calendarWidth = document.getElementById('calendar').offsetWidth; // Get the current width of the calendar
+            var baseSize = 6; // Base font size in pixels
+            var scalingFactor = 0.005; // Scaling factor based on the calendar width
 
-        var newSize = baseSize + (calendarWidth * scalingFactor) + 'px';
-        var labels = document.querySelectorAll('#filters label');
-        labels.forEach(function(label) {
-            label.style.fontSize = newSize; // Set new font size for each label
-        });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-
-        fetchTodayTasks().then(tasks => {
-            const todoList = document.getElementById('todoList');
-            tasks.forEach(task => {
-                const taskElement = document.createElement('li');
-                taskElement.className = 'list-group-item';
-                taskElement.textContent = task.title; // Adjust as per your data structure
-                todoList.appendChild(taskElement);
+            var newSize = baseSize + (calendarWidth * scalingFactor) + 'px';
+            var labels = document.querySelectorAll('#filters label');
+            labels.forEach(function (label) {
+                label.style.fontSize = newSize; // Set new font size for each label
             });
-        });
-
-        async function fetchTodayTasks() {
-            // Fetch data from server (use your actual API endpoint)
-            const response = await fetch('/api/today-tasks');
-            const data = await response.json();
-            return data; // This should return tasks for the current day
         }
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        document.addEventListener('DOMContentLoaded', function () {
 
-            headerToolbar: {
-                left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                center: 'title',
-                right: 'prev,next today'
-            },
+            fetchTodayTasks().then(tasks => {
+                const todoList = document.getElementById('todoList');
+                tasks.forEach(task => {
+                    // Create list item
+                    const taskElement = document.createElement('li');
+                    taskElement.className = 'list-group-item';
 
-            timeZone: 'none',
-            weekNumbers: true,
-            displayEventEnd: true,
-            firstDay: 1,
-            weekText: "",
-            eventTimeFormat: { // like '14:30:00'
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            },
-            initialView: 'dayGridMonth',
-            eventDidMount: function() {
+                    // Create checkbox
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'task-checkbox';
+
+                    // Create label for checkbox
+                    const label = document.createElement('label');
+                    label.textContent = task.title; // Adjust as per your data structure
+
+                    // Append checkbox and label to list item
+                    taskElement.appendChild(checkbox);
+                    taskElement.appendChild(label);
+
+                    // Append list item to the todoList
+                    todoList.appendChild(taskElement);
+                });
+            });
+
+            async function fetchTodayTasks() {
+                // Fetch data from server (use your actual API endpoint)
+                const response = await fetch('/api/today-tasks');
+                const data = await response.json();
+                return data; // This should return tasks for the current day
+            }
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+
+                headerToolbar: {
+                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    center: 'title',
+                    right: 'prev,next today'
+                },
+
+                timeZone: 'none',
+                weekNumbers: true,
+                displayEventEnd: true,
+                firstDay: 1,
+                weekText: "",
+                eventTimeFormat: { // like '14:30:00'
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                },
+                initialView: 'dayGridMonth',
+                eventDidMount: function () {
+                    var calendarHeader = document.querySelector('.fc-header-toolbar');
+                    var filters = document.getElementById('filters');
+                    if (calendarHeader && filters) {
+                        calendarHeader.appendChild(filters);
+                        filters.style.display = 'block'; // or adjust based on your display logic
+                    }
+                },
+
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    let filters = [];
+
+                    if (document.getElementById('filter-goals').checked) filters.push('goals');
+                    if (document.getElementById('filter-assignments').checked) filters.push('assignments');
+                    if (document.getElementById('filter-course_events').checked) filters.push('course_events');
+
+                    fetch(`/api/calendar?types=${filters.join(',')}`)
+                        .then(response => response.json())
+                        .then(data => successCallback(data))
+                        .catch(error => failureCallback(error));
+                },
+
+
+
+                eventClick: function (info) {
+
+                    var eventDetails = '';
+                    switch (info.event.extendedProps.event_type) {
+                        case 'course':
+
+                            eventDetails = `
+                    <p>Course: ${info.event.extendedProps.coursecode} ${info.event.title}</p>
+                    <p>Date: ${info.event.startStr.split('T')[0]} - ${info.event.endStr.split('T')[0]}</p>
+
+                `;
+                            break;
+                        case 'goal':
+                            // Add or remove data as per your requirement
+
+                            break;
+                        case 'assignment':
+                            // Add or remove data as per your requirement
+                            break;
+                        case 'course_event':
+                            eventDetails = `
+                    <p>Course Code: ${info.event.extendedProps.coursecode}</p>
+                    <p>Date: ${info.event.startStr.split('T')[0]}</p>
+                    <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
+                    <p>Location: ${info.event.extendedProps.location}</p>
+                    <p>Description: ${info.event.title}</p>
+                `;
+                            break;
+                        default:
+                            // Default case if no type matches
+                            break;
+                    }
+                    document.getElementById("eventDetails").innerHTML = eventDetails;
+                    document.getElementById("eventModal").style.display = "flex";
+                }
+
+
+            });
+            calendar.render();
+
+
+            adjustLabelFontSize(); // Adjust font size on initial load
+
+            window.addEventListener('resize', function () {
+                adjustLabelFontSize(); // Adjust font size on window resize
+            });
+
+            function adjustFiltersPosition() {
                 var calendarHeader = document.querySelector('.fc-header-toolbar');
-                var filters = document.getElementById('filters');
-                if (calendarHeader && filters) {
-                    calendarHeader.appendChild(filters);
-                    filters.style.display = 'block'; // or adjust based on your display logic
+                if (calendarHeader) {
+                    var filters = document.getElementById('filters');
+                    filters.style.top = calendarHeader.offsetHeight + 'px'; // Dynamically set the top position
+                    filters.style.display = 'background';
                 }
-            },
-
-            events: function(fetchInfo, successCallback, failureCallback) {
-                let filters = [];
-
-                if (document.getElementById('filter-goals').checked) filters.push('goals');
-                if (document.getElementById('filter-assignments').checked) filters.push('assignments');
-                if (document.getElementById('filter-course_events').checked) filters.push('course_events');
-
-                fetch(`/api/calendar?types=${filters.join(',')}`)
-                    .then(response => response.json())
-                    .then(data => successCallback(data))
-                    .catch(error => failureCallback(error));
-            },
-
-
-
-            eventClick: function(info) {
-
-                var eventDetails = '';
-                switch(info.event.extendedProps.event_type) {
-                    case 'course':
-
-                        eventDetails = `
-                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.title}</p>
-                        <p>Date: ${info.event.startStr.split('T')[0]} - ${info.event.endStr.split('T')[0]}</p>
-
-                    `;
-                        break;
-                    case 'goal':
-                        // Add or remove data as per your requirement
-
-                        break;
-                    case 'assignment':
-                        // Add or remove data as per your requirement
-                        break;
-                    case 'course_event':
-                        eventDetails = `
-                        <p>Course Code: ${info.event.extendedProps.coursecode}</p>
-                        <p>Date: ${info.event.startStr.split('T')[0]}</p>
-                        <p>Time: ${info.event.startStr.split('T')[1]} - ${info.event.endStr.split('T')[1]}</p>
-                        <p>Location: ${info.event.extendedProps.location}</p>
-                        <p>Description: ${info.event.title}</p>
-                    `;
-                        break;
-                    default:
-                        // Default case if no type matches
-                        break;
-                }
-                document.getElementById("eventDetails").innerHTML = eventDetails;
-                document.getElementById("eventModal").style.display = "flex";
             }
 
+            document.getElementById("closeButton").addEventListener('click', closeModal);
+            // Re-fetch events when the event type is changed
 
-        });
-        calendar.render();
-
-
-        adjustLabelFontSize(); // Adjust font size on initial load
-
-        window.addEventListener('resize', function() {
-            adjustLabelFontSize(); // Adjust font size on window resize
-        });
-
-        function adjustFiltersPosition() {
-            var calendarHeader = document.querySelector('.fc-header-toolbar');
-            if (calendarHeader) {
-                var filters = document.getElementById('filters');
-                filters.style.top = calendarHeader.offsetHeight + 'px'; // Dynamically set the top position
-                filters.style.display = 'background';
-            }
-        }
-
-        document.getElementById("closeButton").addEventListener('click', closeModal);
-        // Re-fetch events when the event type is changed
-
-        document.querySelectorAll('#filters input').forEach(input => {
-            input.addEventListener('change', function() {
-                calendar.refetchEvents();
+            document.querySelectorAll('#filters input').forEach(input => {
+                input.addEventListener('change', function () {
+                    calendar.refetchEvents();
+                });
             });
         });
-    });
-    function closeModal() {
-        document.getElementById("eventModal").style.display = "none";
-    }
-</script>
+        function closeModal() {
+            document.getElementById("eventModal").style.display = "none";
+        }
+    </script>
 
 </body>
+
 </html>
