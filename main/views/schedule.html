@@ -191,14 +191,20 @@
 
 
             eventClick: function(info) {
+                let linkedEvents = calendar.getEvents().filter(e => e.extendedProps.linkId === info.event.extendedProps.linkId);
+                // Now `linkedEvents` contains both the start and end events linked by `linkId`
 
+                // Example: you could prompt the user to edit details, and apply changes to all linked events
+                /*linkedEvents.forEach(e => {
+                    e.setProp('title', 'Updated ' + e.title); // Example modification
+                });*/
                 var eventDetails = '';
                 switch(info.event.extendedProps.event_type) {
                     case 'course':
 
                         eventDetails = `
-                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.title}</p>
-                        <p>Date: ${info.event.startStr.split('T')[0]} - ${info.event.endStr.split('T')[0]}</p>
+                        <p>Course: ${info.event.extendedProps.coursecode} ${info.event.extendedProps.description}</p>
+                        <p>Date: ${info.event.extendedProps.actualStart.split('T')[0]} - ${info.event.extendedProps.actualEnd.split('T')[0]}</p>
 
                     `;
                         break;

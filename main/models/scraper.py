@@ -83,7 +83,7 @@ class Scraper:
             The HTML content of the course page, or None if the fetch fails or an error occurs.
         """
         try:
-            url = f"https://schema.mau.se/ajax/ajax_sokResurser.jsp?sokord={search_term}&startDatum=idag&slutDatum=&intervallTyp=m&intervallAntal=6"
+            url = f"https://schema.mau.se/ajax/ajax_sokResurser.jsp?sokord={search_term}&startDatum=2024-02-15&slutDatum=&intervallTyp=m&intervallAntal=6"
 
             response = requests.get(url)
             if response.status_code == 200:
@@ -123,21 +123,6 @@ class Scraper:
             return None
 
     def get_schedule(self, url, course_or_no):
-        """
-        Scrapes the schedule from the given URL.
-
-        Parameters
-        ----------
-        url : str
-            The URL of the page to scrape.
-        course_or_no : bool
-            A flag to determine the type of description to scrape.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the scraped schedule data, or None if no schedule table is found or an error occurs.
-        """
         month_map = {
             "Jan": "January",
             "Feb": "February",
@@ -151,6 +136,14 @@ class Scraper:
             "Okt": "October",
             "Nov": "November",
             "Dec": "December",
+        }
+        keywords = {
+            "lecture": [],
+            "Workshop": [],
+
+            "lab": [],
+            "other": [],
+            "tentamen": []
         }
         try:
             response = requests.get(url)
@@ -173,15 +166,10 @@ class Scraper:
                     day = cells[0].get_text(strip=True)
                     scraped_date = cells[1].get_text(strip=True)
                     if scraped_date != "":
-                        # Replace the month name in the scraped date with the English month name
                         for non_english_month, english_month in month_map.items():
-                            scraped_date = scraped_date.replace(
-                                non_english_month, english_month
-                            )
-                        # Add the current year to the scraped date
+                            scraped_date = scraped_date.replace(non_english_month, english_month)
                         current_year = datetime.now().year
                         scraped_date = f"{scraped_date} {current_year}"
-                        # Parse the date string to a date object
                         date = datetime.strptime(scraped_date, "%d %B %Y").date()
                     time = cells[2].get_text(strip=True)
                     starting_time, ending_time = time.split("-")
@@ -205,17 +193,29 @@ class Scraper:
                         location = cells[5].get_text(strip=True)
 
                     description = re.sub(r"\s*,\s*", ", ", description)
-                    events[current_week].append(
-                        {
-                            "day": day,
-                            "date": date,
-                            "start_time": start_time,
-                            "end_time": end_time,
-                            "location": location,
-                            "description": description,
-                        }
-                    )
-            # Fill in missing day and date values if event is not the first in a day
+                    event_data = {
+                        "day": day,
+                        "date": date,
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "location": location,
+                        "description": description,
+                    }
+                    events[current_week].append(event_data)
+
+                    # Identify and categorize the event based on the description
+                    found = False
+                    for keyword in keywords.keys():
+                        if keyword in description.lower():
+                            keywords[keyword].append(event_data)
+                            found = True
+                            break
+                    if not found:
+                        if re.match(r"F\d+", description):  # Match "F" followed by a number
+                            keywords["lecture"].append(event_data)
+                        else:
+                            keywords["other"].append(event_data)
+
             for week_events in events.values():
                 for event in week_events:
                     if event["day"] != "":
@@ -226,19 +226,15 @@ class Scraper:
                         date = event["date"]
                     if event["date"] == "":
                         event["date"] = date
-            # Print the schedule
-            for week, week_events in events.items():
-                for event in week_events:
-                    print(
-                        f"Week: {week}, Day: {event['day']}, Date: {event['date']}, From: {event['start_time']}, To: {event['end_time']}, Locale: {event['location']} Description: {event['description']}"
-                    )
 
-            return events
+            return {"events": events, "keywords": keywords}
         except Exception as e:
             print(f"An error occurred in get_schedule: {e}")
             return None
 
-#Scraper("da336a", True).scrape()
+
+
+
 print("\n")
 print("\n")
 print("\n")

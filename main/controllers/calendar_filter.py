@@ -1,3 +1,5 @@
+import uuid
+
 from models.json_manager import read_from_json_file
 
 
@@ -10,17 +12,72 @@ def filter_courses(conn):
     filtered_courses = cur.fetchall()
     formatted_courses = []
     for course in filtered_courses:
-        formatted_event = {
-            "title": course[3],
+        link_id = uuid.uuid4().hex  # Generate a unique identifier for linked events
+        start_event = {
+            "title": course[2] + " (start)",
             "start": course[0],
-            "end": course[1],
+            "end": course[0],
+            "allDay": True,
+            "linkId": link_id,
+
             "extendedProps": {
                 "coursecode": course[2],
+                "event_type": "course",
+                "actualStart": course[0],
+                "actualEnd": course[1],
+                "description": course[3]
+            }
+        }
+        formatted_courses.append(start_event)
+        end_event = {
+            "title": course[2] + " (end)",
+            "start": course[1],
+            "allDay": True,
+            "linkId": link_id,
+
+            "extendedProps": {
+                "coursecode": course[2],
+                "event_type": "course",
+                "actualStart": course[0],
+                "actualEnd": course[1],
+                "description": course[3]
+            }
+        }
+        formatted_courses.append(end_event)
+
+    return formatted_courses
+
+def filter_course_singles(conn):
+    pre_formatted_courses = filter_courses(conn)
+    # Adjusting events to only show start and end dates
+    adjusted_events = []
+    for course in pre_formatted_courses:
+        link_id = uuid.uuid4().hex  # Generate a unique identifier for linked events
+        start_event = {
+            "title": course['title'] + " (Start)",
+            "start": course['start'],
+            "allDay": True,
+            "linkId": link_id,
+            "extendedProps": {
+                "coursecode": course['coursecode'],
                 "event_type": "course"
             }
         }
-        formatted_courses.append(formatted_event)
-    return formatted_courses
+        adjusted_events.append(start_event)
+
+        if course['start'] != course['end']:
+            end_event = {
+                "title": course['title'] + " (End)",
+                "start": course['end'],  # Use the end date as the start for this event
+                "allDay": True,
+                "linkId": link_id,
+                "extendedProps": {
+                    "coursecode": course['coursecode'],
+                    "event_type": "course"
+                }
+            }
+            adjusted_events.append(end_event)
+    return adjusted_events
 
 
 def filter_goals(conn):
@@ -98,6 +155,7 @@ def filter_assignments_for_daily(conn):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_assignments
+    WHERE CURRENT_DATE BETWEEN start_time AND deadline_timestamp
 
     """
     cur.execute(query)
@@ -119,3 +177,22 @@ def filter_assignments_for_daily(conn):
         formatted_assignments.append(formatted_event)
     print(formatted_assignments)
     return formatted_assignments
+
+def filter_subtask(conn):
+    cur = conn.cursor()
+    query = """
+    SELECT * FROM subtasks
+    WHERE CURRENT_DATE = date
+    """
+    cur.execute(query)
+    filtered_subtasks = cur.fetchall()
+    formatted_subtasks = []
+    for subtask in filtered_subtasks:
+        formatted_event = {
+            "id": subtask[0],
+            "assignment_id": subtask[1],
+            "title": subtask[2],
+            "date": subtask[3],
+        }
+        formatted_subtasks.append(formatted_event)
+    return formatted_subtasks

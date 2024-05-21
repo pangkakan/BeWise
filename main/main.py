@@ -18,7 +18,7 @@ from controllers.calendar_filter import (
     filter_courses,
     filter_goals,
     filter_assignments,
-    filter_course_events, filter_assignments_for_daily
+    filter_course_events, filter_assignments_for_daily, filter_course_singles
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
