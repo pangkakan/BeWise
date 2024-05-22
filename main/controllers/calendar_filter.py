@@ -135,8 +135,17 @@ def filter_assignments(conn, this_user):
     return formatted_assignments
 
 
-def filter_course_events():
+def filter_course_events(conn, course_code, this_user):
     # Load events from your JSON file
+
+    cur = conn.cursor
+    query = """
+    SELECT * FROM course_events
+    WHERE course_code = %s AND user_id
+
+    """
+
+    """
     events = read_from_json_file("static/timeblocks.json")
 
     # Convert the events to FullCalendar's format
@@ -156,7 +165,7 @@ def filter_course_events():
         }
         formatted_events.append(formatted_event)
     return formatted_events
-
+"""
 
 def filter_assignments_for_daily(conn, this_user):
     cur = conn.cursor()
