@@ -13,28 +13,11 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 
     <style>
-        body {
-            /* display: flex; */
-            /* sets up a flexbox layout */
-            /* padding-top: 5px; */
-            /* offset from the top */
-        }
-
-        #sidebar {
-            /* width: 30%; */
-            /* takes up 30% of the horizontal space */
-            /* padding-right: 20px; */
-            /* space between the to-do list and the calendar */
-        }
-
         #calendar {
-            /* flex-grow: 1; */
-            /* takes remaining space */
-
             position: relative;
-            /* Ensure the calendar container has a relative positioning */
         }
 
         #filters {
@@ -44,13 +27,9 @@
             top: 4%;
             left: 45%;
             width: 100%;
-            /* Make it the same width as the calendar */
             box-shadow: none;
             background-color: transparent;
             padding: 5px;
-            /* z-index: 2; */
-            /* Ensures it's on top, adjust z-index appropriately */
-
         }
 
         #filters label {
@@ -58,7 +37,6 @@
             /* Adjust base font size plus a scaling factor based on the viewport width */
             padding: 5px;
             display: inline-block;
-            /* Ensures labels align nicely inline */
         }
 
         #eventModal {
@@ -74,7 +52,6 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-
         }
 
         #eventDetails {
@@ -88,18 +65,11 @@
         }
 
         button {
-            /* margin-top: 20px; */
-            /* z-index: 1200; */
             cursor: pointer;
         }
 
         button:hover {
             background-color: deeppink;
-        }
-
-        #sidebar h3 {
-            /* color: #333; */
-            /* padding: 10px 0; */
         }
 
         #todoList .list-group-item {
@@ -131,12 +101,15 @@
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#add-course-modal">Kurs</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#add-goal-modal">Mål</button>
+                                    data-bs-toggle="modal" data-bs-target="#add-goal-modal" hx-get="/get-user-courses"
+                                    hx-target="#course-select">Mål</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#add-assignment-modal">Uppgift</button>
+                                    data-bs-toggle="modal" data-bs-target="#add-assignment-modal"
+                                    hx-get="/get-user-goals" hx-target="#goal-select">Uppgift</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#add-subtask-modal">Deluppgift</button>
-                                    <button class="dropdown-item" type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#add-subtask-modal"
+                                    hx-get="/get-user-assignments" hx-target="#assignment-select">Deluppgift</button>
+                                <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#add-event-modal">Händelse</button>
                             </div>
                         </div>
@@ -155,7 +128,7 @@
                                     data-bs-toggle="modal" data-bs-target="#view-assignments-modal">Uppgifter</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#view-subtasks-modal">Deluppgifter</button>
-                                    <button class="dropdown-item" type="button" class="btn btn-primary"
+                                <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#view-events-modal">Händelser</button>
                             </div>
                         </div>
@@ -209,9 +182,6 @@
 
 
         <div class="row row-cols-3">
-            % for goal in goals:
-            <div>{{ goal["title"] }}</div>
-            % end
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Mål</h4>
@@ -354,23 +324,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till kurs</h1>
+                    <h1 class="modal-title fs-5" id="add-course-heading">Lägg till kurs</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-
-                        <div class="mb-3">
-                            <label for="course-title" class="form-label">Kursnamn</label>
-                            <input type="text" id="course-title" class="form-control" placeholder="Vad heter kursen?">
-                        </div>
+                    <form id="add-course-form" hx-post="/add-course">
                         <div class="mb-3">
                             <label for="course-code" class="form-label">Kurskod</label>
-                            <input type="text" id="course-code" class="form-control" placeholder="Ange kurskod.">
+                            <input type="text" id="course-code" name="course_code" class="form-control"
+                                placeholder="Ange kurskod." required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Slutför</button>
-
                     </form>
                 </div>
             </div>
@@ -383,37 +348,38 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till mål</h1>
+                    <h1 class="modal-title fs-5" id="add-goal-heading">Lägg till mål</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-
+                    <form id="add-goal-form" hx-post="/add-goal" hx-trigger="submit" hx-swap="none">
                         <div class="mb-3">
                             <label for="course-select" class="form-label">Välj kurs</label>
-                            <select id="course-select" class="form-select">
-                                <option>Kurs 1</option>
-                                <option>Kurs 2</option>
-                                <option>Kurs 3</option>
+                            <select id="course-select" name="chosen_course" class="form-select">
+
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="goal-title" class="form-label">Titel</label>
-                            <input type="text" id="goal-title" class="form-control" placeholder="Vad ska göras?">
+                            <input type="text" id="goal-title" name="goal_title" class="form-control"
+                                placeholder="Vad ska göras?" required>
                         </div>
                         <div class="mb-3">
-                            <label for="goal-startdate" class="form-label">Välj startdatum</label>
-                            <input type="date" id="goal-startdate" class="form-control">
+                            <label for="goal-type" class="form-label">Typ</label>
+                            <input type="text" id="goal-type" name="goal_type" class="form-control"
+                                placeholder="Vilken typ av mål?" required>
                         </div>
                         <div class="mb-3">
-                            <label for="goal-enddate" class="form-label">Välj slutdatum</label>
-                            <input type="date" id="goal-enddate" class="form-control">
+                            <label for="goal-startdate" class="form-label">Ange startdatum</label>
+                            <input type="date" id="goal-startdate" name="goal_startdate" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="goal-enddate" class="form-label">Ange deadline</label>
+                            <input type="date" id="goal-enddate" name="goal_enddate" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Slutför</button>
-
-
                     </form>
                 </div>
             </div>
@@ -426,41 +392,38 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till uppgift</h1>
+                    <h1 class="modal-title fs-5" id="add-assignment-heading">Lägg till uppgift</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-
-                        <div class="mb-3">
-                            <label for="course-select" class="form-label">Välj kurs</label>
-                            <select id="course-select" class="form-select">
-                                <option>Kurs 1</option>
-                                <option>Kurs 2</option>
-                                <option>Kurs 3</option>
-                            </select>
-                        </div>
+                    <form id="add-assignment-form" hx-post="/add-assignment" hx-trigger="submit" hx-swap="none">
                         <div class="mb-3">
                             <label for="goal-select" class="form-label">Välj mål</label>
-                            <select id="goal-select" class="form-select">
-                                <option>Mål 1</option>
-                                <option>Mål 2</option>
-                                <option>Mål 3</option>
+                            <select id="goal-select" name="chosen_goal" class="form-select">
+
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="task-title" class="form-label">Titel</label>
-                            <input type="text" id="task-title" class="form-control" placeholder="Vad ska göras?">
+                            <label for="assignment-title" class="form-label">Titel</label>
+                            <input type="text" id="assignment-title" name="assignment_title" class="form-control"
+                                placeholder="Vad ska göras?" required>
                         </div>
                         <div class="mb-3">
-                            <label for="task-startdate" class="form-label">Välj startdatum (kan väljas inom målets
-                                intervall)</label>
-                            <input type="date" id="task-startdate" class="form-control">
+                            <label for="assignment-type" class="form-label">Typ</label>
+                            <input type="text" id="assignment-type" name="assignment_type" class="form-control"
+                                placeholder="Vilken typ av uppgift?" required>
                         </div>
                         <div class="mb-3">
-                            <label for="task-enddate" class="form-label">Välj slutdatum (kan väljas inom målets
+                            <label for="assignment-startdate" class="form-label">Ange startdatum (kan väljas inom målets
                                 intervall)</label>
-                            <input type="date" id="task-enddate" class="form-control">
+                            <input type="date" id="assignment-startdate" name="assignment_startdate"
+                                class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignment-enddate" class="form-label">Ange deadline (kan väljas inom målets
+                                intervall)</label>
+                            <input type="date" id="assignment-enddate" name="assignment_enddate" class="form-control"
+                                required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Slutför</button>
@@ -478,44 +441,26 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till deluppgift</h1>
+                    <h1 class="modal-title fs-5" id="add-subtask-heading">Lägg till deluppgift</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="add-subtask-form" hx-post="/add-subtask" hx-trigger="submit" hx-swap="none">
+                        <div class="mb-3">
+                            <label for="assignment-select" class="form-label">Välj uppgift</label>
+                            <select id="assignment-select" name="chosen_assignment" class="form-select">
 
-                        <div class="mb-3">
-                            <label for="course-select" class="form-label">Välj kurs</label>
-                            <select id="course-select" class="form-select">
-                                <option>Kurs 1</option>
-                                <option>Kurs 2</option>
-                                <option>Kurs 3</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="goal-select" class="form-label">Välj mål</label>
-                            <select id="goal-select" class="form-select">
-                                <option>Mål 1</option>
-                                <option>Mål 2</option>
-                                <option>Mål 3</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="task-select" class="form-label">Välj uppgift</label>
-                            <select id="task-select" class="form-select">
-                                <option>Uppgift 1</option>
-                                <option>Uppgift 2</option>
-                                <option>Uppgift 3</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="subtask-title" class="form-label">Titel</label>
-                            <input type="text" id="subtask-title" class="form-control" placeholder="Vad ska göras?">
+                            <input type="text" id="subtask-title" name="subtask_title" class="form-control"
+                                placeholder="Vad ska göras?" required>
                         </div>
                         <div class="mb-3">
                             <label for="subtask-date" class="form-label">Välj datum (kan väljas inom uppgiftens
                                 intervall)</label>
-                            <input type="date" id="subtask-date" class="form-control">
+                            <input type="date" id="subtask-date" name="subtask_date" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Slutför</button>
@@ -534,12 +479,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Lägg till händelse</h1>
+                    <h1 class="modal-title fs-5" id="add-event-heading">Lägg till händelse</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-
+                    <form hx-post="/add-event" hx-trigger="submit" hx-swap="none">
                         <div class="mb-3">
                             <label for="course-title" class="form-label">Kursnamn</label>
                             <input type="text" id="course-title" class="form-control" placeholder="Vad heter kursen?">
@@ -625,8 +569,7 @@
     </div>
 
     <!-- Modal: visa händelser -->
-    <div class="modal fade" id="view-events-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="view-events-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -826,11 +769,11 @@
 
             var newSize = baseSize + (calendarWidth * scalingFactor) + 'px';
             var labels = document.querySelectorAll('#filters label');
-            labels.forEach(function(label) {
+            labels.forEach(function (label) {
                 label.style.fontSize = newSize; // Set new font size for each label
             });
         }
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
 
             fetchTodayTasks().then(tasks => {
                 const todoList = document.getElementById('todoList');
@@ -868,7 +811,7 @@
                     hour12: false
                 },
                 initialView: 'dayGridMonth',
-                eventDidMount: function() {
+                eventDidMount: function () {
                     var calendarHeader = document.querySelector('.fc-header-toolbar');
                     var filters = document.getElementById('filters');
                     if (calendarHeader && filters) {
@@ -877,7 +820,7 @@
                     }
                 },
 
-                events: function(fetchInfo, successCallback, failureCallback) {
+                events: function (fetchInfo, successCallback, failureCallback) {
                     let filters = [];
 
                     if (document.getElementById('filter-goals').checked) filters.push('goals');
@@ -892,7 +835,7 @@
 
 
 
-                eventClick: function(info) {
+                eventClick: function (info) {
                     let linkedEvents = calendar.getEvents().filter(e => e.extendedProps.linkId === info.event.extendedProps.linkId);
                     // Now `linkedEvents` contains both the start and end events linked by `linkId`
 
@@ -901,7 +844,7 @@
                         e.setProp('title', 'Updated ' + e.title); // Example modification
                     });*/
                     var eventDetails = '';
-                    switch(info.event.extendedProps.event_type) {
+                    switch (info.event.extendedProps.event_type) {
                         case 'course':
 
                             eventDetails = `
@@ -941,7 +884,7 @@
 
             adjustLabelFontSize(); // Adjust font size on initial load
 
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 adjustLabelFontSize(); // Adjust font size on window resize
             });
 
@@ -958,7 +901,7 @@
             // Re-fetch events when the event type is changed
 
             document.querySelectorAll('#filters input').forEach(input => {
-                input.addEventListener('change', function() {
+                input.addEventListener('change', function () {
                     calendar.refetchEvents();
                 });
             });
@@ -966,6 +909,46 @@
         function closeModal() {
             document.getElementById("eventModal").style.display = "none";
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //    Handle modals with form submits
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                $('#add-course-modal').modal('hide');
+            }
+        });
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                $('#add-goal-modal').modal('hide');
+            }
+        });
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                $('#add-assignment-modal').modal('hide');
+            }
+        });
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                $('#add-subtask-modal').modal('hide');
+            }
+        });
+
+
     </script>
 
 </body>

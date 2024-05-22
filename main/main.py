@@ -32,7 +32,6 @@ conn = create_connection()
 def index():
     today_tasks = get_today_tasks()
     goals = filter_goals(conn)
-    print(goals)
     return template("index", today_tasks=today_tasks, goals=goals)
 
 
@@ -63,10 +62,73 @@ def get_today_tasks():
 #     return template("addcourse")
 
 
-@route("/add-course", method="post")
-def handle_add_course():
-    return course_ctrl.add_course_post(conn)
+# @route("/add-course", method="post")
+# def handle_add_course():
+#     return course_ctrl.add_course_post(conn)
 
+@route("/add-course", method="post")
+def add_course():
+    course_code = request.forms.get("course_code")
+    
+    # check if coursecode exists for some course
+    # check if user is already connected to the course 
+
+    # connect user to a course in db
+    
+
+
+@route("/add-goal", method="post")
+def add_goal():
+    user_course_id = request.forms.get("chosen_course")
+    # startdate and enddate boundary = course startdate-enddate
+    start_date = request.forms.get("goal_startdate")
+    end_date = request.forms.get("goal_enddate")
+    title = request.forms.get("goal_title")
+    type = request.forms.get("goal_type")
+    print(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
+
+
+@route("/add-assignment", method="post")
+def add_assignment():
+    goal_id = request.forms.get("chosen_goal")
+    # startdate and enddate boundary = goal startdate-enddate
+    start_date = request.forms.get("assignment_startdate")
+    end_date = request.forms.get("assignment_enddate")
+    title = request.forms.get("assignment_title")
+    type = request.forms.get("assignment_type")
+    print(f"Goal id: {goal_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
+
+
+@route("/add-subtask", method="post")
+def add_subtask():
+    assignment_id = request.forms.get("chosen_assignment") 
+    # date boundary = assignment startdate-enddate
+    date = request.forms.get("subtask_date")
+    title = request.forms.get("subtask_title")
+    print(f"Assignment id: {assignment_id}, Date: {date}, Title: {title}")
+
+
+@route("/add-event", method="post")
+def add_event():
+    pass
+
+
+@route("/get-user-courses")
+def get_user_courses():
+    courses = ["Systemutveckling", "Databasteknik", "Programmering"]
+    return template("course-select", courses=courses)
+
+
+@route("/get-user-goals")
+def get_user_goals():
+    goals = ["Första målet", "Andra målet", "Tredje målet"]
+    return template("goal-select", goals=goals)
+
+
+@route("/get-user-assignments")
+def get_user_goals():
+    assignments = ["Första uppgiften", "Andra uppgiften", "Tredje uppgiften"]
+    return template("assignment-select", assignments=assignments)
 
 # @route("/<coursecode>/tasks")
 # def course_tasks(coursecode):
@@ -92,9 +154,9 @@ def handle_add_course():
 #         return template("error")
 
 
-@route("/add-task", method="post")
-def handle_add_task():
-    return add_task_post()
+# @route("/add-task", method="post")
+# def handle_add_task():
+#     return add_task_post()
 
 
 # @route("/<coursecode>/schedule")
@@ -121,9 +183,9 @@ def handle_add_task():
 #         return template("error")
 
 
-@route("/add-timeblock", method="post")
-def handle_add_timeblock():
-    return add_timeblock_post()
+# @route("/add-timeblock", method="post")
+# def handle_add_timeblock():
+#     return add_timeblock_post()
 
 
 # @route("/preferences")

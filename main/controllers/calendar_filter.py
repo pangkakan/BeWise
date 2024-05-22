@@ -178,7 +178,7 @@ def filter_assignments_for_daily(conn):
     print(formatted_assignments)
     return formatted_assignments
 
-def filter_subtask(conn):
+def filter_subtasks(conn):
     cur = conn.cursor()
     query = """
     SELECT * FROM subtasks

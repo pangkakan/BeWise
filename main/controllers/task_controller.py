@@ -29,6 +29,15 @@ def add_task_post(conn):
     # istället för redirect till startsidan kan detta lösas med htmx så man stannar kvar på sidan
     redirect("/")
 
+
+    
+
+    
+
+
+    
+
+
 def get_tasks_with_coursecode(coursecode):
     tasks = read_from_json_file("static/tasks.json")
     task_list = []
