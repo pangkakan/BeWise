@@ -137,9 +137,9 @@ def calendar_api():
 
     all_events = []
 
-    all_events += filter_courses(conn)
+    all_events += filter_courses(conn, current_user)
     if "goals" in type_list:
-        all_events += filter_goals(conn, 1)
+        all_events += filter_goals(conn, current_user)
     if "assignments" in type_list:
         all_events += filter_assignments(conn, current_user)
     if "course_events" in type_list:

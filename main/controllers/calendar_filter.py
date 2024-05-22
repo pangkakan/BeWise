@@ -3,11 +3,13 @@ import uuid
 from models.json_manager import read_from_json_file
 
 
-def filter_courses(conn):
+def filter_courses(conn, this_user):
     cur = conn.cursor()
     query = """
-    SELECT * FROM filter_courses
-    """
+    SELECT * FROM filter_user_courses
+     WHERE user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_courses = cur.fetchall()
     formatted_courses = []
@@ -47,8 +49,9 @@ def filter_courses(conn):
 
     return formatted_courses
 
-def filter_course_singles(conn):
-    pre_formatted_courses = filter_courses(conn)
+
+def filter_course_singles(conn, this_user):
+    pre_formatted_courses = filter_courses(conn, this_user)
     # Adjusting events to only show start and end dates
     adjusted_events = []
     for course in pre_formatted_courses:
