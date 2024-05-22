@@ -121,15 +121,15 @@
                             </button>
                             <div class="dropdown-menu">
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#view-courses-modal">Kurser</button>
+                                    data-bs-toggle="modal" data-bs-target="#view-courses-modal" hx-get="/view-courses" hx-target="#my-courses-list">Kurser</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#view-goals-modal">Mål</button>
+                                    data-bs-toggle="modal" data-bs-target="#view-goals-modal" hx-get="/view-goals" hx-target="#my-goals-list">Mål</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#view-assignments-modal">Uppgifter</button>
+                                    data-bs-toggle="modal" data-bs-target="#view-assignments-modal" hx-get="/view-assignments" hx-target="#my-assignments-list">Uppgifter</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#view-subtasks-modal">Deluppgifter</button>
+                                    data-bs-toggle="modal" data-bs-target="#view-subtasks-modal" hx-get="/view-subtasks" hx-target="#my-subtasks-list">Deluppgifter</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#view-events-modal">Händelser</button>
+                                    data-bs-toggle="modal" data-bs-target="#view-events-modal" hx-get="/view-events" hx-target="#my-events-list">Händelser</button>
                             </div>
                         </div>
                     </div>
@@ -483,14 +483,48 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form hx-post="/add-event" hx-trigger="submit" hx-swap="none">
+                    <form id="add-event-form" hx-post="/add-event" hx-trigger="submit" hx-swap="none">
                         <div class="mb-3">
-                            <label for="course-title" class="form-label">Kursnamn</label>
-                            <input type="text" id="course-title" class="form-control" placeholder="Vad heter kursen?">
+                            <label for="event-course-select" class="form-label">Kurs</label>
+                            <select id="event-course-select" name="chosen_course" class="form-select">
+                                <option value="">Hej</option>
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label for="course-code" class="form-label">Kurskod</label>
-                            <input type="text" id="course-code" class="form-control" placeholder="Ange kurskod.">
+                            <label for="event-description" class="form-label">Beskrivning</label>
+                            <input type="text" id="event-description" name="event_description" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-type" class="form-label">Typ av händelse</label>
+                            <input type="text" id="event-type" name="event_type" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="weekday-select" class="form-label">Veckodag</label>
+                            <select id="weekday-select" name="chosen_weekday" class="form-select">
+                                <option value="monday">Måndag</option>
+                                <option value="tuesday">Tisdag</option>
+                                <option value="wednesday">Onsdag</option>
+                                <option value="thursday">Torsdag</option>
+                                <option value="friday">Fredag</option>
+                                <option value="saturday">Lördag</option>
+                                <option value="sunday">Söndag</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-date" class="form-label">Datum</label>
+                            <input type="date" id="event-date" name="event_date" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-starttime" class="form-label">Starttid</label>
+                            <input type="time" id="event-starttime" name="event_starttime" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-endtime" class="form-label">Sluttid</label>
+                            <input type="time" id="event-endtime" name="event_endtime" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event-location" class="form-label">Plats</label>
+                            <input type="text" id="event-location" name="event_location" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Slutför</button>
@@ -515,7 +549,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="my-courses-list"></div>
                 </div>
             </div>
         </div>
@@ -530,7 +564,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="my-goals-list"></div>
                 </div>
             </div>
         </div>
@@ -546,7 +580,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="my-assignments-list"></div>
                 </div>
             </div>
         </div>
@@ -562,7 +596,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="my-subtasks-list"></div>
                 </div>
             </div>
         </div>
@@ -577,7 +611,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="my-events-list"></div>
                 </div>
             </div>
         </div>
@@ -945,6 +979,12 @@
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
                 $('#add-subtask-modal').modal('hide');
+            }
+        });
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                $('#add-event-modal').modal('hide');
             }
         });
 

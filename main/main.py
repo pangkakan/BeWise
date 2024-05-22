@@ -87,6 +87,8 @@ def add_goal():
     type = request.forms.get("goal_type")
     print(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
 
+    # insert into db
+
 
 @route("/add-assignment", method="post")
 def add_assignment():
@@ -98,6 +100,8 @@ def add_assignment():
     type = request.forms.get("assignment_type")
     print(f"Goal id: {goal_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
 
+    # insert into db
+
 
 @route("/add-subtask", method="post")
 def add_subtask():
@@ -107,28 +111,69 @@ def add_subtask():
     title = request.forms.get("subtask_title")
     print(f"Assignment id: {assignment_id}, Date: {date}, Title: {title}")
 
+    # insert into db
+
 
 @route("/add-event", method="post")
 def add_event():
-    pass
+    weekday = request.forms.get("chosen_weekday")
 
 
 @route("/get-user-courses")
 def get_user_courses():
     courses = ["Systemutveckling", "Databasteknik", "Programmering"]
+    # get all user courses (course id + title)
     return template("course-select", courses=courses)
 
 
 @route("/get-user-goals")
 def get_user_goals():
     goals = ["Första målet", "Andra målet", "Tredje målet"]
+    # get all user goals (goal id + title) from database
     return template("goal-select", goals=goals)
 
 
 @route("/get-user-assignments")
 def get_user_goals():
     assignments = ["Första uppgiften", "Andra uppgiften", "Tredje uppgiften"]
+    # get all user assignments (assignment id + title) from database
     return template("assignment-select", assignments=assignments)
+
+
+@route("/view-courses")
+def view_courses():
+    courses = ["DA336A - Systemutveckling startdaum slutdatum", "DA297A - Databasteknik startdatum slutdatum", "DA354A - Programmering startdatum slutdatum"]
+    # get all user courses (id, coursecode, title, start, end) from database
+    return template("view-courses-list", courses=courses)
+
+
+@route("/view-goals")
+def view_goals():
+    goals = ["Mål 1", "Mål 2", "Mål 3"]
+    # get all user goals (id, course, title, start, end, type, completed) from database
+    return template("view-goals-list", goals=goals)
+
+
+@route("/view-assignments")
+def view_assignments():
+    assignments = ["Uppgift 1", "Uppgift 2", "Uppgift 3"]
+    # get all user assignments (id, goal, title, start, end, type, priority, completed) from database
+    return template("view-assignments-list", assignments=assignments)
+
+
+@route("/view-subtasks")
+def view_subtasks():
+    subtasks = ["Deluppgift 1", "Deluppgift 2", "Deluppgift 3"]
+    # get all user subtasks (id, assignment, title, date, type, completed) from database
+    return template("view-subtasks-list", subtasks=subtasks)
+
+
+@route("/view-events")
+def view_events():
+    events = ["Händelse 1", "Händelse 2", "Händelse 3"]
+    # get all user events from database
+    return template("view-events-list", events=events)
+
 
 # @route("/<coursecode>/tasks")
 # def course_tasks(coursecode):
