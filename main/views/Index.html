@@ -110,7 +110,8 @@
                                     data-bs-toggle="modal" data-bs-target="#add-subtask-modal"
                                     hx-get="/get-user-assignments" hx-target="#assignment-select">Deluppgift</button>
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#add-event-modal">Händelse</button>
+                                    data-bs-toggle="modal" data-bs-target="#add-event-modal" hx-get="/get-user-courses/events"
+                                    hx-target="#event-course-select">Händelse</button>
                             </div>
                         </div>
 

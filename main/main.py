@@ -126,6 +126,13 @@ def get_user_courses():
     return template("course-select", courses=courses)
 
 
+@route("/get-user-courses/events")
+def get_user_courses():
+    courses = ["Systemutveckling", "Databasteknik", "Programmering"]
+    # get all user courses (course id + title)
+    return template("event-course-select", courses=courses)
+
+
 @route("/get-user-goals")
 def get_user_goals():
     goals = ["Första målet", "Andra målet", "Tredje målet"]
@@ -138,6 +145,7 @@ def get_user_goals():
     assignments = ["Första uppgiften", "Andra uppgiften", "Tredje uppgiften"]
     # get all user assignments (assignment id + title) from database
     return template("assignment-select", assignments=assignments)
+
 
 
 @route("/view-courses")
