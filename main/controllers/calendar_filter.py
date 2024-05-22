@@ -80,11 +80,12 @@ def filter_course_singles(conn):
     return adjusted_events
 
 
-def filter_goals(conn):
+def filter_goals(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_goals
-    """
+    WHERE user_id = %s
+    """ % this_user
     cur.execute(query)
     filtered_goals = cur.fetchall()
     formatted_goals = []
@@ -103,11 +104,13 @@ def filter_goals(conn):
     return formatted_goals
 
 
-def filter_assignments(conn):
+def filter_assignments(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_assignments
-    """
+    WHERE (CURRENT_DATE BETWEEN start_time AND deadline_timestamp) AND user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_assignments = cur.fetchall()
     formatted_assignments = []
@@ -119,8 +122,9 @@ def filter_assignments(conn):
             "extendedProps": {
                 "type": assignment[3],
                 "priority": assignment[4],
-                "goal_title": assignment[5],
-                "coursecode": assignment[6],
+                "completed": assignment[5],
+                "goal_title": assignment[6],
+                "coursecode": assignment[7],
                 "event_type": "assignment"
             }
         }
@@ -151,13 +155,12 @@ def filter_course_events():
     return formatted_events
 
 
-def filter_assignments_for_daily(conn):
+def filter_assignments_for_daily(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_assignments
-    WHERE CURRENT_DATE BETWEEN start_time AND deadline_timestamp
-
-    """
+    WHERE (CURRENT_DATE BETWEEN start_time AND deadline_timestamp) AND user_id = %s
+    """ % this_user
     cur.execute(query)
     filtered_assignments = cur.fetchall()
     formatted_assignments = []
@@ -178,12 +181,14 @@ def filter_assignments_for_daily(conn):
     print(formatted_assignments)
     return formatted_assignments
 
-def filter_subtask(conn):
+
+def filter_subtask(conn, this_user):
     cur = conn.cursor()
     query = """
-    SELECT * FROM subtasks
-    WHERE CURRENT_DATE = date
-    """
+    SELECT * FROM filter_subtasks
+    WHERE CURRENT_DATE = date AND user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_subtasks = cur.fetchall()
     formatted_subtasks = []
@@ -193,6 +198,7 @@ def filter_subtask(conn):
             "assignment_id": subtask[1],
             "title": subtask[2],
             "date": subtask[3],
+            "completed": subtask[4]
         }
         formatted_subtasks.append(formatted_event)
     return formatted_subtasks

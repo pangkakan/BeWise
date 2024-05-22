@@ -18,21 +18,21 @@ from controllers.calendar_filter import (
     filter_courses,
     filter_goals,
     filter_assignments,
-    filter_course_events, filter_assignments_for_daily, filter_course_singles
+    filter_course_events, filter_assignments_for_daily, filter_course_singles, filter_subtask
 )
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
 conn = create_connection()
-
+current_user = 1
 
 @route("/")
 def index():
     # Lista av kurser
     # fem
-    courses = read_from_json_file("static/courses.json")
-    return template("mycourses", courses=courses)
 
+    return template("schedule")
 
+"""
 @route("/<coursecode>")
 def course_page(coursecode):
     # kontrollera att kurs med den coursecodeen finns i courses.json
@@ -124,7 +124,7 @@ def add_preferences():
     # flash message("Dina preferenser har sparats")
     redirect("/profile")
 
-
+"""
 @route("/profile")
 def show_profile():
     return template("profile")
@@ -139,9 +139,9 @@ def calendar_api():
 
     all_events += filter_courses(conn)
     if "goals" in type_list:
-        all_events += filter_goals(conn)
+        all_events += filter_goals(conn, 1)
     if "assignments" in type_list:
-        all_events += filter_assignments(conn)
+        all_events += filter_assignments(conn, current_user)
     if "course_events" in type_list:
         all_events += filter_course_events()
 
@@ -158,7 +158,7 @@ def today_tasks():
 
 
     all_tasks = []
-    all_tasks += filter_assignments_for_daily(conn)
+    all_tasks += filter_subtask(conn, 2)
 
     response.content_type = 'application/json'
     return json.dumps(all_tasks, cls=DateTimeEncoder)

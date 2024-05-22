@@ -35,4 +35,7 @@ class DateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
             return obj.isoformat()
-        return super(DateTimeEncoder, self).default(obj)
+        elif isinstance(obj, datetime.date):
+            return obj.isoformat()  # Ensure this part is correctly handling date objects
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
