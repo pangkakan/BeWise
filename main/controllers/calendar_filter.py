@@ -135,16 +135,36 @@ def filter_assignments(conn, this_user):
     return formatted_assignments
 
 
-def filter_course_events(conn, course_code, this_user):
+def filter_course_events(conn, this_user):
     # Load events from your JSON file
 
-    cur = conn.cursor
+    cur = conn.cursor()
     query = """
-    SELECT * FROM course_events
-    WHERE course_code = %s AND user_id
+    SELECT * FROM filter_course_events
+    WHERE  user_id = %s
+    """ % this_user
+    cur.execute(query)
+    filtered_course_events = cur.fetchall()
 
-    """
+    formatted_events = []
+    for event in filtered_course_events:
+        start_datetime = f"{event[1]}T{event[2]}"
+        end_datetime = f"{event[1]}T{event[3]}"
+        formatted_event = {
 
+            "title": event[5],
+            "start": start_datetime,
+            "end": end_datetime,
+            "extendedProps": {
+                "id": event[0],
+                "location": event[4],
+                "coursecode": event[7],
+                "type": event[6],
+                "event_type": "course_event"
+            }
+        }
+        formatted_events.append(formatted_event)
+    return formatted_events
     """
     events = read_from_json_file("static/timeblocks.json")
 
