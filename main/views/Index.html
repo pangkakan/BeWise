@@ -16,6 +16,11 @@
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 
     <style>
+        a {
+            color: initial;
+            text-decoration: initial;
+        }
+
         #calendar {
             position: relative;
         }
@@ -88,7 +93,7 @@
 
     <div class="container">
         <header class="row mb-3">
-            <div class="col-12 bg-warning-subtle">
+            <div class="col-12 border border-secondary">
                 <nav class="navbar pt-3 pb-3">
                     <a href="#" class="navbar-brand">BeWisePlanner</a>
                     <div class="d-flex flew-row column-gap-3">
@@ -152,7 +157,7 @@
 
 
         <div class="row mb-3 column-gap-3">
-            <div class="col-5 bg-success-subtle">
+            <div class="col-5 border border-secondary">
                 <h2>Att göra idag</h2>
                 <ul class="list-group" id="todoList">
                     % for task in today_tasks:
@@ -164,7 +169,7 @@
                 </ul>
             </div>
 
-            <div class="col bg-warning">
+            <div class="col">
                 <div id='calendar'></div>
 
                 <!-- Event Modal -->
