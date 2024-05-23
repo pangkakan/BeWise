@@ -85,6 +85,10 @@
         #todoList .list-group-item:hover {
             background-color: #f8f8f8;
         }
+
+        .fc-event {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -157,7 +161,7 @@
 
 
         <div class="row mb-3 column-gap-3">
-            <div class="col-5 border border-secondary">
+            <div class="col-4 border border-secondary">
                 <h2>Att göra idag</h2>
                 <ul class="list-group" id="todoList">
                     % for task in today_tasks:
