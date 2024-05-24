@@ -18,133 +18,114 @@ from controllers.calendar_filter import (
     filter_courses,
     filter_goals,
     filter_assignments,
-    filter_course_events, filter_assignments_for_daily,
-    filter_subtasks
+    filter_course_events, filter_assignments_for_daily, filter_course_singles
 )
+from models.events import scrape_to_db
 from models.json_manager import read_from_json_file, DateTimeEncoder
 
 TEMPLATE_PATH.append('main/views')
 
 conn = create_connection()
-
+current_user = 1
 
 @route("/")
 def index():
-    today_tasks = get_today_tasks()
-    goals = filter_goals(conn)
-    return template("index", today_tasks=today_tasks, goals=goals)
+    # Lista av kurser
+    # fem
+    courses = read_from_json_file("static/courses.json")
+    return template("mycourses", courses=courses)
 
 
-def nested_user_data():
-    pass
+@route("/<coursecode>")
+def course_page(coursecode):
+    # kontrollera att kurs med den coursecodeen finns i courses.json
+    try:
+        course = course_ctrl.get_course_with_coursecode(coursecode)
+        return template("coursepage", course=course)
+    except:
+        return template("error")
 
 
-def get_today_tasks():
-    # all_tasks = []
-    # all_tasks += filter_assignments_for_daily(conn)
-    all_subtasks = []
-    all_subtasks += filter_subtasks(conn)
-    return all_subtasks
+@route("/new-course")
+def new_course():
+    return template("addcourse")
 
-
-# @route("/<coursecode>")
-# def course_page(coursecode):
-#     # kontrollera att kurs med den coursecodeen finns i courses.json
-#     try:
-#         course = course_ctrl.get_course_with_coursecode(coursecode)
-#         return template("coursepage", course=course)
-#     except:
-#         return template("error")
-
-
-# @route("/new-course")
-# def new_course():
-#     return template("addcourse")
-
-
-# @route("/add-course", method="post")
-# def handle_add_course():
-#     return course_ctrl.add_course_post(conn)
 
 @route("/add-course", method="post")
-def add_course():
-    course_code = request.forms.get("course_code")
-    
-    # check if coursecode exists for some course
-    # check if user is already connected to the course 
-
-    # connect user to a course in db
-    
+def handle_add_course():
+    return course_ctrl.add_course_post(conn)
 
 
-@route("/add-goal", method="post")
-def add_goal():
-    user_course_id = request.forms.get("chosen_course")
-    # startdate and enddate boundary = course startdate-enddate
-    start_date = request.forms.get("goal_startdate")
-    end_date = request.forms.get("goal_enddate")
-    title = request.forms.get("goal_title")
-    type = request.forms.get("goal_type")
-    print(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
+@route("/<coursecode>/tasks")
+def course_tasks(coursecode):
+    # läs in alla uppgifter för coursecode och skicka till tasks.html
+    try:
+        course = course_ctrl.get_course_with_coursecode(coursecode)
+        tasks = get_tasks_with_coursecode(coursecode)
+        return template("tasks", course=course, tasks=tasks)
 
-    # insert into db
-
-
-@route("/add-assignment", method="post")
-def add_assignment():
-    goal_id = request.forms.get("chosen_goal")
-    # startdate and enddate boundary = goal startdate-enddate
-    start_date = request.forms.get("assignment_startdate")
-    end_date = request.forms.get("assignment_enddate")
-    title = request.forms.get("assignment_title")
-    type = request.forms.get("assignment_type")
-    print(f"Goal id: {goal_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
-
-    # insert into db
+    except:
+        return template("error")
 
 
-@route("/add-subtask", method="post")
-def add_subtask():
-    assignment_id = request.forms.get("chosen_assignment") 
-    # date boundary = assignment startdate-enddate
-    date = request.forms.get("subtask_date")
-    title = request.forms.get("subtask_title")
-    print(f"Assignment id: {assignment_id}, Date: {date}, Title: {title}")
+@route("/<coursecode>/tasks/<id>")
+def view_task(coursecode, id):
+    # hämta uppgift med rätt id från uppgiftslistan och skicka till task.html
+    try:
+        course = course_ctrl.get_course_with_coursecode(coursecode)
+        task = get_task_with_id(coursecode, id)
+        return template("task", course=course, task=task)
 
-    # insert into db
-
-
-@route("/add-event", method="post")
-def add_event():
-    weekday = request.forms.get("chosen_weekday")
+    except:
+        return template("error")
 
 
-@route("/get-user-courses")
-def get_user_courses():
-    courses = ["Systemutveckling", "Databasteknik", "Programmering"]
-    # get all user courses (course id + title)
-    return template("course-select", courses=courses)
+@route("/add-task", method="post")
+def handle_add_task():
+    return add_task_post()
 
 
-@route("/get-user-courses/events")
-def get_user_courses():
-    courses = ["Systemutveckling", "Databasteknik", "Programmering"]
-    # get all user courses (course id + title)
-    return template("event-course-select", courses=courses)
+@route("/<coursecode>/schedule")
+def course_tasks(coursecode):
+    # läs in alla tidsblock för coursecode och skicka till schedule.html
+    try:
+        course = course_ctrl.get_course_with_coursecode(coursecode)
+        timeblocks = get_timeblocks_with_coursecode(coursecode)
+        return template("schedule", course=course, timeblocks=timeblocks)
+
+    except:
+        return template("error")
 
 
-@route("/get-user-goals")
-def get_user_goals():
-    goals = ["Första målet", "Andra målet", "Tredje målet"]
-    # get all user goals (goal id + title) from database
-    return template("goal-select", goals=goals)
+@route("/<coursecode>/schedule/<id>")
+def view_timeblock(coursecode, id):
+    # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
+    try:
+        course = course_ctrl.get_course_with_coursecode(coursecode)
+        timeblock = get_timeblock_with_id(coursecode, id)
+        return template("timeblock", course=course, timeblock=timeblock)
+
+    except:
+        return template("error")
 
 
-@route("/get-user-assignments")
-def get_user_goals():
-    assignments = ["Första uppgiften", "Andra uppgiften", "Tredje uppgiften"]
-    # get all user assignments (assignment id + title) from database
-    return template("assignment-select", assignments=assignments)
+@route("/add-timeblock", method="post")
+def handle_add_timeblock():
+    return add_timeblock_post()
+
+
+@route("/preferences")
+def study_preferences():
+    return template("studypreferences")
+
+
+@route("/save-preferences", method="post")
+def add_preferences():
+    hours_per_week = getattr(request.forms, "rangeInput")
+    # skriv till fil
+
+    # flash message("Dina preferenser har sparats")
+    redirect("/profile")
 
 
 
@@ -267,13 +248,13 @@ def calendar_api():
 
     all_events = []
 
-    all_events += filter_courses(conn)
+    all_events += filter_courses(conn, current_user)
     if "goals" in type_list:
-        all_events += filter_goals(conn)
+        all_events += filter_goals(conn, current_user)
     if "assignments" in type_list:
-        all_events += filter_assignments(conn)
+        all_events += filter_assignments(conn, current_user)
     if "course_events" in type_list:
-        all_events += filter_course_events()
+        all_events += filter_course_events(conn, current_user)
 
 
 
@@ -288,7 +269,7 @@ def today_tasks():
 
 
     all_tasks = []
-    all_tasks += filter_assignments_for_daily(conn)
+    all_tasks += filter_subtask(conn, 2)
 
     response.content_type = 'application/json'
     return json.dumps(all_tasks, cls=DateTimeEncoder)

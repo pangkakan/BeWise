@@ -3,11 +3,13 @@ import uuid
 from models.json_manager import read_from_json_file
 
 
-def filter_courses(conn):
+def filter_courses(conn, this_user):
     cur = conn.cursor()
     query = """
-    SELECT * FROM filter_courses
-    """
+    SELECT * FROM filter_user_courses
+     WHERE user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_courses = cur.fetchall()
     formatted_courses = []
@@ -47,8 +49,9 @@ def filter_courses(conn):
 
     return formatted_courses
 
-def filter_course_singles(conn):
-    pre_formatted_courses = filter_courses(conn)
+
+def filter_course_singles(conn, this_user):
+    pre_formatted_courses = filter_courses(conn, this_user)
     # Adjusting events to only show start and end dates
     adjusted_events = []
     for course in pre_formatted_courses:
@@ -80,11 +83,12 @@ def filter_course_singles(conn):
     return adjusted_events
 
 
-def filter_goals(conn):
+def filter_goals(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_goals
-    """
+    WHERE user_id = %s
+    """ % this_user
     cur.execute(query)
     filtered_goals = cur.fetchall()
     formatted_goals = []
@@ -103,11 +107,13 @@ def filter_goals(conn):
     return formatted_goals
 
 
-def filter_assignments(conn):
+def filter_assignments(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_assignments
-    """
+    WHERE (CURRENT_DATE BETWEEN start_time AND deadline_timestamp) AND user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_assignments = cur.fetchall()
     formatted_assignments = []
@@ -119,8 +125,9 @@ def filter_assignments(conn):
             "extendedProps": {
                 "type": assignment[3],
                 "priority": assignment[4],
-                "goal_title": assignment[5],
-                "coursecode": assignment[6],
+                "completed": assignment[5],
+                "goal_title": assignment[6],
+                "coursecode": assignment[7],
                 "event_type": "assignment"
             }
         }
@@ -128,8 +135,37 @@ def filter_assignments(conn):
     return formatted_assignments
 
 
-def filter_course_events():
+def filter_course_events(conn, this_user):
     # Load events from your JSON file
+
+    cur = conn.cursor()
+    query = """
+    SELECT * FROM filter_course_events
+    WHERE  user_id = %s
+    """ % this_user
+    cur.execute(query)
+    filtered_course_events = cur.fetchall()
+
+    formatted_events = []
+    for event in filtered_course_events:
+        start_datetime = f"{event[1]}T{event[2]}"
+        end_datetime = f"{event[1]}T{event[3]}"
+        formatted_event = {
+
+            "title": event[5],
+            "start": start_datetime,
+            "end": end_datetime,
+            "extendedProps": {
+                "id": event[0],
+                "location": event[4],
+                "coursecode": event[7],
+                "type": event[6],
+                "event_type": "course_event"
+            }
+        }
+        formatted_events.append(formatted_event)
+    return formatted_events
+    """
     events = read_from_json_file("static/timeblocks.json")
 
     # Convert the events to FullCalendar's format
@@ -149,15 +185,14 @@ def filter_course_events():
         }
         formatted_events.append(formatted_event)
     return formatted_events
+"""
 
-
-def filter_assignments_for_daily(conn):
+def filter_assignments_for_daily(conn, this_user):
     cur = conn.cursor()
     query = """
     SELECT * FROM filter_assignments
-    WHERE CURRENT_DATE BETWEEN start_time AND deadline_timestamp
-
-    """
+    WHERE (CURRENT_DATE BETWEEN start_time AND deadline_timestamp) AND user_id = %s
+    """ % this_user
     cur.execute(query)
     filtered_assignments = cur.fetchall()
     formatted_assignments = []
@@ -178,12 +213,14 @@ def filter_assignments_for_daily(conn):
     print(formatted_assignments)
     return formatted_assignments
 
-def filter_subtasks(conn):
+
+def filter_subtask(conn, this_user):
     cur = conn.cursor()
     query = """
-    SELECT * FROM subtasks
-    WHERE CURRENT_DATE = date
-    """
+    SELECT * FROM filter_subtasks
+    WHERE CURRENT_DATE = date AND user_id = %s
+    """ % this_user
+
     cur.execute(query)
     filtered_subtasks = cur.fetchall()
     formatted_subtasks = []
@@ -193,6 +230,7 @@ def filter_subtasks(conn):
             "assignment_id": subtask[1],
             "title": subtask[2],
             "date": subtask[3],
+            "completed": subtask[4]
         }
         formatted_subtasks.append(formatted_event)
     return formatted_subtasks
