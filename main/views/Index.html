@@ -1001,13 +1001,25 @@
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
                 $('#add-course-modal').modal('hide');
+
             }
         });
+
+        
+        $('#add-course-modal').on('hidden.bs.modal', function () {
+            window.location.href = "/"; 
+        }); 
+
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
                 $('#add-goal-modal').modal('hide');
             }
+        });
+
+
+        $('#add-goal-modal').on('hidden.bs.modal', function () {
+            window.location.href = "/";
         });
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
@@ -1016,16 +1028,28 @@
             }
         });
 
+        $('#add-assignment-modal').on('hidden.bs.modal', function () {
+            window.location.href = "/";
+        });
+
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
                 $('#add-subtask-modal').modal('hide');
             }
         });
 
+        $('#add-subtask-modal').on('hidden.bs.modal', function () {
+            window.location.href = "/";
+        });
+
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
                 $('#add-event-modal').modal('hide');
             }
+        });
+
+        $('#add-event-modal').on('hidden.bs.modal', function () {
+            window.location.href = "/";
         });
 
 

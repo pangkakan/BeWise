@@ -26,7 +26,7 @@ from models.json_manager import read_from_json_file, DateTimeEncoder
 TEMPLATE_PATH.append('main/views')
 
 conn = create_connection()
-
+current_user = 1
 
 @route("/")
 def index():
@@ -88,6 +88,32 @@ def add_goal():
     print(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
 
     # insert into db
+    cur = conn.cursor()
+
+    insert_query = """
+        INSERT INTO goals (user_course_id, title, start_time, deadline_timestamp, type)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id;
+    """
+
+    values = (user_course_id, title, start_date, end_date, type)
+
+    try:
+        # Execute query and check if insert is successful
+        cur.execute(insert_query, values)
+
+        inserted_id = cur.fetchone()[0]
+
+        conn.commit()
+
+        print(f"Insert successful, new row id: {inserted_id}")
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Insert failed: {e}")
+
+    
 
 
 @route("/add-assignment", method="post")
@@ -101,6 +127,30 @@ def add_assignment():
     print(f"Goal id: {goal_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
 
     # insert into db
+    cur = conn.cursor()
+
+    insert_query = """
+        INSERT INTO assignments (goal_id, title, start_time, deadline_timestamp, type)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id;
+    """
+
+    values = (goal_id, title, start_date, end_date, type)
+
+    try:
+        # Execute query and check if insert is successful
+        cur.execute(insert_query, values)
+
+        inserted_id = cur.fetchone()[0]
+
+        conn.commit()
+
+        print(f"Insert successful, new row id: {inserted_id}")
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Insert failed: {e}")
 
 
 @route("/add-subtask", method="post")
@@ -112,6 +162,30 @@ def add_subtask():
     print(f"Assignment id: {assignment_id}, Date: {date}, Title: {title}")
 
     # insert into db
+    cur = conn.cursor()
+
+    insert_query = """
+        INSERT INTO subtasks (assignment_id, title, date)
+        VALUES (%s, %s, %s)
+        RETURNING id;
+    """
+
+    values = (assignment_id, title, date)
+
+    try:
+        # Execute query and check if insert is successful
+        cur.execute(insert_query, values)
+
+        inserted_id = cur.fetchone()[0]
+
+        conn.commit()
+
+        print(f"Insert successful, new row id: {inserted_id}")
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Insert failed: {e}")
 
 
 @route("/add-event", method="post")
