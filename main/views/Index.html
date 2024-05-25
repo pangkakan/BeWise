@@ -39,6 +39,10 @@
             font-style: normal;
         }
 
+        #todolist-heading {
+            font-size: 1.75em;
+        }
+
         a {
             color: initial;
             text-decoration: initial;
@@ -119,7 +123,7 @@
 <body class="pt-3 pb-3">
 
     <div class="container">
-        <header class="row mb-3">
+        <header class="row mb-4">
             <div class="col-12 border border-secondary">
                 <nav class="navbar pt-3 pb-3">
                     <a href="#" class="navbar-brand">BeWisePlanner</a>
@@ -174,11 +178,11 @@
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Meny
+                            Byt användare
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Kontoinställningar</a></li>
-                            <li><a class="dropdown-item" href="#">Logga ut</a></li>
+                            <li><a class="dropdown-item" href="#">Användare 1</a></li>
+                            <li><a class="dropdown-item" href="#">Användare 2</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -188,9 +192,9 @@
 
 
 
-        <div class="row mb-3 column-gap-3">
+        <div class="row mb-4 column-gap-3">
             <div class="col-4 border border-secondary">
-                <h2>Att göra idag</h2>
+                <h2 id="todolist-heading">Att göra idag</h2>
                 <ul class="list-group" id="todoList">
                     % for task in today_tasks:
                     <li class="list-group-item">
@@ -366,7 +370,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="add-course-form" hx-post="/add-course">
+                    <form id="add-course-form" hx-post="/add-course" hx-trigger="submit" hx-swap="none">
                         <div class="mb-3">
                             <label for="course-code" class="form-label">Kurskod</label>
                             <input type="text" id="course-code" name="course_code" class="form-control"
@@ -656,6 +660,41 @@
             </div>
         </div>
     </div>
+
+
+    <!-- User feedback popups -->
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="successModalLabel">Success</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Din åtgärd lyckades!
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="errorModalLabel">Error</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Något fick fel. Vänligen försök igen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 
 
 
@@ -997,60 +1036,96 @@
 
 
 
-        //    Handle modals with form submits
+        //    Handle modals for form submits to inform the user if the action was successful or not
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
-                $('#add-course-modal').modal('hide');
+                const response = event.detail.xhr.response;
+                if (response === "success") {
+                    $('#add-course-modal').modal('hide');
+                    $('#successModal').modal('show');
 
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    console.log("Not gonna close because it failed")
+                    $('#errorModal').modal('show');
+                }
             }
         });
 
 
-        $('#add-course-modal').on('hidden.bs.modal', function () {
-            window.location.href = "/";
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                const response = event.detail.xhr.response;
+                if (response === "success") {
+                    $('#add-goal-modal').modal('hide');
+                    $('#successModal').modal('show');
+
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    console.log("Not gonna close because it failed")
+                    $('#errorModal').modal('show');
+                }
+            }
         });
 
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
-                $('#add-goal-modal').modal('hide');
+                const response = event.detail.xhr.response;
+                if (response === "success") {
+                    $('#add-assignment-modal').modal('hide');
+                    $('#successModal').modal('show');
+
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    console.log("Not gonna close because it failed")
+                    $('#errorModal').modal('show');
+                }
             }
         });
 
+       
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            if (event.detail.successful) {
+                const response = event.detail.xhr.response;
+                if (response === "success") {
+                    $('#add-subtask-modal').modal('hide');
+                    $('#successModal').modal('show');
 
-        $('#add-goal-modal').on('hidden.bs.modal', function () {
-            window.location.href = "/";
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    console.log("Not gonna close because it failed")
+                    $('#errorModal').modal('show');
+                }
+            }
         });
+
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             if (event.detail.successful) {
-                $('#add-assignment-modal').modal('hide');
+                const response = event.detail.xhr.response;
+                if (response === "success") {
+                    $('#add-event-modal').modal('hide');
+                    $('#successModal').modal('show');
+
+                    $('#successModal').on('hidden.bs.modal', function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    console.log("Not gonna close because it failed")
+                    $('#errorModal').modal('show');
+                }
             }
         });
-
-        $('#add-assignment-modal').on('hidden.bs.modal', function () {
-            window.location.href = "/";
-        });
-
-        document.body.addEventListener('htmx:afterRequest', function (event) {
-            if (event.detail.successful) {
-                $('#add-subtask-modal').modal('hide');
-            }
-        });
-
-        $('#add-subtask-modal').on('hidden.bs.modal', function () {
-            window.location.href = "/";
-        });
-
-        document.body.addEventListener('htmx:afterRequest', function (event) {
-            if (event.detail.successful) {
-                $('#add-event-modal').modal('hide');
-            }
-        });
-
-        $('#add-event-modal').on('hidden.bs.modal', function () {
-            window.location.href = "/";
-        });
+        
 
 
     </script>
