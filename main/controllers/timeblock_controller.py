@@ -36,7 +36,7 @@ def add_timeblock_post():
     redirect("/")
 
 def view_timeblock(coursecode, id):
-    # hämta tidsblock med rätt id från tidsblocklistan och skicka till timeblock.html
+    # hämta tidsblock med rätt id från tidsblocklistan och skicka till
     try:
         course = get_course_with_coursecode(coursecode)
         timeblock = get_timeblock_with_id(coursecode, id)
