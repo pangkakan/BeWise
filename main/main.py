@@ -227,16 +227,54 @@ def get_user_courses():
 
 @route("/get-user-goals")
 def get_user_goals():
-    goals = ["Första målet", "Andra målet", "Tredje målet"]
+    cur = conn.cursor()
+    query = """
+    SELECT g.title, g.id FROM users u 
+    JOIN user_courses uc ON u.id = uc.user_id
+    JOIN courses c ON uc.course_id = c.id
+    JOIN public.goals g on uc.id = g.user_course_id
+    WHERE user_id = %s
+     
+    """ % current_user
+    cur.execute(query)
+    this_user_goals = cur.fetchall()
+    goal_list = []
+    for goal in this_user_goals:
+        goal = {
+            "title": goal[0],
+            "id": goal[1]
+        }
+        goal_list.append(goal)
+
     # get all user goals (goal id + title) from database
-    return template("goal-select", goals=goals)
+    return template("goal-select", goals=goal_list)
 
 
 @route("/get-user-assignments")
 def get_user_goals():
     assignments = ["Första uppgiften", "Andra uppgiften", "Tredje uppgiften"]
     # get all user assignments (assignment id + title) from database
-    return template("assignment-select", assignments=assignments)
+    cur = conn.cursor()
+    query = """
+    SELECT a.title, a.id FROM users u 
+    JOIN user_courses uc ON u.id = uc.user_id
+    JOIN courses c ON uc.course_id = c.id
+    JOIN goals g on uc.id = g.user_course_id
+    JOIN assignments a on g.id = a.goal_id
+    WHERE user_id = %s
+     
+    """ % current_user
+    cur.execute(query)
+    this_user_assignments = cur.fetchall()
+    assignment_list = []
+    for assignment in this_user_assignments:
+        assignment = {
+            "title": assignment[0],
+            "id": assignment[1]
+        }
+        assignment_list.append(assignment)
+
+    return template("assignment-select", assignments=assignment_list)
 
 
 
