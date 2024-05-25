@@ -1,5 +1,5 @@
 import json
-
+import logging
 from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from datetime import datetime
@@ -26,7 +26,10 @@ from models.json_manager import read_from_json_file, DateTimeEncoder
 TEMPLATE_PATH.append('main/views')
 
 conn = create_connection()
-current_user = 1
+current_user = 2
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 @route("/")
 def index():
@@ -76,14 +79,13 @@ def add_course():
 @route("/add-goal", method="post")
 def add_goal():
     user_course_id = request.forms.get("chosen_course")
-    # startdate and enddate boundary = course startdate-enddate
+
     start_date = request.forms.get("goal_startdate")
     end_date = request.forms.get("goal_enddate")
     title = request.forms.get("goal_title")
-    type = request.forms.get("goal_type")
-    print(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
+    goal_type = request.forms.get("goal_type")
+    logger.debug(f"Course id: {user_course_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {goal_type}")
 
-    # insert into db
     cur = conn.cursor()
 
     insert_query = """
@@ -92,7 +94,7 @@ def add_goal():
         RETURNING id;
     """
 
-    values = (user_course_id, title, start_date, end_date, type)
+    values = (user_course_id, title, start_date, end_date, goal_type)
 
     try:
         # Execute query and check if insert is successful
@@ -191,9 +193,29 @@ def add_event():
 
 @route("/get-user-courses")
 def get_user_courses():
-    courses = ["Systemutveckling", "Databasteknik", "Programmering"]
+
+    cur = conn.cursor()
+
+    query = """
+    SELECT c.title, uc.id FROM users u 
+    JOIN user_courses uc ON u.id = uc.user_id
+    JOIN courses c ON uc.course_id = c.id
+    WHERE user_id = %s
+     
+    """ % current_user
+    cur.execute(query)
+    this_user_courses = cur.fetchall()
+    course_list = []
+    for course in this_user_courses:
+        course = {
+            "title": course[0],
+            "id": course[1]
+        }
+        course_list.append(course)
+
+
     # get all user courses (course id + title)
-    return template("course-select", courses=courses)
+    return template("course-select", courses=course_list)
 
 
 @route("/get-user-courses/events")
