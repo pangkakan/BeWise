@@ -38,7 +38,16 @@ def index():
     return template("index", today_tasks=today_tasks, goals=goals)
 
 
-def nested_user_data():
+@route("/switch-user/<id>")
+def switch_user(id):
+    global current_user
+    if id != current_user:
+        current_user = id
+        print(f"Switching to user: {id}")
+        redirect("/")
+
+
+def get_card_data():
     pass
 
 
@@ -50,29 +59,18 @@ def get_today_tasks():
     return all_subtasks
 
 
-@route("/<coursecode>")
-def course_page(coursecode):
-    # kontrollera att kurs med den coursecodeen finns i courses.json
-    try:
-        course = course_ctrl.get_course_with_coursecode(coursecode)
-        return template("coursepage", course=course)
-    except:
-        return template("error")
-
-
-@route("/new-course")
-def new_course():
-    return template("addcourse")
-
 
 @route("/add-course", method="post")
 def add_course():
     course_code = request.forms.get("course_code")
 
     # check if coursecode exists for some course
+
+    # check if user is already connected to the course .... current_user
     # check if user is already connected to the course
 
     # connect user to a course in db
+    return "success"
 
 
 
@@ -106,11 +104,14 @@ def add_goal():
 
         print(f"Insert successful, new row id: {inserted_id}")
 
+        cur.close()
+        return "success" 
+
     except Exception as e:
         # Rollback in case of error
         conn.rollback()
         print(f"Insert failed: {e}")
-
+        cur.close()
 
 
 
@@ -145,10 +146,15 @@ def add_assignment():
 
         print(f"Insert successful, new row id: {inserted_id}")
 
+        cur.close()
+        return "success"
+
     except Exception as e:
         # Rollback in case of error
         conn.rollback()
         print(f"Insert failed: {e}")
+        cur.close()
+
 
 
 @route("/add-subtask", method="post")
@@ -180,10 +186,14 @@ def add_subtask():
 
         print(f"Insert successful, new row id: {inserted_id}")
 
+        cur.close()
+        return "success"
+
     except Exception as e:
         # Rollback in case of error
         conn.rollback()
         print(f"Insert failed: {e}")
+        cur.close()
 
 
 @route("/add-event", method="post")
