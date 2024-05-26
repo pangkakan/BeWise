@@ -39,13 +39,18 @@
             font-style: normal;
         }
 
-        #todolist-heading {
+        #todo-heading {
             font-size: 1.75em;
         }
 
         a {
             color: initial;
             text-decoration: initial;
+        }
+
+        #todo {
+            max-height: 598px;
+            overflow-y: auto;
         }
 
         #calendar {
@@ -196,15 +201,69 @@
 
         <div class="row mb-4 column-gap-3">
             <div class="col-4 border border-secondary">
-                <h2 id="todolist-heading">Att göra idag</h2>
-                <ul class="list-group" id="todoList">
-                    % for task in today_tasks:
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ task['id'] }}">
-                        <label class="form-check-label" for="{{ task['id'] }}">{{ task["title"] }}</label>
-                    </li>
-                    % end
-                </ul>
+                <div id="todo">
+                    <h2 id="todo-heading">Att göra idag</h2>
+                    <div id="todo-list">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Kurshändelse</h5>
+                                <p class="card-text">Tid: 08.00-10.00</p>
+                                <p class="card-text">Lokal: NI0606</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Anvhändelse</h5>
+                                <p class="card-text">Tid: 08.00-10.00</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Uppgift</h5>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Uppgift</h5>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Uppgift</h5>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
+                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col">
@@ -1152,7 +1211,7 @@
 
         // Toggle active user in the user switch menu
         document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function(event) {
+            item.addEventListener('click', function (event) {
                 // Remove 'active' class from all items
                 document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
 
