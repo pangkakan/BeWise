@@ -1,3 +1,11 @@
 % for goal in goals:
-<p>{{ goal }}</p>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ goal["title"] }}</h5>
+        <p class="card-text">Startdatum: {{ goal["start"] }}</p> 
+        <p class="card-text">Slutdatum: {{ goal["end"] }}</p>
+        <p class="card-text">Typ: {{ goal["type"] }}</p>
+        <p class="card-text">Slutförd: {{ goal["completed"] }}</p>
+    </div>
+</div>
 % end
