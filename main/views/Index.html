@@ -218,51 +218,21 @@
                                 <p class="card-text">Tid: 08.00-10.00</p>
                             </div>
                         </div>
+                        % for task in todo_tasks:
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Uppgift</h5>
+                                <h5 class="card-title">{{ task["title"] }}</h5>
                                 <ul class="list-group">
+                                    % for subtask in task["subtasks"]:
                                     <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ subtask['id'] }}">
+                                        <label class="form-check-label" for="{{ subtask['id'] }}">{{ subtask["title"] }}</label>
                                     </li>
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
-                                    </li>
+                                    % end
                                 </ul>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Uppgift</h5>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Uppgift</h5>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="subtask_id">
-                                        <label class="form-check-label" for="subtask_id">Deluppgift</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        % end
                     </div>
                 </div>
             </div>

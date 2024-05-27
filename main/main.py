@@ -33,9 +33,9 @@ logger = logging.getLogger(__name__)
 
 @route("/")
 def index():
-    today_tasks = get_today_tasks()
-    goals = filter_goals(conn, current_user)
-    return template("index", today_tasks=today_tasks, goals=goals, user=current_user)
+    nested_assignments = fetch_todo_subtasks()
+    print(nested_assignments)
+    return template("index", user=current_user, todo_tasks=nested_assignments)
 
 
 @route("/switch-user/<id>")
@@ -49,16 +49,43 @@ def switch_user(id):
         return ''
 
 
-def get_card_data():
-    pass
+def fetch_todo_subtasks():
+    cur = conn.cursor()
+    query = """
+    SELECT 
+    a.id AS assignment_id,
+    a.title AS assignment_title,
+    ARRAY_AGG(
+        JSON_BUILD_OBJECT(
+            'title', s.title, 
+            'id', s.id, 
+            'date', s.date, 
+            'completed', s.completed
+        )
+    ) AS subtasks
+    FROM users u 
+        JOIN user_courses uc ON u.id = uc.user_id
+        JOIN courses c ON uc.course_id = c.id
+        JOIN goals g ON uc.id = g.user_course_id
+        JOIN assignments a ON g.id = a.goal_id
+        JOIN subtasks s ON a.id = s.assignment_id
+    WHERE u.id = %s 
+    AND CURRENT_DATE = s.date 
+    GROUP BY a.id, a.title;
 
+    """ % current_user
+    cur.execute(query)
+    this_user_todo_today = cur.fetchall()
+    assignments = []
+    for row in this_user_todo_today:
+        assignment = {
+            "id": row[0],
+            "title": row[1],
+            "subtasks": row[2]
+        }
+        assignments.append(assignment)
+    return assignments 
 
-def get_today_tasks():
-    # all_tasks = []
-    # all_tasks += filter_assignments_for_daily(conn)
-    all_subtasks = []
-    all_subtasks += filter_subtask(conn, current_user)
-    return all_subtasks
 
 
 
