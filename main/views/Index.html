@@ -180,6 +180,7 @@
                             </div>
                         </div>
                     </div>
+                    <p>Användare: {{ user }}</p>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -188,7 +189,7 @@
                         <div class="dropdown-menu">
                             <button type="button" class="dropdown-item" hx-get="/switch-user/1" hx-trigger="click"
                                 hx-swap="none">Användare 1</button>
-                            <button type="button" class="dropdown-item active" hx-get="/switch-user/2"
+                            <button type="button" class="dropdown-item" hx-get="/switch-user/2"
                                 hx-trigger="click" hx-swap="none">Användare 2</button>
                         </div>
                     </div>
@@ -1204,20 +1205,6 @@
                     }
                 }
             }
-        });
-
-
-
-
-        // Toggle active user in the user switch menu
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function (event) {
-                // Remove 'active' class from all items
-                document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
-
-                // Add 'active' class to the clicked item
-                this.classList.add('active');
-            });
         });
 
 

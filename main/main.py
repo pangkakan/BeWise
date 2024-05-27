@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 def index():
     today_tasks = get_today_tasks()
     goals = filter_goals(conn, current_user)
-    return template("index", today_tasks=today_tasks, goals=goals)
+    return template("index", today_tasks=today_tasks, goals=goals, user=current_user)
 
 
 @route("/switch-user/<id>")
@@ -44,7 +44,9 @@ def switch_user(id):
     if id != current_user:
         current_user = id
         print(f"Switching to user: {id}")
-        redirect("/")
+        response.status = 204
+        response.set_header('HX-Redirect', '/')
+        return ''
 
 
 def get_card_data():
