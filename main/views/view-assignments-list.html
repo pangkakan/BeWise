@@ -7,5 +7,8 @@
         <p class="card-text">Typ: {{ assignment["type"] }}</p>
         <p class="card-text">Slutförd: {{ assignment["completed"] }}</p>
     </div>
+    <div class="card-footer">
+        <button class="btn btn-danger" hx-delete="/delete-assignment/{{ assignment['id'] }}" hx-confirm="Är du säker?">Ta bort</button>
+    </div>
 </div>
 % end

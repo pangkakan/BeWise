@@ -5,5 +5,8 @@
         <p class="card-text">Datum: {{ subtask["date"] }}</p> 
         <p class="card-text">Slutförd: {{ subtask["completed"] }}</p>
     </div>
+    <div class="card-footer">
+        <button class="btn btn-danger" hx-delete="/delete-subtask/{{ subtask['id'] }}" hx-confirm="Är du säker?">Ta bort</button>
+    </div>
 </div>
 % end

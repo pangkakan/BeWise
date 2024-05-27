@@ -734,7 +734,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Din åtgärd lyckades!
+                    Åtgärden lyckades!
                 </div>
             </div>
         </div>
@@ -1120,6 +1120,27 @@
         });
 
 
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            // Check if the target element of the event is a form
+            if (event.target.tagName.toLowerCase() === 'button' && event.target.hasAttribute('hx-delete')) {
+                if (event.detail.successful) {
+                    const response = event.detail.xhr.responseText;
+                    if (response === "success") {
+                        $('#view-courses-modal').modal('hide');
+                        $('#successModal').modal('show');
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/";
+                        });
+                    } else {
+                        console.log("Not gonna close because it failed");
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        });
+
+
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             // Check if the target element of the event is a form
@@ -1128,6 +1149,27 @@
                     const response = event.detail.xhr.responseText;
                     if (response === "success") {
                         $('#add-goal-modal').modal('hide');
+                        $('#successModal').modal('show');
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/";
+                        });
+                    } else {
+                        console.log("Not gonna close because it failed");
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        });
+
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            // Check if the target element of the event is a form
+            if (event.target.tagName.toLowerCase() === 'button' && event.target.hasAttribute('hx-delete')) {
+                if (event.detail.successful) {
+                    const response = event.detail.xhr.responseText;
+                    if (response === "success") {
+                        $('#view-goals-modal').modal('hide');
                         $('#successModal').modal('show');
 
                         $('#successModal').on('hidden.bs.modal', function () {
@@ -1164,6 +1206,27 @@
         });
 
 
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            // Check if the target element of the event is a form
+            if (event.target.tagName.toLowerCase() === 'button' && event.target.hasAttribute('hx-delete')) {
+                if (event.detail.successful) {
+                    const response = event.detail.xhr.responseText;
+                    if (response === "success") {
+                        $('#view-assignments-modal').modal('hide');
+                        $('#successModal').modal('show');
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/";
+                        });
+                    } else {
+                        console.log("Not gonna close because it failed");
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        });
+
+
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             // Check if the target element of the event is a form
@@ -1186,6 +1249,27 @@
         });
 
 
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            // Check if the target element of the event is a form
+            if (event.target.tagName.toLowerCase() === 'button' && event.target.hasAttribute('hx-delete')) {
+                if (event.detail.successful) {
+                    const response = event.detail.xhr.responseText;
+                    if (response === "success") {
+                        $('#view-subtasks-modal').modal('hide');
+                        $('#successModal').modal('show');
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/";
+                        });
+                    } else {
+                        console.log("Not gonna close because it failed");
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        });
+
+
 
         document.body.addEventListener('htmx:afterRequest', function (event) {
             // Check if the target element of the event is a form
@@ -1194,6 +1278,27 @@
                     const response = event.detail.xhr.responseText;
                     if (response === "success") {
                         $('#add-event-modal').modal('hide');
+                        $('#successModal').modal('show');
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/";
+                        });
+                    } else {
+                        console.log("Not gonna close because it failed");
+                        $('#errorModal').modal('show');
+                    }
+                }
+            }
+        });
+
+
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+            // Check if the target element of the event is a form
+            if (event.target.tagName.toLowerCase() === 'button' && event.target.hasAttribute('hx-delete')) {
+                if (event.detail.successful) {
+                    const response = event.detail.xhr.responseText;
+                    if (response === "success") {
+                        $('#view-events-modal').modal('hide');
                         $('#successModal').modal('show');
 
                         $('#successModal').on('hidden.bs.modal', function () {

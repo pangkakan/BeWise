@@ -420,6 +420,106 @@ def view_events():
 
 
 
+@route("/delete-course/<id>", method="delete")
+def delete_course(id):
+    return "success"
+
+
+@route("/delete-goal/<id>", method="delete")
+def delete_goal(id):
+    cur = conn.cursor()
+
+    delete_query = """
+        DELETE FROM goals WHERE id = %s
+     
+    """ % id
+
+    try:
+        # Execute query and check if delete is successful
+        cur.execute(delete_query)
+        conn.commit()
+
+        if cur.rowcount > 0:
+            print("Deletion successful.")
+            cur.close()
+            return "success"
+        else:
+            print("No rows deleted. Item with ID", id, "not found.")
+            cur.close()
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Delete failed: {e}")
+        cur.close()
+
+
+
+@route("/delete-assignment/<id>", method="delete")
+def delete_assignment(id):
+    cur = conn.cursor()
+
+    delete_query = """
+        DELETE FROM assignments WHERE id = %s
+     
+    """ % id
+
+    try:
+        # Execute query and check if delete is successful
+        cur.execute(delete_query)
+        conn.commit()
+
+        if cur.rowcount > 0:
+            print("Deletion successful.")
+            cur.close()
+            return "success"
+        else:
+            print("No rows deleted. Item with ID", id, "not found.")
+            cur.close()
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Delete failed: {e}")
+        cur.close()
+
+
+@route("/delete-subtask/<id>", method="delete")
+def delete_subtask(id):
+    cur = conn.cursor()
+
+    delete_query = """
+        DELETE FROM subtasks WHERE id = %s
+     
+    """ % id
+
+    try:
+        # Execute query and check if delete is successful
+        cur.execute(delete_query)
+        conn.commit()
+
+        if cur.rowcount > 0:
+            print("Deletion successful.")
+            cur.close()
+            return "success"
+        else:
+            print("No rows deleted. Item with ID", id, "not found.")
+            cur.close()
+
+    except Exception as e:
+        # Rollback in case of error
+        conn.rollback()
+        print(f"Delete failed: {e}")
+        cur.close()
+
+
+
+@route("/delete-event/<id>", method="delete")
+def delete_event(id):
+    return "success"
+
+
+
 @route("/api/calendar")
 def calendar_api():
     types = request.query.get('types', '')

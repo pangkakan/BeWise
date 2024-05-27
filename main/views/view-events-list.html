@@ -1,3 +1,13 @@
 % for event in events:
 <p>{{ event }}</p>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ course["code"] }} - {{ course["title"] }}</h5>
+        <p class="card-text">Startdatum: {{ course["start"] }}</p> 
+        <p class="card-text">Slutdatum: {{ course["end"] }}</p>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-danger" hx-delete="/delete-course/{{ course['id'] }}" hx-confirm="Är du säker?">Ta bort</button>
+    </div>
+</div>
 % end
