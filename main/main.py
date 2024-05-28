@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import datetime
 from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from datetime import datetime
@@ -36,8 +37,9 @@ def index():
     # course_events_today 
     # user_events_today
     nested_assignments = fetch_todo_subtasks()
-    print(nested_assignments)
-    return template("index", user=current_user, todo_tasks=nested_assignments)
+    #print(nested_assignments)
+    card_data = fetch_card_data()
+    return template("index", user=current_user, todo_tasks=nested_assignments, card_data=card_data)
 
 
 @route("/switch-user/<id>")
@@ -170,6 +172,88 @@ def fetch_todo_subtasks():
         assignments.append(assignment)
     return assignments 
 
+
+def fetch_card_data():
+    cur = conn.cursor()
+    query = """
+    SELECT 
+        g.id AS goal_id,
+        g.title AS goal_title,
+        g.deadline_timestamp AS goal_deadline,
+        c.title AS course_title,
+        JSON_AGG(
+            JSON_BUILD_OBJECT(
+                'assignment_id', a.id,
+                'assignment_title', a.title,
+                'deadline_timestamp', a.deadline_timestamp,
+                'completed', a.completed,
+                'subtasks', (
+                    SELECT JSON_AGG(
+                                JSON_BUILD_OBJECT(
+                                    'title', s.title, 
+                                    'id', s.id, 
+                                    'completed', s.completed
+                                )
+                            )
+                    FROM subtasks s
+                    WHERE s.assignment_id = a.id
+                )
+            )
+        ) AS assignments
+    FROM users u 
+    JOIN user_courses uc ON u.id = uc.user_id
+    JOIN courses c ON uc.course_id = c.id
+    JOIN goals g ON uc.id = g.user_course_id
+    JOIN assignments a ON g.id = a.goal_id
+    WHERE u.id = %s
+    GROUP BY g.id, g.title, g.deadline_timestamp, c.title;
+    """ % current_user
+
+    cur.execute(query)
+    this_user_card_data = cur.fetchall()
+    goals = []
+
+    for row in this_user_card_data:
+        goal = {
+            "id": row[0],
+            "title": row[1],
+            "deadline_timestamp": row[2],
+            "course_title": row[3],
+            "assignments": row[4] if row[4] else []
+        }
+        goals.append(goal)
+
+    return goals
+
+
+
+def calculate_completion_stats(goals):
+    for goal in goals:
+        total_assignments = len(goal["assignments"])
+        completed_assignments = 0
+        total_subtasks = 0
+        completed_subtasks = 0
+
+        for assignment in goal["assignments"]:
+            if assignment["completed"]:
+                completed_assignments += 1
+
+            if assignment["subtasks"]:  # Check if subtasks list is not None
+                for subtask in assignment["subtasks"]:
+                    total_subtasks += 1
+                    if subtask["completed"]:
+                        completed_subtasks += 1
+
+        goal["assignments_summary"] = {
+            "completed": completed_assignments,
+            "total": total_assignments
+        }
+        goal["subtasks_summary"] = {
+            "completed": completed_subtasks,
+            "total": total_subtasks
+        }
+
+    return goals
 
 
 
