@@ -185,8 +185,8 @@
                         <div class="dropdown-menu">
                             <button type="button" class="dropdown-item" hx-get="/switch-user/1" hx-trigger="click"
                                 hx-swap="none">Användare 1</button>
-                            <button type="button" class="dropdown-item" hx-get="/switch-user/2"
-                                hx-trigger="click" hx-swap="none">Användare 2</button>
+                            <button type="button" class="dropdown-item" hx-get="/switch-user/2" hx-trigger="click"
+                                hx-swap="none">Användare 2</button>
                         </div>
                     </div>
                 </nav>
@@ -221,8 +221,11 @@
                                 <ul class="list-group">
                                     % for subtask in task["subtasks"]:
                                     <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ subtask['id'] }}" hx-patch="/todo-update/{{ subtask['id'] }}" hx-trigger="click" hx-swap="none">
-                                        <label class="form-check-label" for="{{ subtask['id'] }}">{{ subtask["title"] }}</label>
+                                        <input class="form-check-input me-1" type="checkbox"
+                                            value="{{ subtask['completed'] }}" id="{{ subtask['id'] }}"
+                                            hx-patch="/todo-update/{{ subtask['id'] }}" hx-trigger="click"
+                                            hx-swap="none">
+                                        <label class="form-check-label" for="{{ subtask['id'] }}">{{subtask["title"]}}</label>
                                         <p>{{ subtask["completed"] }}</p>
                                     </li>
                                     % end
@@ -1278,6 +1281,14 @@
                 }
             }
         });
+
+
+        // Find all checkboxes with subtask['completed'] = true
+        document.querySelectorAll('input[type="checkbox"][value="True"]').forEach(function (checkbox) {
+            // Set the checked attribute to true
+            checkbox.checked = true;
+        });
+
 
 
 

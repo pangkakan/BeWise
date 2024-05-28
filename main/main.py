@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 @route("/")
 def index():
+    # course_events_today 
+    # user_events_today
     nested_assignments = fetch_todo_subtasks()
     print(nested_assignments)
     return template("index", user=current_user, todo_tasks=nested_assignments)
@@ -123,6 +125,9 @@ def todo_update(id):
         print("Error occurred during database operation:", e)
         print("Database error message:", cur.statusmessage)
         conn.rollback()  # Rollback the transaction in case of error
+        response.status = 204
+        response.set_header('HX-Redirect', '/')
+        return ''
         
     
 
