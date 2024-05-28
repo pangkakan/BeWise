@@ -53,6 +53,11 @@
             overflow-y: auto;
         }
 
+        #todo input,
+        #todo label {
+            cursor: pointer;
+        }
+
         #calendar {
             position: relative;
         }
@@ -107,15 +112,6 @@
 
         button:hover {
             background-color: deeppink;
-        }
-
-        #todoList .list-group-item {
-            cursor: pointer;
-
-        }
-
-        #todoList .list-group-item:hover {
-            background-color: #f8f8f8;
         }
 
         .fc-event {
@@ -225,8 +221,9 @@
                                 <ul class="list-group">
                                     % for subtask in task["subtasks"]:
                                     <li class="list-group-item">
-                                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ subtask['id'] }}">
+                                        <input class="form-check-input me-1" type="checkbox" value="" id="{{ subtask['id'] }}" hx-patch="/todo-update/{{ subtask['id'] }}" hx-trigger="click" hx-swap="none">
                                         <label class="form-check-label" for="{{ subtask['id'] }}">{{ subtask["title"] }}</label>
+                                        <p>{{ subtask["completed"] }}</p>
                                     </li>
                                     % end
                                 </ul>

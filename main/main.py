@@ -49,6 +49,85 @@ def switch_user(id):
         return ''
 
 
+@route("/todo-update/<id>", method="patch") 
+def todo_update(id):
+    
+    #conn.autocommit = False  # Start transaction
+        
+    cur = conn.cursor()
+        
+    try:
+        # Step 1: Toggle the subtask's completed status
+        toggle_subtask_query = """
+        UPDATE subtasks
+        SET completed = NOT completed
+        WHERE id = %s
+        RETURNING completed;
+        """
+        cur.execute(toggle_subtask_query, (id,))
+        subtask_completed = cur.fetchone()[0]
+
+        print("Subtask toggled successfully. New completed status:", subtask_completed)
+
+        # Step 2: Update the assignment's completed status
+        update_assignment_query = """
+        WITH updated_assignment AS (
+            SELECT assignment_id
+            FROM subtasks
+            WHERE id = %s
+        )
+        UPDATE assignments
+        SET completed = (
+            SELECT NOT EXISTS (
+                SELECT 1
+                FROM subtasks
+                WHERE assignment_id = updated_assignment.assignment_id
+                AND completed = FALSE
+            )
+        )
+        FROM updated_assignment
+        WHERE assignments.id = updated_assignment.assignment_id
+        RETURNING assignments.goal_id;
+        """
+        cur.execute(update_assignment_query, (id,))
+        goal_id = cur.fetchone()[0]
+
+        print("Assignment updated successfully.")
+
+        # Step 3: Update the goal's completed status
+        update_goal_query = """
+        UPDATE goals
+        SET completed = (
+            SELECT NOT EXISTS (
+                SELECT 1
+                FROM assignments
+                WHERE goal_id = %s
+                AND completed = FALSE
+            )
+        )
+        WHERE id = %s;
+        """
+        cur.execute(update_goal_query, (goal_id, goal_id))
+
+        print("Goal updated successfully.")
+
+        # Commit the transaction
+        conn.commit()
+
+        print("Subtask and related assignment and goal updated successfully.")
+        response.status = 204
+        response.set_header('HX-Redirect', '/')
+        return ''
+    
+    except Exception as e:
+        print("Error occurred during database operation:", e)
+        print("Database error message:", cur.statusmessage)
+        conn.rollback()  # Rollback the transaction in case of error
+        
+    
+
+
+
 def fetch_todo_subtasks():
     cur = conn.cursor()
     query = """
