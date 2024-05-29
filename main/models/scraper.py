@@ -23,6 +23,43 @@ class Scraper:
         }
         self.keywords = ["lecture", "workshop", "lab", "other", "tentamen"]
 
+    def extract_course_name(self):
+        try:
+            content_page = self.get_course(self.search_term)
+            if not content_page:
+                print("No content page found.")
+                return None
+
+            good_link = self.find_link(content_page)
+            if not good_link:
+                print("No good link found.")
+                return None
+
+            response = requests.get(good_link)
+            soup = BeautifulSoup(response.text, "html.parser")
+            row = soup.find("tr")
+            if not row:
+                print("No table row found.")
+                return None
+
+            data_cells = row.find_all("td", class_="data")
+            if not data_cells or len(data_cells) < 2:
+                print(f"Not enough data cells found: {data_cells}")
+                return None
+
+            course_info = data_cells[1].get_text(strip=True)
+            if "," in course_info:
+                course_name = course_info.split(",")[1].strip()
+            else:
+                print(f"Unexpected course info format: {course_info}")
+                return None
+
+            print(f"Course name: {course_name}")
+            return course_name
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+
     def scrape(self):
         try:
             content_page = self.get_course(self.search_term)
@@ -58,8 +95,8 @@ class Scraper:
             for link in soup.find_all("a"):
                 href = link.get("href")
                 text = link.text.strip()
-                if len(text) > 20:
-                  #  print(f"Found link: {href}")
+                if len(text) > 20 and "-20241-" in text:
+                    #print(f"Found link: {href}")
                     return href
             return None
         except Exception as e:
@@ -179,6 +216,7 @@ for week, week_events in events.items():
             f"Week: {week}, Day: {event['day']}, Date: {event['date']}, From: {event['start_time']}, To: {event['end_time']}, Locale: {event['location']} Description: {event['description']}"
         )
         """
+
 print("\n")
 print("\n")
 print("\n")

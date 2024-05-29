@@ -1,5 +1,7 @@
 import json
 import logging
+import traceback
+
 from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from datetime import datetime
@@ -22,6 +24,7 @@ from controllers.calendar_filter import (
 )
 from models.events import scrape_to_db
 from models.json_manager import read_from_json_file, DateTimeEncoder
+from models.scraper import Scraper
 
 TEMPLATE_PATH.append('main/views')
 
@@ -67,14 +70,46 @@ def new_course():
 
 @route("/add-course", method="post")
 def add_course():
-    course_code = request.forms.get("course_code")
+    given_course_code = request.forms.get("course_code").lower()
+    start_date = "2024-01-01 00:00:00"
+    end_date = "2024-06-02 00:00:00"
 
-    # check if coursecode exists for some course
-    # check if user is already connected to the course
+    try:
+        with conn.cursor() as cur:
+            # Check if course exists
+            cur.execute("SELECT id FROM courses WHERE course_code = %s", (given_course_code,))
+            course_id = cur.fetchone()
 
-    # connect user to a course in db
+            if course_id:
+                course_id = course_id[0]
+                # Check if user is already connected to the course
+                cur.execute("SELECT id FROM user_courses WHERE user_id = %s AND course_id = %s", (current_user, course_id))
+                user_course_id = cur.fetchone()
+
+                if not user_course_id:
+                    # Connect user to a course in db
+                    cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, course_id))
+                    conn.commit()
+                else:
+                    print("User already connected to course")
+                    return "User already connected to course"
+            else:
+                # If course does not exist, create it and connect the user
+                course_title = Scraper(given_course_code, True).extract_course_name()
+                cur.execute(
+                    "INSERT INTO courses (start_timestamp, end_timestamp, course_code, title) VALUES (%s, %s, %s, %s) RETURNING id",
+                    (start_date, end_date, given_course_code, course_title)
+                )
+                created_course_id = cur.fetchone()[0]
+                conn.commit()
+
+                cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, created_course_id))
+                conn.commit()
+                scrape_to_db(conn, given_course_code, True)
 
 
+    except Exception as e:
+        traceback.print_exc()
 
 @route("/add-goal", method="post")
 def add_goal():
