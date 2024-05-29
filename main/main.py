@@ -297,7 +297,10 @@ def add_course():
 
                 cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, created_course_id))
                 conn.commit()
+
                 scrape_to_db(conn, given_course_code, True)
+                return "success"
+
 
 
     except Exception as e:
@@ -651,6 +654,8 @@ def view_events():
 
 @route("/delete-course/<id>", method="delete")
 def delete_course(id):
+
+
     return "success"
 
 
