@@ -146,12 +146,14 @@
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#add-subtask-modal"
                                     hx-get="/get-user-assignments" hx-target="#assignment-select">Deluppgift</button>
+                                <!--
                                 <button class="dropdown-item" type="button" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#add-event-modal"
                                     hx-get="/get-user-courses/events" hx-target="#event-course-select">Händelse</button>
+                                    -->
                             </div>
                         </div>
-
+                        <!--
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -174,7 +176,7 @@
                                     data-bs-toggle="modal" data-bs-target="#view-events-modal" hx-get="/view-events"
                                     hx-target="#my-events-list">Händelser</button>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <p>Användare: {{ user }}</p>
                     <div class="dropdown">
@@ -321,7 +323,16 @@
                             <input type="text" id="course-code" name="course_code" class="form-control"
                                 placeholder="Ange kurskod." required>
                         </div>
-
+                       <!-- Här behöver vi göra något snyggt så man bara knappar in datum ifall det är en ny kurs
+                        <div class="mb-3">
+                            <label for="course-startdate" class="form-label">Ange startdatum</label>
+                            <input type="date" id="course-startdate" name="course_startdate" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="course-enddate" class="form-label">Ange slutdatum</label>
+                            <input type="date" id="course-enddate" name="course_enddate" class="form-control" required>
+                        </div>
+                        -->
                         <button type="submit" class="btn btn-primary">Slutför</button>
                     </form>
                 </div>

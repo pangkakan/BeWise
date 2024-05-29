@@ -1,6 +1,8 @@
 import json
 import logging
 from datetime import datetime
+import traceback
+
 from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
 from controllers import course_controller as course_ctrl
 from datetime import datetime
@@ -23,6 +25,7 @@ from controllers.calendar_filter import (
 )
 from models.events import scrape_to_db
 from models.json_manager import read_from_json_file, DateTimeEncoder
+from models.scraper import Scraper
 
 TEMPLATE_PATH.append('main/views')
 
@@ -34,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 @route("/")
 def index():
-    # course_events_today 
+    # course_events_today
     # user_events_today
     nested_assignments = fetch_todo_subtasks()
     #print(nested_assignments)
@@ -53,13 +56,13 @@ def switch_user(id):
         return ''
 
 
-@route("/todo-update/<id>", method="patch") 
+@route("/todo-update/<id>", method="patch")
 def todo_update(id):
-    
+
     #conn.autocommit = False  # Start transaction
-        
+
     cur = conn.cursor()
-        
+
     try:
         # Step 1: Toggle the subtask's completed status
         toggle_subtask_query = """
@@ -122,7 +125,7 @@ def todo_update(id):
         response.status = 204
         response.set_header('HX-Redirect', '/')
         return ''
-    
+
     except Exception as e:
         print("Error occurred during database operation:", e)
         print("Database error message:", cur.statusmessage)
@@ -130,8 +133,8 @@ def todo_update(id):
         response.status = 204
         response.set_header('HX-Redirect', '/')
         return ''
-        
-    
+
+
 
 
 
@@ -170,7 +173,7 @@ def fetch_todo_subtasks():
             "subtasks": row[2]
         }
         assignments.append(assignment)
-    return assignments 
+    return assignments
 
 
 def fetch_card_data():
@@ -259,17 +262,46 @@ def calculate_completion_stats(goals):
 
 @route("/add-course", method="post")
 def add_course():
-    #course_code = request.forms.get("course_code")
+    given_course_code = request.forms.get("course_code").lower()
+    start_date = "2024-01-01 00:00:00"
+    end_date = "2024-06-02 00:00:00"
 
-    # check if coursecode exists for some course
+    try:
+        with conn.cursor() as cur:
+            # Check if course exists
+            cur.execute("SELECT id FROM courses WHERE course_code = %s", (given_course_code,))
+            course_id = cur.fetchone()
 
-    # check if user is already connected to the course .... current_user
-    # check if user is already connected to the course
+            if course_id:
+                course_id = course_id[0]
+                # Check if user is already connected to the course
+                cur.execute("SELECT id FROM user_courses WHERE user_id = %s AND course_id = %s", (current_user, course_id))
+                user_course_id = cur.fetchone()
 
-    # connect user to a course in db
-    return "success"
+                if not user_course_id:
+                    # Connect user to a course in db
+                    cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, course_id))
+                    conn.commit()
+                else:
+                    print("User already connected to course")
+                    return "User already connected to course"
+            else:
+                # If course does not exist, create it and connect the user
+                course_title = Scraper(given_course_code, True).extract_course_name()
+                cur.execute(
+                    "INSERT INTO courses (start_timestamp, end_timestamp, course_code, title) VALUES (%s, %s, %s, %s) RETURNING id",
+                    (start_date, end_date, given_course_code, course_title)
+                )
+                created_course_id = cur.fetchone()[0]
+                conn.commit()
+
+                cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, created_course_id))
+                conn.commit()
+                scrape_to_db(conn, given_course_code, True)
 
 
+    except Exception as e:
+        traceback.print_exc()
 
 @route("/add-goal", method="post")
 def add_goal():
@@ -302,7 +334,7 @@ def add_goal():
         print(f"Insert successful, new row id: {inserted_id}")
 
         cur.close()
-        return "success" 
+        return "success"
 
     except Exception as e:
         # Rollback in case of error
