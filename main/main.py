@@ -282,6 +282,7 @@ def add_course():
                     # Connect user to a course in db
                     cur.execute("INSERT INTO user_courses (user_id, course_id) VALUES (%s, %s)", (current_user, course_id))
                     conn.commit()
+                    return "success"
                 else:
                     print("User already connected to course")
                     return "User already connected to course"
@@ -549,7 +550,7 @@ def view_courses():
         }
         course_list.append(course)
 
-    return template("view-courses-list", courses=course_list)
+    return template("view-courses-list", user_courses=course_list)
 
 
 @route("/view-goals")
@@ -654,9 +655,20 @@ def view_events():
 
 @route("/delete-course/<id>", method="delete")
 def delete_course(id):
+    cur = conn.cursor()
+    query = """
+     DELETE FROM user_courses WHERE id = %s
+    """ % id
 
+    try:
+        cur.execute(query)
+        conn.commit()
+        return "success"
+    except Exception as e:
+        conn.rollback()
+        print(f"Delete failed: {e}")
+        cur.close()
 
-    return "success"
 
 
 @route("/delete-goal/<id>", method="delete")
