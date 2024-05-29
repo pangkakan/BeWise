@@ -259,7 +259,7 @@ def calculate_completion_stats(goals):
 
 @route("/add-course", method="post")
 def add_course():
-    course_code = request.forms.get("course_code")
+    #course_code = request.forms.get("course_code")
 
     # check if coursecode exists for some course
 
@@ -320,18 +320,19 @@ def add_assignment():
     end_date = request.forms.get("assignment_enddate")
     title = request.forms.get("assignment_title")
     type = request.forms.get("assignment_type")
+    prio = request.forms.get("chosen_prio")
     print(f"Goal id: {goal_id}, Start: {start_date}, End: {end_date}, Title: {title}, Type: {type}")
 
     # insert into db
     cur = conn.cursor()
 
     insert_query = """
-        INSERT INTO assignments (goal_id, title, start_time, deadline_timestamp, type)
-        VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO assignments (goal_id, title, start_time, deadline_timestamp, type, priority)
+        VALUES (%s, %s, %s, %s, %s, %s)
         RETURNING id;
     """
 
-    values = (goal_id, title, start_date, end_date, type)
+    values = (goal_id, title, start_date, end_date, type, prio)
 
     try:
         # Execute query and check if insert is successful
@@ -395,7 +396,8 @@ def add_subtask():
 
 @route("/add-event", method="post")
 def add_event():
-    weekday = request.forms.get("chosen_weekday")
+    #weekday = request.forms.get("chosen_weekday")
+    return "success"
 
 
 @route("/get-user-courses")

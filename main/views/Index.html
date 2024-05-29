@@ -225,7 +225,8 @@
                                             value="{{ subtask['completed'] }}" id="{{ subtask['id'] }}"
                                             hx-patch="/todo-update/{{ subtask['id'] }}" hx-trigger="click"
                                             hx-swap="none">
-                                        <label class="form-check-label" for="{{ subtask['id'] }}">{{subtask["title"]}}</label>
+                                        <label class="form-check-label"
+                                            for="{{ subtask['id'] }}">{{subtask["title"]}}</label>
                                     </li>
                                     % end
                                 </ul>
@@ -281,7 +282,7 @@
                                 % end
                             </div>
                         </div>
-                        % end 
+                        % end
                         % end
                     </div>
                 </div>
@@ -398,6 +399,14 @@
                             <label for="assignment-type" class="form-label">Typ</label>
                             <input type="text" id="assignment-type" name="assignment_type" class="form-control"
                                 placeholder="Vilken typ av uppgift?" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prio-select" class="form-label">Prioritet</label>
+                            <select id="prio-select" name="chosen_prio" class="form-select">
+                                <option value="1">1 (högst)</option>
+                                <option value="2">2 (medel)</option>
+                                <option value="3">3 (lägst)</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="assignment-startdate" class="form-label">Ange startdatum (kan väljas inom målets
