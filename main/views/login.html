@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Login</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </head>
+
+    <style>
+        body{
+            max-width: 77.6%;
+            margin: auto;
+            margin-top: 17px;
+            font-family: "Inknut Antiqua", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        header{
+            border: 1px solid #6A6A6A;
+            font-size: 10px;
+            height: 70px;
+        }
+        h1{
+            margin-left: 1%;
+        }
+        main{
+            margin-top: 19.9px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 19.9px;
+        }
+        .expandble-box{
+            border: 1px solid #6A6A6A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            height: 670px;
+            overflow: hidden;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: visible; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+        li.dropdown{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .dropbtn {
+            display: block;
+            color: white;
+            background-color: #677175;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            border-radius: 10px;
+            width: 300px;
+            transition: all 0.5s;
+        }
+        .dropbtn:hover {
+            background-color: #565D61;
+        }
+        .dropdown-content input {
+            border: none;
+            background-color: whitesmoke;
+            padding: 10px;
+            width: 87%;
+            text-align: center;
+        }
+        button{
+            background-color: #677175;
+            border: none;
+            color: white;
+            font-family: "Inknut Antiqua", serif;
+            font-weight: 400;
+            font-style: normal;
+            transition: all 0.5s;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #565D61;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 160px;
+            max-width: 20%;
+            text-align: center;
+            background-color: white;
+            top: 69px;
+            transition: all 0.5s;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        } 
+    </style>
+
+    <body>
+        <header>
+            <h1>BeWisePlanner</h1>
+        </header>
+        <main>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Logga in</a>
+                        <div class="dropdown-content">
+                            <form action="/login" method="post">
+                                <label for="email-login">Email:</label>
+                                <input type="email" id="email-login" name="email-login">
+                                <label for="password-login">Lösenord:</label>
+                                <input type="password" id="password-login" name="password-login">
+                                <button type="submit">Logga in</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Regristrera dig</a>
+                        <ul class="dropdown-content">
+                            <form action="/register" method="post">
+                                <label for="name-reg">Användarnamn:</label>
+                                <input type="text" id="name-reg" name="name-reg">
+                                <label for="email-reg">Email:</label>
+                                <input type="email" id="email-reg" name="email-reg">
+                                <label for="password-reg">Lösenord:</label>
+                                <input type="password" id="password-reg" name="password-reg">
+                                <button type="submit">Regristrera dig</button>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </body>
+</html>

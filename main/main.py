@@ -3,8 +3,10 @@ import logging
 from datetime import datetime
 import traceback
 
-from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH
+from bottle import route, run, template, error, static_file, request, redirect, response, TEMPLATE_PATH, HTTPResponse, default_app
+from beaker.middleware import SessionMiddleware
 from controllers import course_controller as course_ctrl
+from controllers.user_controller import login, register
 from datetime import datetime
 from controllers.db import create_connection
 from controllers.task_controller import (
@@ -26,28 +28,159 @@ from controllers.calendar_filter import (
 from models.events import scrape_to_db
 from models.json_manager import read_from_json_file, DateTimeEncoder
 from models.scraper import Scraper
+from models.user import User
+
+session_opts = {
+    'session.type': 'memory',
+    'session.cookie_expires': 300,
+    'session.auto': True
+}
+
+app = SessionMiddleware(default_app(), session_opts)
 
 TEMPLATE_PATH.append('main/views')
 
 conn = create_connection()
-current_user = 2
+cur = conn.cursor()
+current_user = None
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+def get_current_user():
+    session = request.environ.get('beaker.session')
+    if session:
+        return session.get('current_user')
+    return None
+
+def get_user_id_by_username(username):
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id FROM user_data WHERE username = %s", (username,))
+        user_id = cur.fetchone()
+        return user_id[0] if user_id else None
+    except Exception as e:
+        logger.error(f"Error fetching user ID: {e}")
+        conn.rollback()
+        return None
+    finally:
+        cur.close()
+
+@route("/login", method=["GET", "POST"])
+def user_login():
+    session = request.environ.get('beaker.session')
+    
+    if request.method == 'POST':
+        email = request.forms.get('email-login')
+        password = request.forms.get('password-login')
+        
+        user = User.get_by_email_and_password(email, password, cur, conn, logger)
+        if user and user.verify_password(password):
+            session['current_user'] = user.username
+            session.save()
+            logger.debug(f"User {user.username} logged in and set in session.")
+            redirect("/")
+        else:
+            logger.debug("Login failed")
+            redirect("/login")
+    
+    return template("login")
+
+@route("/register", method="POST")
+def user_register():
+    try:
+        username = request.forms.get('name-reg')
+        email = request.forms.get('email-reg')
+        password = request.forms.get('password-reg')
+
+        if not username or not email or not password:
+            return template("login", error="All fields are required")
+
+        existing_user = User.get_by_email(email, cur, conn, logger)
+        if existing_user:
+            return template("login", error="User with this email already exists")
+
+        user = User(username=username, password=password, email=email, cur=cur, conn=conn, logger=logger)
+        if user.save_user():
+            redirect("/login")
+        else:
+            return template("login", error="Failed to register user")
+
+    except Exception as e:
+        logger.error(f"Error during registration: {e}")
+        traceback.print_exc()
+        return template("login", error="An error occurred during registration")
+
 @route("/")
 def index():
+    session = request.environ.get('beaker.session')
+    current_user = session.get('current_user')
+
+    if not current_user:
+        logger.debug("Redirecting to login: current_user is None")
+        redirect("/login")
+
+    user_id = get_user_id_by_username(current_user)
+    if user_id is None:
+        logger.debug(f"User ID not found for {current_user}. Redirecting to login.")
+        redirect("/login")
     # course_events_today
     # user_events_today
-    nested_assignments = fetch_todo_subtasks()
+    nested_assignments = fetch_todo_subtasks(user_id)
     #print(nested_assignments)
-    card_data = fetch_card_data()
-    return template("index", user=current_user, todo_tasks=nested_assignments, card_data=card_data)
+    card_data = fetch_card_data(user_id)
+    return template("index", current_user=current_user, todo_tasks=nested_assignments, card_data=card_data)
+
+@route('/user-settings', method=['GET', 'POST'])
+def user_settings_page():
+    if request.method == 'POST':
+        action = request.forms.get('action')
+
+        if action == 'authenticate':
+            email = request.forms.get('email')
+            password = request.forms.get('password')
+
+            user = User.authenticate(email, password, cur, conn, logger)
+
+            if user:
+                if 'update_username' in request.forms:
+                    new_username = request.forms.get('new-name')
+                    if new_username and user.update_username(new_username):
+                        logger.debug(f"User {user.username} updated username to {new_username}")
+                        return template('user-settings', success_message="Username updated successfully.")
+                
+                elif 'update_email' in request.forms:
+                    new_email = request.forms.get('new-email')
+                    if new_email and user.update_email(new_email):
+                        logger.debug(f"User {user.username} updated email to {new_email}")
+                        return template('user-settings', success_message="Email updated successfully.")
+                
+                elif 'update_password' in request.forms:
+                    new_password = request.forms.get('new-password')
+                    if new_password and user.update_password(new_password):
+                        logger.debug(f"User {user.username} updated password.")
+                        return template('user-settings', success_message="Password updated successfully.")
+                
+                elif 'delete_account' in request.forms:
+                    if user.delete_account():
+                        logger.debug(f"User {user.username} deleted account.")
+                        return template('user-settings', success_message="Account deleted successfully.")
+
+            else:
+                logger.debug("Authentication failed for user.")
+                return template('user-settings', error_message="Invalid email or password.")
+        
+        else:
+            return template('user-settings')
+
+    return template('user-settings')
 
 
 @route("/switch-user/<id>")
 def switch_user(id):
-    global current_user
+    session = request.environ.get('beaker.session')
+    current_user = session.get('current_user')
+
     if id != current_user:
         current_user = id
         print(f"Switching to user: {id}")
@@ -138,7 +271,7 @@ def todo_update(id):
 
 
 
-def fetch_todo_subtasks():
+def fetch_todo_subtasks(user_id):
     cur = conn.cursor()
     query = """
     SELECT 
@@ -162,9 +295,10 @@ def fetch_todo_subtasks():
     AND CURRENT_DATE = s.date 
     GROUP BY a.id, a.title;
 
-    """ % current_user
-    cur.execute(query)
+    """
+    cur.execute(query, (user_id,))
     this_user_todo_today = cur.fetchall()
+        
     assignments = []
     for row in this_user_todo_today:
         assignment = {
@@ -173,10 +307,11 @@ def fetch_todo_subtasks():
             "subtasks": row[2]
         }
         assignments.append(assignment)
+    
     return assignments
 
 
-def fetch_card_data():
+def fetch_card_data(user_id):
     cur = conn.cursor()
     query = """
     SELECT 
@@ -210,9 +345,9 @@ def fetch_card_data():
     JOIN assignments a ON g.id = a.goal_id
     WHERE u.id = %s
     GROUP BY g.id, g.title, g.deadline_timestamp, c.title;
-    """ % current_user
+    """
 
-    cur.execute(query)
+    cur.execute(query, (user_id,))
     this_user_card_data = cur.fetchall()
     goals = []
 
@@ -262,6 +397,7 @@ def calculate_completion_stats(goals):
 
 @route("/add-course", method="post")
 def add_course():
+    current_user = get_current_user()
     given_course_code = request.forms.get("course_code").lower()
     start_date = "2024-01-01 00:00:00"
     end_date = "2024-06-02 00:00:00"
@@ -768,22 +904,29 @@ def delete_event(id):
 
 @route("/api/calendar")
 def calendar_api():
-    types = request.query.get('types', '')
-    type_list = types.split(',') if types else []
+    try:
+        types = request.query.get('types', '')
+        type_list = types.split(',') if types else []
 
-    all_events = []
+        all_events = []
 
-    all_events += filter_courses(conn, current_user)
-    if "goals" in type_list:
-        all_events += filter_goals(conn, current_user)
-    if "assignments" in type_list:
-        all_events += filter_assignments(conn, current_user)
-    if "course_events" in type_list:
-        all_events += filter_course_events(conn, current_user)
+        all_events += filter_courses(conn, current_user)
+        if "goals" in type_list:
+            all_events += filter_goals(conn, current_user)
+        if "assignments" in type_list:
+            all_events += filter_assignments(conn, current_user)
+        if "course_events" in type_list:
+            all_events += filter_course_events(conn, current_user)
 
-    # Return the formatted events
-    response.content_type = 'application/json'
-    return json.dumps(all_events, cls=DateTimeEncoder)
+        # Return the formatted events
+        response.content_type = 'application/json'
+        return json.dumps(all_events, cls=DateTimeEncoder)
+    
+    except Exception as e:
+        logger.error(f"Error in calendar API for user {current_user}: {e}")
+        conn.rollback()
+        response.status = 500
+        return {"error": "Failed to fetch calendar data"}
 
 
 @route("/api/today-tasks")
@@ -808,16 +951,16 @@ def error404(error):
     return template("error")
 
 
-@route("/static/<filename>")
-def static_files(filename):
+@route("/static/<filepath:path>")
+def static_files(filenpath):
     """
     Handles the routes to our static files
 
         Returns:
                 file : the static file requested by URL
     """
-    return static_file(filename, root="static")
-
+    return static_file(filenpath, root="./main/static")
 
 # Start our web server
-run(host="127.0.0.1", port=8080, reloader=True)
+if __name__ == "__main__":
+    run(app=app, host="127.0.0.1", port=8080, reloader=True)

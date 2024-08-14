@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>User Settings</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </head>
+
+    <style>
+        body{
+            max-width: 77.6%;
+            margin: auto;
+            margin-top: 17px;
+            font-family: "Inknut Antiqua", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        header{
+            border: 1px solid #6A6A6A;
+            font-size: 10px;
+            height: 70px;
+        }
+        h1{
+            margin-left: 1%;
+        }
+        #back{
+            font-size: 13px;
+            float: right;
+            margin-top: 1%;
+            margin-right: 1%;
+            text-decoration: none;
+            color: white;
+            padding: 5px;
+            background-color: #677175;
+            border-radius: 5px;
+            transition: all 0.5s;
+        }
+        #back:hover{
+            background-color: #565D61;
+        }
+        main{
+            margin-top: 19.9px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 19.9px;
+        }
+        .expandble-box{
+            border: 1px solid #6A6A6A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            height: 670px;
+            overflow: hidden;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: visible; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+        li.dropdown{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .dropbtn {
+            display: block;
+            color: white;
+            background-color: #677175;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            border-radius: 10px;
+            width: 300px;
+            transition: all 0.5s;
+        }
+        .dropbtn:hover {
+            background-color: #565D61;
+        }
+        .dropdown-content input {
+            border: none;
+            background-color: whitesmoke;
+            padding: 10px;
+            width: 87%;
+            text-align: center;
+        }
+        button{
+            background-color: #677175;
+            border: none;
+            color: white;
+            font-family: "Inknut Antiqua", serif;
+            font-weight: 400;
+            font-style: normal;
+            transition: all 0.5s;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #565D61;
+        }
+        #delete {
+            background-color: red;
+            border: none;
+            color: white;
+            font-family: "Inknut Antiqua", serif;
+            font-weight: 400;
+            font-style: normal;
+            transition: all 0.5s;
+            border-radius: 5px;
+        }
+        #delete:hover {
+            background-color: darkred;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 160px;
+            max-width: 20%;
+            text-align: center;
+            background-color: white;
+            top: 69px;
+            transition: all 0.5s;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        } 
+        #check {
+            height: 20px;
+        }
+        h2{
+            font-size: 15px;
+            border: 1px black solid;
+            padding: 5px;
+        }
+    </style>
+
+    <body>
+        <header>
+            <a href="/" id="back">Tillbaka till startsidan</a>
+            <h1>BeWisePlanner</h1>
+        </header>
+        <main>
+            <div>
+                <h2>Autentisera för åtkomst till användar inställningar</h2>
+                <form action="/user-settings" method="post">
+                    <input type="hidden" name="action" value="authenticate">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Autentisera</button>
+                </form>
+            </div>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Ändra användarnamn</a>
+                        <div class="dropdown-content">
+                            <form action="/user-settings" method="post">
+                                <input type="hidden" name="action" value="update_username">
+                                <label for="new-name">Nya namnet:</label>
+                                <input type="text" id="new-name" name="new-name">
+                                <button type="submit">Ändra</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Ändra emailadress</a>
+                        <ul class="dropdown-content">
+                            <form action="/user-settings" method="post">
+                                <input type="hidden" name="action" value="update_email">
+                                <label for="new-email">Nya email:</label>
+                                <input type="email" id="new-email" name="new-email">
+                                <button type="submit">Ändra</button>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Ändra lösenord</a>
+                        <div class="dropdown-content">
+                            <form action="/user-settings" method="post">
+                                <input type="hidden" name="action" value="update_password">
+                                <label for="new-password">Nya lösenordet:</label>
+                                <input type="password" id="new-password" name="new-password">
+                                <button type="submit">Ändra</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="expandble-box">
+                <ul>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Radera konto</a>
+                        <ul class="dropdown-content">
+                            <form action="/user-settings" method="post">
+                                <input type="hidden" name="action" value="delete_account">
+                                <label for="delete-user">Säker på att du vill radera ditt konto?</label>
+                                <input type="checkbox" id="delete-user" name="delete-user">
+                                <button type="submit" id="delete">Radera</button>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </body>
+</html>

@@ -117,6 +117,17 @@
         .fc-event {
             cursor: pointer;
         }
+        #btn-settings {
+            color: white;
+            border: none;
+            background-color: #677175 ;
+            border-radius: 5px;
+            padding: 7px;
+            transition: all 0.3s;
+        }
+        #btn-settings:hover {
+            background-color: #565D61 ;
+        }
     </style>
 
 </head>
@@ -178,22 +189,11 @@
                             </div>
                         </div>
                     </div>
-                    <p>Användare: {{ user }}</p>
+                    <p>Användare: {{ current_user }}</p>
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Byt användare
-                        </button>
-                        <div class="dropdown-menu">
-                            <button type="button" class="dropdown-item" hx-get="/switch-user/1" hx-trigger="click"
-                                hx-swap="none">Användare 1</button>
-                            <button type="button" class="dropdown-item" hx-get="/switch-user/2" hx-trigger="click"
-                                hx-swap="none">Användare 2</button>
-                            <button type="button" class="dropdown-item" hx-get="/switch-user/3" hx-trigger="click"
-                                    hx-swap="none">Användare 3</button>
-                            <button type="button" class="dropdown-item" hx-get="/switch-user/4" hx-trigger="click"
-                                    hx-swap="none">Användare 4</button>
-                        </div>
+                        <form action="/user-settings" >
+                            <button id="btn-settings">Användar inställningar</button>
+                        </form>
                     </div>
                 </nav>
             </div>
